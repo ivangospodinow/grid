@@ -1,0 +1,11 @@
+<thead>
+    <?php
+    foreach ($this->grid->getData() as $row) {
+
+        if (!$row->isHead()) {
+            continue;
+        }
+        include '9.0.row.phtml';
+    }
+    ?>
+</thead>

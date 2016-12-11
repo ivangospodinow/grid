@@ -1,0 +1,12 @@
+<tbody>
+    <?php
+    foreach ($this->grid->getData() as $row) {
+
+        if (!$row->isBody()) {
+            continue;
+        }
+
+        include '9.0.row.phtml';
+    }
+    ?>
+</tbody>

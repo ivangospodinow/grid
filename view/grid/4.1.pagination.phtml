@@ -1,0 +1,53 @@
+<?php
+$count = $this->grid->getCount();
+$pages = (int) ceil($count / $this->itemsPerPage) - 1;
+
+if (!$this->showOnNoPages && $pages <= 0) {
+    return;
+}
+
+$activePage = $this->getLinkCreator()->getActivePaginationPage();
+
+echo PHP_EOL;
+echo str_replace(
+    '__ATTRIBUTES__',
+    $this->getAttributesString(true),
+    $this->holderTagOpen
+) . PHP_EOL;
+
+$items = [];
+
+$items['first'] = str_replace(
+    '__ATTRIBUTES__',
+    ' href="' . $this->getLinkCreator()->createPaginationLink(0) . '"',
+    $this->itemTagOpen
+);
+$items['first'] .= $this->firstLabel;
+$items['first'] .= $this->itemTagClose . PHP_EOL;
+
+for ($i = 0; $i <= $pages; $i++) {
+    $attributes = [];
+    $attributes[] = 'href="' . $this->getLinkCreator()->createPaginationLink($i) . '"';
+    if ($i == $activePage) {
+        $attributes[] = 'class="active"';
+    }
+    $items[$i] = str_replace(
+        '__ATTRIBUTES__',
+        implode(' ', $attributes),
+        $this->itemTagOpen
+    );
+    $items[$i] .= $i + 1;
+    $items[$i] .= $this->itemTagClose . PHP_EOL;
+}
+
+$items['last'] = str_replace(
+    '__ATTRIBUTES__',
+    ' href="' . $this->getLinkCreator()->createPaginationLink($pages) . '"',
+    $this->itemTagOpen
+);
+$items['last'] .= $this->lastLabel;
+$items['last'] .= $this->itemTagClose . PHP_EOL;
+
+echo implode($this->itemSeparator, $items);
+
+echo $this->holderTagClose . PHP_EOL;

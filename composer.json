@@ -1,0 +1,35 @@
+{
+    "name": "Gospodinow/Grid",
+    "description": "Easy to use event driven php grid",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "datagrid",
+        "Datagrid",
+        "Datatable"
+    ],
+
+    "authors": [{
+        "name": "Ivan Gospodinow",
+        "email": "ivangospodinow@gmail.com"
+    }],
+
+    "require": {
+        "php": "~7.0",
+        "wp-cli/php-cli-tools": "^0.11.1"
+    },
+
+    "require-dev": {
+        
+    },
+
+    "suggest": {
+        
+    },
+    
+    "autoload": {
+        "psr-4": {
+            "Grid\\": "src/Grid"
+        }
+    }
+}

@@ -31,7 +31,7 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface
     protected $lastLabel      = '|-&gt;';
 
     protected $itemsPerPage   = 10;
-    protected $showOnNoPages  = true;
+    protected $showOnNoPages  = false;
 
     /**
      *

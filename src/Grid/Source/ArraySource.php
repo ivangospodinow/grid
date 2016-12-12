@@ -8,7 +8,7 @@ use \Exception;
  *
  * @author Gospodinow
  */
-class ArraySource implements SourceInterface
+class ArraySource extends AbstractSource
 {
     protected $array = [];
     protected $count;

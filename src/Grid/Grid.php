@@ -2,6 +2,8 @@
 
 namespace Grid;
 
+use Grid\Column\Column;
+
 use Grid\Source\SourceInterface;
 use Grid\Renderer\RendererInterface;
 use Grid\Column\AbstractColumn;
@@ -12,6 +14,8 @@ use Grid\Plugin\Interfaces\DataPluginInterface;
 use Grid\Plugin\Interfaces\ColumnsPluginInterface;
 use Grid\Plugin\ExtractorPlugin;
 use Grid\Plugin\Interfaces\RowPluginInterface;
+use Grid\Plugin\ProfilePlugin;
+use Grid\Source\AbstractSource;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
@@ -63,6 +67,33 @@ class Grid implements ArrayAccess
         
         $this[] = new ExtractorPlugin;
         $this[] = new HeaderPlugin;
+    }
+
+    public static function factory(array $config) : self
+    {
+        $grid = new self($config);
+
+        if (isset($config['source'])) {
+            foreach ($config['source'] as $source) {
+                $this[] = AbstractSource::factory($source);
+            }
+        }
+
+        if (isset($config['columns'])) {
+            foreach ($config['columns'] as $column) {
+                $grid[] = Column::factory($column);
+            }
+        }
+
+        if (isset($config['profile'])) {
+            $grid[] = ProfilePlugin::factory($config['profile']);
+        }
+        
+        if (isset($config['renderer']) && class_exists($config['renderer'])) {
+            $grid[] = new $config['renderer'];
+        }
+
+        return $grid;
     }
 
     /**
@@ -156,7 +187,7 @@ class Grid implements ArrayAccess
      * @param type $interface
      * @return array
      */
-    protected function getObjects($interface) : array
+    public function getObjects($interface) : array
     {
         $objects = [];
         foreach ($this->iterator as $mixed) {

@@ -5,6 +5,8 @@ use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Extractor\AbstractExtractor;
 use Grid\Util\Traits\Attributes;
 
+use \Exception;
+
 /**
  * Every column must extend this class
  * More features coming
@@ -38,6 +40,28 @@ abstract class AbstractColumn
                 'label'     => $label,
                 'extract'   => $extract ?? $name
             ]
+        );
+    }
+
+    /**
+     *
+     * @param array $config
+     * @return \self
+     * @throws Exception
+     */
+    public static function factory(array $config) : self
+    {
+        if (!isset($config['name'])) {
+            throw new Exception('name is required');
+        }
+        if (!isset($config['label'])) {
+            throw new Exception('label is required');
+        }
+
+        return new Column(
+            $config['name'],
+            $config['label'],
+            $config['extract'] ?? null
         );
     }
 

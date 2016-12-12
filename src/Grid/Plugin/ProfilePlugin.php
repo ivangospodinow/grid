@@ -29,6 +29,16 @@ class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, Da
 
     /**
      *
+     * @param array $config
+     * @return \self
+     */
+    public static function factory(array $config) : self
+    {
+        return new self($config);
+    }
+
+    /**
+     *
      * @param array $columns
      * @return array
      */

@@ -32,23 +32,24 @@ require_once 'autoload.php';
 //die;
 //var_dump($grid);die;
 
-
+$array = [];
+for ($i = 1; $i <= 1000; $i++) {
+    $array[] = [
+        'id' => $i,
+        'name' => 'Name ' .$i
+    ];
+}
 
 $grid = new Grid\Grid;
 $grid[] = new Grid\Column\Column('id', '#');
 $grid[] = new Grid\Column\Column('name', 'Name');
-//$grid[] = new Grid\Source\ArraySource(
-//    [
-//        [
-//            'id' => 1,
-//            'name' => 'Ivan Gospodinow',
-//        ],
-//        [
-//            'id' => 2,
-//            'name' => 'Ivan Gospodinow The Second',
-//        ]
-//    ]
-//);
+$grid[] = new Grid\Source\ArraySource(
+    [
+        'driver' => $array,
+        'start' => 0,
+        'end' => 10,
+    ]
+);
 
 //$pdo = new PDO('mysql:host=localhost;dbname=test;charset=UTF8', 'root', '');
 //
@@ -61,15 +62,15 @@ $grid[] = new Grid\Column\Column('name', 'Name');
 //    ]
 //);
 
-$mysqli = new mysqli('localhost', 'root', '', 'test');
-$grid[] = $source = new \Grid\Source\MysqliSource(
-    [
-        'driver' => $mysqli,
-        'table'  => 'users',
-        'start'  => 0,
-        'end'    => 10,
-    ]
-);
+//$mysqli = new mysqli('localhost', 'root', '', 'test');
+//$grid[] = $source = new \Grid\Source\MysqliSource(
+//    [
+//        'driver' => $mysqli,
+//        'table'  => 'users',
+//        'start'  => 0,
+//        'end'    => 10,
+//    ]
+//);
 
 
 //var_dump($source->getR/ows());die;

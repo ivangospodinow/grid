@@ -10,20 +10,25 @@ use \Exception;
  */
 class ArraySource extends AbstractSource
 {
-    protected $array = [];
-    protected $count;
+    /**
+     *
+     * @var []
+     */
+    protected $driver;
     
     /**
      *
      * @param array $array
      * @throws Exception
      */
-    public function __construct(array $array)
+    public function __construct(array $config)
     {
-        if (!is_array($array[key($array)])) {
-            throw new Exception('ArraySource expects array of arrays');
+        if (!isset($config['driver'])
+        || !is_array($config['driver'])) {
+            throw new Exception('ArraySource expects driver that contains array');
         }
-        $this->array = $array;
+
+        parent::__construct($config);
     }
 
     /**
@@ -32,7 +37,14 @@ class ArraySource extends AbstractSource
      */
     public function getRows()
     {
-        return $this->array;
+        if ($this->getStart() || $this->getEnd()) {
+            return array_slice(
+                $this->driver,
+                $this->getStart(),
+                $this->getLimit()
+            );
+        }
+        return $this->driver;
     }
 
     /**
@@ -41,7 +53,7 @@ class ArraySource extends AbstractSource
      */
     public function setRows(array $rows)
     {
-        $this->array = $rows;
+        $this->driver = $rows;
     }
     
     /**
@@ -51,7 +63,7 @@ class ArraySource extends AbstractSource
     public function getCount() : int
     {
         if (null === $this->count) {
-            $this->setCount(count($this->array));
+            $this->setCount(count($this->driver));
         }
         return $this->count;
     }

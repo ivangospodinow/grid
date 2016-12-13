@@ -11,11 +11,9 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 
-use \PDO;
 use \Exception;
 
 /**
- * At this time pdo driver query will be string
  *
  * @author Gospodinow
  */
@@ -49,7 +47,7 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     
     /**
      *
-     * @var PDO
+     * @var QuerySourceInterface
      */
     protected $driver;
     

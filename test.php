@@ -50,16 +50,27 @@ $grid[] = new Grid\Column\Column('name', 'Name');
 //    ]
 //);
 
-$pdo = new PDO('mysql:host=localhost;dbname=test;charset=UTF8', 'root', '');
+//$pdo = new PDO('mysql:host=localhost;dbname=test;charset=UTF8', 'root', '');
+//
+//$grid[] = $source = new \Grid\Source\MysqlPdoSource(
+//    [
+//        'driver' => $pdo,
+//        'table'  => 'users',
+//        'start'  => 0,
+//        'end'    => 10,
+//    ]
+//);
 
-$grid[] = $source = new \Grid\Source\MysqlPdoSource(
+$mysqli = new mysqli('localhost', 'root', '', 'test');
+$grid[] = $source = new \Grid\Source\MysqliSource(
     [
-        'driver' => $pdo,
+        'driver' => $mysqli,
         'table'  => 'users',
         'start'  => 0,
         'end'    => 10,
     ]
 );
+
 
 //var_dump($source->getR/ows());die;
 

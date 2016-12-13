@@ -63,15 +63,15 @@ $grid[] = $source = new \Grid\Source\MysqlPdoSource(
 
 //var_dump($source->getR/ows());die;
 
-$grid[] = new Grid\Renderer\CliRenderer();
-//$grid[] = new Grid\Renderer\HtmlRenderer;
+//$grid[] = new Grid\Renderer\CliRenderer();
+$grid[] = new Grid\Renderer\HtmlRenderer;
 //$grid[] = new Grid\Grid;
 //var_dump($grid);
 //var_dump($grid->getData());
 //var_dump($grid->getColumns());
 $grid[] = new Grid\Plugin\ProfilePlugin(
     [
-        'columns' => ['name']
+        'columns' => ['id', 'name']
     ]
 );
 $grid[] = new Grid\Plugin\PaginationPlugin;

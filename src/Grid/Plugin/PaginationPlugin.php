@@ -5,6 +5,8 @@ namespace Grid\Plugin;
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Attributes;
 use Grid\Plugin\Interfaces\DataPluginInterface;
+use Grid\Plugin\Interfaces\SourcePluginInterface;
+use Grid\Source\AbstractSource;
 use Grid\GridRow;
 
 /**
@@ -13,7 +15,7 @@ use Grid\GridRow;
  *
  * @author Gospodinow
  */
-class PaginationPlugin extends AbstractPlugin implements DataPluginInterface
+class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, SourcePluginInterface
 {
     use ExchangeArray, Attributes;
 
@@ -27,8 +29,14 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface
 
     protected $itemSeparator  = ' | ';
 
-    protected $firstLabel     = '&lt;-|';
-    protected $lastLabel      = '|-&gt;';
+    protected $firstLabel     = '&lsaquo;&lsaquo;';
+    protected $lastLabel      = '&rsaquo;&rsaquo;';
+
+    protected $prevLabel     = '&lsaquo;';
+    protected $nextLabel     = '&rsaquo;';
+
+    protected $itemsBeforeActive = 3;
+    protected $itemsAfterActive = 3;
 
     protected $itemsPerPage   = 10;
     protected $showOnNoPages  = false;
@@ -43,6 +51,21 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface
     {
         $this->view = __DIR__ . '/../../../view/grid/4.1.pagination.phtml';
         $this->exchangeArray($config);
+    }
+
+    /**
+     *
+     * @param AbstractSource $query
+     * @return AbstractSource
+     */
+    public function filterSource(AbstractSource $source) : AbstractSource
+    {
+        $page = $this->getLinkCreator()->getActivePaginationPage();
+        if ($page > 0 && $source->getLimit() > 0) {
+            $source->setStart($page * $source->getLimit());
+            $source->setEnd($page * $source->getLimit() + $source->getLimit());
+        }
+        return $source;
     }
 
     /**

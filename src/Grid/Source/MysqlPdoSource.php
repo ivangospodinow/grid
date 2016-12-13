@@ -2,7 +2,6 @@
 namespace Grid\Source;
 
 use Grid\Source\Interfaces\QuerySourceInterface;
-use Grid\Util\Traits\ExchangeArray;
 use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
@@ -23,7 +22,7 @@ use \Exception;
  */
 class MysqlPdoSource extends AbstractSource implements GridInterface, QuerySourceInterface
 {
-    use ExchangeArray, FilterGridQuery, GridAwareTrait;
+    use FilterGridQuery, GridAwareTrait;
     
     /**
      *
@@ -68,7 +67,8 @@ class MysqlPdoSource extends AbstractSource implements GridInterface, QuerySourc
      */
     public function __construct(array $config)
     {
-        $this->exchangeArray($config);
+        parent::__construct($config);
+        
         if (!$this->driver instanceof PDO) {
             throw new Exception('driver must be instance of PDO');
         }
@@ -121,15 +121,14 @@ class MysqlPdoSource extends AbstractSource implements GridInterface, QuerySourc
                 $expr = 'COUNT(*)';
             }
             $query->columns(['count' => new Expression($expr)]);
+
             $query->reset('group');
-            $query->reset('limit');
-            $query->order('offset');
             $query->reset('order');
             $query->limit(1);
+            $query->offset(0);
             
             $result = $this->getSql()->prepareStatementForSqlObject($query)->execute()->current();
             $this->setCount((int) ($result && isset($result['count']) ? $result['count'] : 0));
-
         }
         return $this->count;
     }
@@ -147,7 +146,7 @@ class MysqlPdoSource extends AbstractSource implements GridInterface, QuerySourc
     {
         if (null === $this->query) {
             $select = $this->getSql()->select($this->table);
-            if (null !== $this->getStart() && null !== $this->getEnd()) {
+            if ($this->getStart() || $this->getEnd()) {
                 $select->limit($this->getEnd() - $this->getStart());
                 $select->offset($this->getStart());
             }
@@ -158,7 +157,7 @@ class MysqlPdoSource extends AbstractSource implements GridInterface, QuerySourc
                 )
             );
         }
-
+        
         return $this->query;
     }
 

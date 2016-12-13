@@ -16,20 +16,52 @@ echo str_replace(
 ) . PHP_EOL;
 
 $items = [];
+if ($this->firstLabel) {
+    $attributes = [];
+    if (0 === $activePage) {
+        $attributes[] = ' class="active"';
+    } else {
+        $attributes[] = ' href="' . $this->getLinkCreator()->createPaginationLink(0) . '"';
+    }
+    
+    $items['first'] = str_replace(
+        '__ATTRIBUTES__',
+        implode(' ', $attributes),
+        $this->itemTagOpen
+    );
+    $items['first'] .= $this->firstLabel;
+    $items['first'] .= $this->itemTagClose . PHP_EOL;
+}
 
-$items['first'] = str_replace(
-    '__ATTRIBUTES__',
-    ' href="' . $this->getLinkCreator()->createPaginationLink(0) . '"',
-    $this->itemTagOpen
-);
-$items['first'] .= $this->firstLabel;
-$items['first'] .= $this->itemTagClose . PHP_EOL;
+if ($this->prevLabel) {
+    $attributes = [];
+    if ($activePage > 0) {
+        $attributes[] = ' href="' . $this->getLinkCreator()->createPaginationLink($activePage - 1) . '"';
+    }
+
+    $items['prev'] = str_replace(
+        '__ATTRIBUTES__',
+        implode(' ', $attributes),
+        $this->itemTagOpen
+    );
+    $items['prev'] .= $this->prevLabel;
+    $items['prev'] .= $this->itemTagClose . PHP_EOL;
+}
+
 
 for ($i = 0; $i <= $pages; $i++) {
+
+    if ($i < $activePage - $this->itemsBeforeActive
+    || $i > $activePage + $this->itemsAfterActive) {
+        continue;
+    }
+
     $attributes = [];
-    $attributes[] = 'href="' . $this->getLinkCreator()->createPaginationLink($i) . '"';
-    if ($i == $activePage) {
-        $attributes[] = 'class="active"';
+    
+    if ($i === $activePage) {
+        $attributes[] = ' class="active"';
+    } else {
+        $attributes[] = ' href="' . $this->getLinkCreator()->createPaginationLink($i) . '"';
     }
     $items[$i] = str_replace(
         '__ATTRIBUTES__',
@@ -40,13 +72,34 @@ for ($i = 0; $i <= $pages; $i++) {
     $items[$i] .= $this->itemTagClose . PHP_EOL;
 }
 
-$items['last'] = str_replace(
-    '__ATTRIBUTES__',
-    ' href="' . $this->getLinkCreator()->createPaginationLink($pages) . '"',
-    $this->itemTagOpen
-);
-$items['last'] .= $this->lastLabel;
-$items['last'] .= $this->itemTagClose . PHP_EOL;
+if ($this->nextLabel) {
+    $attributes = [];
+    if ($activePage < $pages) {
+        $attributes[] = ' href="' . $this->getLinkCreator()->createPaginationLink($activePage + 1) . '"';
+    }
+    $items['next'] = str_replace(
+        '__ATTRIBUTES__',
+        implode(' ', $attributes),
+        $this->itemTagOpen
+    );
+    $items['next'] .= $this->nextLabel;
+    $items['next'] .= $this->itemTagClose . PHP_EOL;
+}
+
+if ($this->itemTagClose) {
+    $attributes = [];
+    if ($activePage < $pages) {
+        $attributes[] = ' href="' . $this->getLinkCreator()->createPaginationLink($pages) . '"';
+    }
+    $items['last'] = str_replace(
+        '__ATTRIBUTES__',
+        implode(' ', $attributes),
+        $this->itemTagOpen
+    );
+    $items['last'] .= $this->lastLabel;
+    $items['last'] .= $this->itemTagClose . PHP_EOL;
+}
+
 
 echo implode($this->itemSeparator, $items);
 

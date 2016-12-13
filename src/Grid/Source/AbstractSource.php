@@ -1,6 +1,8 @@
 <?php
 namespace Grid\Source;
 
+use Grid\Util\Traits\ExchangeArray;
+
 use \Exception;
 
 /**
@@ -10,18 +12,27 @@ use \Exception;
  */
 abstract class AbstractSource implements SourceInterface
 {
+    use ExchangeArray;
+    
     /**
      * Query start from record
      * @var int
      */
-    protected $start;
+    protected $start = 0;
 
     /**
      * Query ends to record
      * @var type
      */
-    protected $end;
-    
+    protected $end = 0;
+
+    /**
+     * $end - start
+     * @var type
+     */
+    protected $limit = 0;
+
+
     /**
      * Resultset count
      * @var type 
@@ -33,6 +44,12 @@ abstract class AbstractSource implements SourceInterface
      * @var type
      */
     protected $rows;
+
+    public function __construct(array $config)
+    {
+        $this->exchangeArray($config);
+        $this->setLimit($this->getEnd() - $this->getStart());
+    }
 
     public static function factory(array $config) : SourceInterface
     {
@@ -83,4 +100,17 @@ abstract class AbstractSource implements SourceInterface
         return $this->end;
     }
 
+    public function getLimit() : int
+    {
+        return $this->limit;
+    }
+
+    /**
+     *
+     * @param int $limit
+     */
+    public function setLimit(int $limit)
+    {
+        $this->limit = $limit;
+    }
 }

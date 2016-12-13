@@ -16,6 +16,7 @@ use Grid\Plugin\ExtractorPlugin;
 use Grid\Plugin\Interfaces\RowPluginInterface;
 use Grid\Plugin\ProfilePlugin;
 use Grid\Source\AbstractSource;
+use Grid\Plugin\Interfaces\SourcePluginInterface;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
@@ -145,8 +146,15 @@ class Grid implements ArrayAccess
         if (!array_key_exists(__METHOD__, $this->cache)) {
             $sources = $this->getObjects(SourceInterface::class);
             $plugins = $this->getObjects(RowPluginInterface::class);
+            
             $data = [];
             foreach ($sources as $source) {
+                $this->plugins(
+                    SourcePluginInterface::class,
+                    'filterSource',
+                    $source
+                );
+
                 foreach ($source->getRows() as $array) {
                     $row = new GridRow($array, $this);
                     foreach ($plugins as $plugin) {

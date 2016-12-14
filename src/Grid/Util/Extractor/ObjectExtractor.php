@@ -21,23 +21,42 @@ class ObjectExtractor extends AbstractExtractor
      * @return type
      * @throws Exception
      */
-    public function extract($source, $key)
+    public function extract($source, $callback)
     {
         if (!is_object($source)) {
             throw new Exception('Extract expects object');
         }
-        if (!is_array($key)) {
-            $key = [$key];
+        if (!is_array($callback)) {
+            $callbacks = [$callback];
+        } else {
+            $callbacks = $callback;
         }
+
+        $firstCallbackNotExists = false;
         $result = null;
-        foreach ($key as $method) {
+        foreach ($callbacks as $method) {
             if (!method_exists($source, $method)) {
+                if ($result === null) {
+                    $firstCallbackNotExists = true;
+                }
                 break;
             }
             $source = call_user_func_array([$source, $method], []);
             if (!is_object($source)) {
                 $result = $source;
                 break;
+            }
+        }
+
+        /**
+         * In case of public property access
+         * $user->name;
+         */
+        if ($firstCallbackNotExists) {
+            $variables = get_object_vars($source);
+            $property = $callbacks[key($callbacks)];
+            if (array_key_exists($property, $variables)) {
+                $result = $variables[$property];
             }
         }
 

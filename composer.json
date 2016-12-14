@@ -17,7 +17,8 @@
     "require": {
         "php": "~7.0",
         "wp-cli/php-cli-tools": "^0.11.1",
-        "zendframework/zend-db": "^2.8"
+        "zendframework/zend-db": "^2.8",
+        "doctrine/orm": "^2.5"
     },
 
     "require-dev": {

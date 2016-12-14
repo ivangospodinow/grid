@@ -6,10 +6,8 @@ use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
 
-use Zend\Db\Adapter\AdapterInterface;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Expression;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 
 use \Exception;
 
@@ -17,12 +15,14 @@ use \Exception;
  *
  * @author Gospodinow
  */
-class ZendDbAdapterSource extends AbstractSource implements GridInterface, QuerySourceInterface
+class DoctrineSource extends AbstractSource implements GridInterface, QuerySourceInterface
 {
     use FilterGridQuery, GridAwareTrait;
     
     /**
-     *
+     * PSR2 class name
+     * Entity name
+     * App\Entity\User
      * @var string
      */
     protected $table;
@@ -34,28 +34,22 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     protected $namespace;
     
     /**
-     * Primery key
+     * Primary key
      * @var type
      */
     protected $pk;
 
     /**
      *
-     * @var Select
+     * @var QueryBuilder
      */
     protected $query;
     
     /**
      *
-     * @var QuerySourceInterface
+     * @var EntityManager
      */
     protected $driver;
-    
-    /**
-     *
-     * @var Sql
-     */
-    protected $sql;
 
     /**
      *
@@ -66,8 +60,12 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     {
         parent::__construct($config);
         
-        if (!$this->driver instanceof AdapterInterface) {
-            throw new Exception('driver must be instance of AdapterInterface');
+        if (!$this->driver instanceof EntityManager) {
+            throw new Exception('driver must be instance of EntityManager');
+        }
+
+        if (!isset($config['namespace'])) {
+            throw new Exception('namespace is required');
         }
 
         if (!$this->table) {
@@ -82,9 +80,7 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     public function getRows()
     {
         if (null === $this->rows) {
-            $this->rows = $this->getSql()
-                           ->prepareStatementForSqlObject($this->getQuery())
-                           ->execute();
+            $this->rows = $this->getQuery()->getQuery()->getResult();
         }
         return $this->rows;
     }
@@ -113,15 +109,13 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
             } else {
                 $expr = 'COUNT(*)';
             }
-            $query->columns(['count' => new Expression($expr)]);
+            $query->select("$expr AS `count`");
+            $query->setFirstResult(null);
+            $query->setMaxResults(null);
+            $query->resetDQLParts(['groupBy', 'orderBy']);
 
-            $query->reset('group');
-            $query->reset('order');
-            $query->limit(1);
-            $query->offset(0);
-            
-            $result = $this->getSql()->prepareStatementForSqlObject($query)->execute()->current();
-            $this->setCount((int) ($result && isset($result['count']) ? $result['count'] : 0));
+            $result = $query->getQuery()->getScalarResult();
+            $this->setCount((int) (isset($result[0]['count']) ? $result[0]['count'] : 0));
         }
         return $this->count;
     }
@@ -138,15 +132,17 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     public function getQuery()
     {
         if (null === $this->query) {
-            $select = $this->getSql()->select($this->table);
+            $query = $this->driver->createQueryBuilder();
+            $query->from($this->table, $this->namespace);
+            
             if ($this->getStart() || $this->getEnd()) {
-                $select->limit($this->getEnd() - $this->getStart());
-                $select->offset($this->getStart());
+                $query->setMaxResults($this->getLimit());
+                $query->setFirstResult($this->getStart());
             }
             $this->setQuery(
                 $this->filterGridQuery(
                     $this->getGrid(),
-                    $select
+                    $query
                 )
             );
         }
@@ -157,26 +153,5 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     public function setQuery($query)
     {
         $this->query = $query;
-    }
-
-    /**
-     *
-     * @return Sql
-     */
-    protected function getSql()
-    {
-        if (null === $this->sql) {
-            $this->sql = new Sql($this->getAdapter());
-        }
-        return $this->sql;
-    }
-
-    /**
-     *
-     * @return AdapterInterface
-     */
-    protected function getAdapter() : AdapterInterface
-    {
-        return $this->driver;
     }
 }

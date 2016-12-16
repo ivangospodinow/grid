@@ -95,6 +95,21 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
     }
     
     /**
+     * Added order to query
+     */
+    public function order()
+    {
+        $orderFields = $this->getOrderFields();
+        if (!empty($orderFields)) {
+            $query = $this->getQuery();
+            $query->resetDQLPart('orderBy');
+            foreach ($orderFields as $field => $direction) {
+                $query->addOrderBy($field, $direction);
+            }
+        }
+    }
+
+    /**
      *
      * @return int
      */

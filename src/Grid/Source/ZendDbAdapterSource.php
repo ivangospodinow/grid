@@ -99,6 +99,17 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     }
     
     /**
+     * Added order to query
+     */
+    public function order()
+    {
+        $orderFields = $this->getOrderFields();
+        if (!empty($orderFields)) {
+            $this->getQuery()->order($orderFields);
+        }
+    }
+
+    /**
      *
      * @return int
      */
@@ -106,10 +117,8 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     {
         if (null === $this->count) {
             $query = clone $this->getQuery();
-            if ($this->pk && $this->namespace) {
-                $expr = 'COUNT(DISTINCT `' . $this->namespace . '`.`' . $this->pk . '`)';
-            } elseif ($this->pk) {
-                $expr = 'COUNT(DISTINCT `' . $this->pk . '`)';
+            if ($this->pk) {
+                $expr = 'COUNT(DISTINCT `' . $this->getDbFieldNamespace($this->pk) . '`)';
             } else {
                 $expr = 'COUNT(*)';
             }
@@ -157,6 +166,16 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     public function setQuery($query)
     {
         $this->query = $query;
+    }
+
+    /**
+     * users.name
+     * @param type $field
+     * @return string
+     */
+    protected function getDbFieldNamespace($field) : string
+    {
+        return ($this->namespace ? $this->namespace . '.' : '') . $field;
     }
 
     /**

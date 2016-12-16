@@ -55,7 +55,32 @@ class ArraySource extends AbstractSource
     {
         $this->driver = $rows;
     }
-    
+
+    public function order()
+    {
+        if (empty($this->driver)) {
+            return $this->driver;
+        }
+
+        $order = $this->getOrder();
+        foreach ($order as $name => $direction) {
+            if (!array_key_exists($name, $this->driver[key($this->driver)])) {
+                error_log('Sorting ' . $name . ' does not exists in array');
+                continue;
+            }
+
+            if ($direction === 'ASC' || $direction === 'DESC') {
+                uasort($this->driver, function ($a, $b) use ($name, $direction) {
+                    if ($direction === 'ASC') {
+                        return $a[$name] <=> $b[$name];
+                    } else {
+                        return $b[$name] <=> $a[$name];
+                    }
+                });
+            }
+        }
+    }
+
     /**
      *
      * @return int

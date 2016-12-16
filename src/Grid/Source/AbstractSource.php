@@ -32,15 +32,20 @@ abstract class AbstractSource implements SourceInterface
      */
     protected $limit = 0;
 
+    /**
+     * [columnName => ASC, DESC, columnName => ASC, DESC ...]
+     * @var type
+     */
+    protected $order = [];
 
     /**
-     * Resultset count
+     * Result set count
      * @var type 
      */
     protected $count;
 
     /**
-     * Resultset
+     * Result set
      * @var type
      */
     protected $rows;
@@ -112,5 +117,59 @@ abstract class AbstractSource implements SourceInterface
     public function setLimit(int $limit)
     {
         $this->limit = $limit;
+    }
+
+    public function getOrder() : array
+    {
+        return $this->order;
+    }
+
+    /**
+     *
+     * @param array $order
+     */
+    public function setOrder(array $order)
+    {
+        foreach ($order as $name => &$direction) {
+            $direction = strtoupper($direction);
+            if (!in_array($direction, ['ASC', 'DESC'])) {
+                unset($order[$name]);
+                trigger_error('order requires ASC or DESC');
+            }
+        }
+        $this->order = $order;
+    }
+
+        /**
+     *
+     * @return bool
+     */
+    public function canOrder() : bool
+    {
+        return count($this->order);
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getOrderFields() : array
+    {
+        $order = $this->getOrder();
+        $orderFields = [];
+        foreach ($order as $name => $direction) {
+            $column = $this->getGrid()->getColumn($name);
+            if (!$column->hasDbFields()) {
+                trigger_error('Sortable column requires dbFields');
+                continue;
+            }
+            if ($direction === 'ASC' || $direction === 'DESC') {
+                foreach ($column->getDbFields() as $field) {
+                    $orderFields[$this->getDbFieldNamespace($field)] = $direction;
+                }
+            }
+        }
+
+        return $orderFields;
     }
 }

@@ -8,6 +8,8 @@ use Grid\Source\SourceInterface;
 use Grid\Renderer\RendererInterface;
 use Grid\Column\AbstractColumn;
 
+use Grid\Interfaces\TranslateInterface;
+
 use Grid\Plugin\AbstractPlugin;
 use Grid\Plugin\HeaderPlugin;
 use Grid\Plugin\Interfaces\DataPluginInterface;
@@ -18,6 +20,8 @@ use Grid\Plugin\ProfilePlugin;
 use Grid\Source\AbstractSource;
 use Grid\Plugin\Interfaces\SourcePluginInterface;
 use Grid\Plugin\Interfaces\HidratorPluginInterface;
+use Grid\Plugin\Interfaces\RenderPluginInterface;
+use Grid\Plugin\Interfaces\ColumnPluginInterface;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
@@ -113,12 +117,19 @@ class Grid implements ArrayAccess
      */
     public function render() : string
     {
+        $this->plugins(RenderPluginInterface::class, 'preRender');
+        
         $renderers = $this->getObjects(RendererInterface::class);
         $html = [];
         foreach ($renderers as $renderer) {
             $html[] = $renderer->render($this);
         }
-        return implode(PHP_EOL, $html);
+
+        return $this->plugins(
+            RenderPluginInterface::class,
+            'postRender',
+            implode(PHP_EOL, $html)
+        );
     }
 
     /**
@@ -128,7 +139,17 @@ class Grid implements ArrayAccess
     public function getColumns() : array
     {
         if (!array_key_exists(__METHOD__, $this->cache)) {
-            $columns = $this->getObjects(AbstractColumn::class);
+            $columns = [];
+            foreach ($this->iterator as $mixed) {
+                if (is_object($mixed)
+                && $mixed instanceof AbstractColumn) {
+                    $columns[] = $this->plugins(
+                        ColumnPluginInterface::class,
+                        'filterColumn',
+                        $mixed
+                    );
+                }
+            }
             $this->cache[__METHOD__] = $this->plugins(
                 ColumnsPluginInterface::class,
                 'filterColumns',
@@ -136,6 +157,25 @@ class Grid implements ArrayAccess
             );
         }
         return $this->cache[__METHOD__];
+    }
+
+    /**
+     *
+     * @param string $name
+     * @return AbstractColumn
+     */
+    public function getColumn(string $name) : AbstractColumn
+    {
+        $key = __METHOD__ . '::' . $name;
+        if (!isset($this->cache[$key])) {
+            foreach ($this->getObjects(AbstractColumn::class) as $column) {
+                if ($column->getName() === $name) {
+                    $this->cache[$key] = $column;
+                    break;
+                }
+            }
+        }
+        return $this->cache[$key];
     }
 
     /**
@@ -156,6 +196,10 @@ class Grid implements ArrayAccess
                     'filterSource',
                     $source
                 );
+
+                if ($source->canOrder()) {
+                    $source->order();
+                }
 
                 foreach ($source->getRows() as $rowData) {
 
@@ -215,13 +259,32 @@ class Grid implements ArrayAccess
     }
 
     /**
+     *
+     * @param string $string
+     */
+    public function translate(string $string) : string
+    {
+        if (!isset($this->cache[__METHOD__])) {
+            $this->cache[__METHOD__] = $this->getObjects(TranslateInterface::class);
+        }
+
+        foreach ($this->cache[__METHOD__] as $translatable) {
+            $string = $translatable->translate($string);
+            if ($string !== $string) {
+                break;
+            }
+        }
+        return $string;
+    }
+
+    /**
      * Calls plugins foreach
      * @param type $interface
      * @param type $method
      * @param type $data
      * @return type
      */
-    protected function plugins($interface, $method, $data)
+    protected function plugins($interface, $method, $data = null)
     {
         $plugins = $this->getObjects($interface);
         foreach ($plugins as $plugin) {

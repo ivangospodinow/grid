@@ -41,13 +41,28 @@ for ($i = 1; $i <= 1000; $i++) {
 }
 
 $grid = new Grid\Grid;
-$grid[] = new Grid\Column\Column('id', '#');
-$grid[] = new Grid\Column\Column('name', 'Name');
+$grid[] = new Grid\Column\Column(
+    [
+        'name' => 'id',
+        'label' => '#',
+        'dbFields' => 'id',
+        'sortable' => true,
+    ]
+);
+$grid[] = new Grid\Column\Column(
+    [
+        'name' => 'name',
+        'label' => 'Name',
+        'dbFields' => 'name',
+        'sortable' => true,
+    ]
+);
 //$grid[] = new Grid\Source\ArraySource(
 //    [
 //        'driver' => $array,
 //        'start' => 0,
 //        'end' => 10,
+//        'order' => ['name' => 'ASC']
 //    ]
 //);
 
@@ -115,5 +130,7 @@ $grid[] = new Grid\Plugin\ProfilePlugin(
 );
 $grid[] = new Grid\Plugin\PaginationPlugin;
 $grid[] = new Grid\Hydrator\Hydrator;
+$grid[] = new Grid\Plugin\ColumnSortablePlugin();
+$grid[] = new \Grid\Util\Links();
 
 echo $grid->render();

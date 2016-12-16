@@ -1,0 +1,94 @@
+<?php
+
+namespace Grid\Plugin;
+
+use Grid\Column\AbstractColumn;
+use Grid\Plugin\Interfaces\RenderPluginInterface;
+use Grid\Util\Traits\GridAwareTrait;
+use Grid\Util\Traits\LinkCreatorAwareTrait;;
+use Grid\GridInterface;
+use Grid\Plugin\Interfaces\SourcePluginInterface;
+use Grid\Source\AbstractSource;
+use Grid\Grid;
+
+/**
+ *
+ * @author Gospodinow
+ */
+class ColumnSortablePlugin extends AbstractPlugin implements RenderPluginInterface, GridInterface, SourcePluginInterface
+{
+    use GridAwareTrait, LinkCreatorAwareTrait;
+
+    protected $ascLabel  = '&uarr;';
+    protected $descLabel = '&darr;';
+
+    /**
+     *
+     * @param Grid $grid
+     */
+    public function preRender()
+    {
+        foreach ($this->getGrid()->getColumns() as $column) {
+            if ($column->isSortable()) {
+                $this->renderSortable($column);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param string $html
+     * @param Grid $grid
+     * @return string
+     */
+    public function postRender(string $html) : string
+    {
+        return $html;
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     */
+    public function renderSortable(AbstractColumn $column)
+    {
+        $link = $this->getLinkCreator();
+        $value = strtoupper($link->getFilterValue($column, 'sortable'));
+        $direction = $value === 'ASC' ? 'desc' : 'asc';
+        $url = $link->createFilterLink($column, 'sortable', $direction);
+
+        if (empty($url)) {
+            trigger_error('LinksInterface is required for sortable to work');
+            return;
+        }
+        
+        $column->setPreLabel('<a href="' . $url . '">');
+        if ($value && $value === 'ASC') {
+            $column->setPostLabel(' ' . $this->ascLabel . '</a>');
+        } elseif ($value && $value === 'DESC') {
+            $column->setPostLabel(' ' . $this->descLabel . '</a>');
+        }
+    }
+
+    public function filterSource(AbstractSource $source) : AbstractSource
+    {
+        $link = $this->getLinkCreator();
+        $order = [];
+        foreach ($this->getGrid()->getColumns() as $column) {
+            if (!$column->isSortable()) {
+                continue;
+            }
+
+            $value = $link->getFilterValue($column, 'sortable');
+            if ($value) {
+                $order[$column->getName()] = strtoupper($value) === 'ASC' ? 'ASC' : 'DESC';
+            }
+        }
+
+        if (!empty($order)) {
+            $source->setOrder($order);
+        }
+
+        return $source;
+    }
+}

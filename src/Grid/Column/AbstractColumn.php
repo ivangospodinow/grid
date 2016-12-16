@@ -1,9 +1,12 @@
 <?php
 namespace Grid\Column;
 
-use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Extractor\AbstractExtractor;
+use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Attributes;
+
+use Grid\Util\Traits\GridAwareTrait;
+use Grid\GridInterface;
 
 use \Exception;
 
@@ -13,34 +16,83 @@ use \Exception;
  *
  * @author Gospodinow
  */
-abstract class AbstractColumn
+abstract class AbstractColumn implements GridInterface
 {
-    use ExchangeArray, Attributes;
-    
+    use ExchangeArray, Attributes, GridAwareTrait;
+
+    /**
+     * Unique identifier within the grid
+     * @var string
+     */
     protected $name;
-    protected $label;
-    protected $extract;
+
+    /**
+     *
+     * @var string
+     */
+    protected $preLabel = '';
+
+    /**
+     *
+     * @var string
+     */
+    protected $label = '';
+
+    /**
+     *
+     * @var string
+     */
+    protected $postLabel = '';
     
     /**
      *
+     * @var type
+     */
+    protected $labelIsTranslated = false;
+
+    /**
+     * Gets column value from array or object
+     * @var type
+     */
+    protected $extract;
+    
+    /**
+     * Called based on extract and row value
      * @var AbstractExtractor
      */
     protected $extractor;
+    
+    /**
+     * Corresponding field or fields for this column
+     * For example User full name = user.name + user.lastName;
+     * @example [user.name, user.lastName]
+     * @var array
+     */
+    protected $dbFields;
+
+    /**
+     * If the column can be sortable
+     * @var type 
+     */
+    protected $sortable = false;
+
     /**
      *
      * @param string $name
      * @param type $label
      * @param type $extract
      */
-    public function __construct(string $name, $label, $extract = null)
+    public function __construct(array $config)
     {
-        $this->exchangeArray(
-            [
-                'name'      => $name,
-                'label'     => $label,
-                'extract'   => $extract ?? $name
-            ]
-        );
+        if (!isset($config['name'])) {
+            throw new Exception('Column required name');
+        }
+        $config['extract']  = $config['extract'] ?? $config['name'];
+        $config['dbFields'] = isset($config['dbFields'])
+                            && !is_array($config['dbFields'])
+                            ? [$config['dbFields']] : [];
+
+        $this->exchangeArray($config);
     }
 
     /**
@@ -51,18 +103,7 @@ abstract class AbstractColumn
      */
     public static function factory(array $config) : self
     {
-        if (!isset($config['name'])) {
-            throw new Exception('name is required');
-        }
-        if (!isset($config['label'])) {
-            throw new Exception('label is required');
-        }
-
-        return new Column(
-            $config['name'],
-            $config['label'],
-            $config['extract'] ?? null
-        );
+        return new Column($config);
     }
 
     /**
@@ -80,7 +121,23 @@ abstract class AbstractColumn
      */
     public function getLabel()
     {
+        if (!$this->labelIsTranslated) {
+            $this->labelIsTranslated = true;
+            $this->label = $this->getGrid()->translate($this->label);
+        }
+
         return $this->label;
+    }
+
+    /**
+     *
+     * @param string $label
+     * @return \self
+     */
+    public function setLabel(string $label) : self
+    {
+        $this->label = $label;
+        return $this;
     }
 
     /**
@@ -90,6 +147,69 @@ abstract class AbstractColumn
     public function getExtract()
     {
         return $this->extract;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getPreLabel() : string
+    {
+        return $this->preLabel;
+    }
+
+    /**
+     *
+     * @param string $string
+     */
+    public function setPreLabel(string $string)
+    {
+        $this->preLabel = $string;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getPostLabel() : string
+    {
+        return $this->postLabel;
+    }
+
+    /**
+     *
+     * @param string $string
+     */
+    public function setPostLabel(string $string)
+    {
+        $this->postLabel = $string;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getDbFields() : array
+    {
+        return $this->dbFields;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function hasDbFields() : bool
+    {
+        return !empty($this->dbFields);
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function isSortable() : bool
+    {
+        return $this->hasDbFields() && $this->sortable;
     }
 
     /**

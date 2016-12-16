@@ -15,7 +15,7 @@ class HeaderPlugin extends AbstractPlugin implements DataPluginInterface
     /**
      * gets the column value from source
      * 
-     * @param GridRow $gridRow
+     * @param array $data
      * @return GridRow
      */
     public function filterData(array $data) : array
@@ -26,7 +26,12 @@ class HeaderPlugin extends AbstractPlugin implements DataPluginInterface
             GridRow::POSITION_HEAD
         );
         foreach ($this->getGrid()->getColumns() as $column) {
-            $gridRow[$column->getName()] = $column->getLabel();
+            $gridRow[$column->getName()] = sprintf(
+                '%s%s%s',
+                $column->getPreLabel(),
+                $column->getLabel(),
+                $column->getPostLabel()
+            );
         }
         $data[] = $gridRow;
         return $data;

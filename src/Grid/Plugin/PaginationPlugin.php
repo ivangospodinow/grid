@@ -4,6 +4,7 @@ namespace Grid\Plugin;
 
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Attributes;
+use Grid\Util\Traits\LinkCreatorAwareTrait;
 use Grid\Plugin\Interfaces\DataPluginInterface;
 use Grid\Plugin\Interfaces\SourcePluginInterface;
 use Grid\Source\AbstractSource;
@@ -17,7 +18,7 @@ use Grid\GridRow;
  */
 class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, SourcePluginInterface
 {
-    use ExchangeArray, Attributes;
+    use ExchangeArray, Attributes, LinkCreatorAwareTrait;
 
     protected $view;
 
@@ -40,12 +41,6 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
 
     protected $itemsPerPage   = 10;
     protected $showOnNoPages  = false;
-
-    /**
-     *
-     * @var PaginationLinkInterface
-     */
-    protected $linkCreator;
 
     public function __construct(array $config = [])
     {
@@ -84,29 +79,5 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
             GridRow::POSITION_FOOTER
         );
         return $data;
-    }
-
-    /**
-     *
-     * @return \Grid\Plugin\PaginationLinkInterface
-     */
-    public function getLinkCreator() : PaginationLinkInterface
-    {
-        if (!$this->linkCreator) {
-            $this->setLinkCreator(new PaginationLink);
-        }
-        $this->linkCreator->setGrid($this->getGrid());
-        return $this->linkCreator;
-    }
-
-    /**
-     *
-     * @param \Grid\Plugin\PaginationLinkInterface $creator
-     * @return \self
-     */
-    public function setLinkCreator(PaginationLinkInterface $creator) : self
-    {
-        $this->linkCreator = $creator;
-        return $this;
     }
 }

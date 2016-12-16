@@ -12,6 +12,8 @@ interface SourceInterface
     public function setRows(array $rows);
     public function getCount() : int;
     public function setCount(int $count);
+    public function canOrder() : bool;
+    public function order();
 
     /**
      * Query start from record

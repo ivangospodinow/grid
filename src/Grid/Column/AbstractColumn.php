@@ -20,6 +20,9 @@ abstract class AbstractColumn implements GridInterface
 {
     use ExchangeArray, Attributes, GridAwareTrait;
 
+    const SEARCHABLE_STRATEGY_EQ   = '=';
+    const SEARCHABLE_STRATEGY_LIKE = 'like';
+
     /**
      * Unique identifier within the grid
      * @var string
@@ -76,6 +79,18 @@ abstract class AbstractColumn implements GridInterface
      */
     protected $sortable = false;
 
+    /**
+     *
+     * @var type
+     */
+    protected $searchable = false;
+
+    /**
+     *
+     * @var string
+     */
+    protected $searchableStrategy = self::SEARCHABLE_STRATEGY_LIKE;
+    
     /**
      *
      * @param string $name
@@ -210,6 +225,15 @@ abstract class AbstractColumn implements GridInterface
     public function isSortable() : bool
     {
         return $this->hasDbFields() && $this->sortable;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function isSearchable() : bool
+    {
+        return $this->hasDbFields() && $this->searchable;
     }
 
     /**

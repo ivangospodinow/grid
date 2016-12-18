@@ -2,8 +2,6 @@
 
 namespace Grid\Plugin\Interfaces;
 
-use Grid\Grid;
-
 /**
  * 
  *

@@ -30,7 +30,7 @@ class ColumnSortablePlugin extends AbstractPlugin implements RenderPluginInterfa
     {
         foreach ($this->getGrid()->getColumns() as $column) {
             if ($column->isSortable()) {
-                $this->renderSortable($column);
+                $this->render($column);
             }
         }
     }
@@ -50,7 +50,7 @@ class ColumnSortablePlugin extends AbstractPlugin implements RenderPluginInterfa
      *
      * @param AbstractColumn $column
      */
-    public function renderSortable(AbstractColumn $column)
+    public function render(AbstractColumn $column)
     {
         $link = $this->getLinkCreator();
         $value = strtoupper($link->getFilterValue($column, 'sortable'));

@@ -25,6 +25,7 @@ use Grid\Plugin\Interfaces\ColumnPluginInterface;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
+use Grid\Util\Traits\Cache;
 
 use \ArrayAccess;
 
@@ -35,7 +36,7 @@ use \ArrayAccess;
  */
 class Grid implements ArrayAccess
 {
-    use Attributes, ExchangeArray;
+    use Attributes, ExchangeArray, Cache;
 
     /**
      * Unique grid Id
@@ -54,13 +55,7 @@ class Grid implements ArrayAccess
      * @var SourceInterface
      */
     protected $source;
-
-    /**
-     * Object cache
-     * @var type
-     */
-    protected $cache = [];
-
+    
     /**
      *
      * @param array $config

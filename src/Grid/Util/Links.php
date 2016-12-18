@@ -28,6 +28,15 @@ class Links implements GridInterface, LinksInterface
 
     /**
      *
+     * @return []
+     */
+    public function getParams() : array
+    {
+        return $this->params;
+    }
+
+    /**
+     *
      * @param AbstractColumn $column
      * @param string $type
      * @param string $value
@@ -86,6 +95,15 @@ class Links implements GridInterface, LinksInterface
 
     /**
      *
+     * @return type
+     */
+    public function getPaginationPageName()
+    {
+        return 'grid[' . $this->getGrid()->getId() . '][page]';
+    }
+
+    /**
+     *
      * @param array $params
      * @return string
      */
@@ -104,6 +122,18 @@ class Links implements GridInterface, LinksInterface
         
         return count($params) > 0
              ? '?' . http_build_query($params)
-             : strstr($_SERVER['REQUEST_URI'], '?', true);
+             : $this->getPageBasePath();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getPageBasePath() : string
+    {
+        if (strpos($_SERVER['REQUEST_URI'], '?') === false) {
+            return $_SERVER['REQUEST_URI'];
+        }
+        return strstr($_SERVER['REQUEST_URI'], '?', true);
     }
 }

@@ -5,11 +5,15 @@ use Grid\Source\Interfaces\QuerySourceInterface;
 use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
+use Grid\Column\AbstractColumn;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
+use Zend\Db\Sql\Predicate\PredicateSet;
+use Zend\Db\Sql\Predicate\Operator;
+use Zend\Db\Sql\Predicate\Like;
 
 use \Exception;
 
@@ -64,6 +68,10 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
      */
     public function __construct(array $config)
     {
+        if (!class_exists('Zend\Db\Sql\Sql')) {
+            throw new Exception('Zend db is not installed. Run composer require zendframework/zend-db');
+        }
+
         parent::__construct($config);
         
         if (!$this->driver instanceof AdapterInterface) {
@@ -107,6 +115,86 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
         if (!empty($orderFields)) {
             $this->getQuery()->order($orderFields);
         }
+    }
+    
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function andWhere(AbstractColumn $column, string $sign, string $value)
+    {
+        $this->where($column, $sign, $value, PredicateSet::OP_AND);
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function orWhere(AbstractColumn $column, string $sign, string $value)
+    {
+        $this->where($column, $sign, $value, PredicateSet::OP_OR);
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     * @param type $op
+     */
+    public function where(AbstractColumn $column, string $sign, string $value, $op = PredicateSet::OP_OR)
+    {
+        $set = new PredicateSet;
+        foreach ($column->getDbFields() as $field) {
+            $set->addPredicate(
+                new Operator(
+                    $this->getDbFieldNamespace($field),
+                    $sign,
+                    $value
+                ),
+                $op
+            );
+        }
+        $this->getQuery()->where($set);
+    }
+    
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function andLike(AbstractColumn $column, string $value)
+    {
+        $this->like($column, $value, PredicateSet::OP_AND);
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function orLike(AbstractColumn $column, string $value)
+    {
+        $this->like($column, $value, PredicateSet::OP_AND);
+    }
+    
+    public function like(AbstractColumn $column, string $value, $op = PredicateSet::OP_OR)
+    {
+        $set = new PredicateSet;
+        foreach ($column->getDbFields() as $field) {
+            $set->addPredicate(
+                new Like(
+                    $this->getDbFieldNamespace($field),
+                    "%$value%"
+                ),
+                $op
+            );
+        }
+        $this->getQuery()->where($set);
     }
 
     /**
@@ -175,6 +263,12 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
      */
     protected function getDbFieldNamespace($field) : string
     {
+        /**
+         * If field has namespace in it, return it
+         */
+        if (strpos($field, '.') !== false) {
+            return $field;
+        }
         return ($this->namespace ? $this->namespace . '.' : '') . $field;
     }
 

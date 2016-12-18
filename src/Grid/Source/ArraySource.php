@@ -1,6 +1,8 @@
 <?php
 namespace Grid\Source;
 
+use Grid\Column\AbstractColumn;
+
 use \Exception;
 
 /**
@@ -14,7 +16,7 @@ class ArraySource extends AbstractSource
      *
      * @var []
      */
-    protected $driver;
+    protected $driver = [];
     
     /**
      *
@@ -59,9 +61,8 @@ class ArraySource extends AbstractSource
     public function order()
     {
         if (empty($this->driver)) {
-            return $this->driver;
+            return;
         }
-
         $order = $this->getOrder();
         foreach ($order as $name => $direction) {
             if (!array_key_exists($name, $this->driver[key($this->driver)])) {
@@ -81,6 +82,64 @@ class ArraySource extends AbstractSource
         }
     }
 
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function andWhere(AbstractColumn $column, string $sign, string $value)
+    {
+        $value = strtolower($value);
+        $name  = $column->getName();
+
+        foreach ($this->driver as $key => $row) {
+            if (strtolower($row[$name]) != $value) {
+                unset($this->driver[$key]);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function orWhere(AbstractColumn $column, string $sign, string $value)
+    {
+        // @TODO SUPPORT OR ?
+        $this->andWhere($column, $sign, $value);
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function andLike(AbstractColumn $column, string $value)
+    {
+        $value = strtolower($value);
+        $name  = $column->getName();
+        
+        foreach ($this->driver as $key => $row) {
+            if (strpos(strtolower($row[$name]), $value) === false) {
+                unset($this->driver[$key]);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function orLike(AbstractColumn $column, string $value)
+    {
+        // @TODO SUPPORT OR ?
+        $this->andLike($column, $value);
+    }
+    
     /**
      *
      * @return int

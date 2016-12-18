@@ -1,6 +1,8 @@
 <?php
 namespace Grid\Source;
 
+use Grid\Column\AbstractColumn;
+
 /**
  * Description of SourceInterface
  *
@@ -14,6 +16,36 @@ interface SourceInterface
     public function setCount(int $count);
     public function canOrder() : bool;
     public function order();
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function andWhere(AbstractColumn $column, string $sign, string $value);
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function orWhere(AbstractColumn $column, string $sign, string $value);
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function andLike(AbstractColumn $column, string $value);
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function orLike(AbstractColumn $column, string $value);
 
     /**
      * Query start from record

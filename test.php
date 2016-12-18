@@ -55,16 +55,17 @@ $grid[] = new Grid\Column\Column(
         'label' => 'Name',
         'dbFields' => 'name',
         'sortable' => true,
+        'searchable' => true,
     ]
 );
-//$grid[] = new Grid\Source\ArraySource(
-//    [
-//        'driver' => $array,
-//        'start' => 0,
-//        'end' => 10,
-//        'order' => ['name' => 'ASC']
-//    ]
-//);
+$grid[] = new Grid\Source\ArraySource(
+    [
+        'driver' => $array,
+        'start' => 0,
+        'end' => 10,
+        'order' => ['name' => 'ASC']
+    ]
+);
 
 //Create a simple "default" Doctrine ORM configuration for Annotations
 //$isDevMode = true;
@@ -93,16 +94,16 @@ $grid[] = new Grid\Column\Column(
 //    ]
 //);
 
-$pdo = new PDO('mysql:host=localhost;dbname=test;charset=UTF8', 'root', '');
-
-$grid[] = $source = new \Grid\Source\MysqlPdoSource(
-    [
-        'driver' => $pdo,
-        'table'  => 'users',
-        'start'  => 0,
-        'end'    => 10,
-    ]
-);
+//$pdo = new PDO('mysql:host=localhost;dbname=test;charset=UTF8', 'root', '');
+//
+//$grid[] = $source = new \Grid\Source\MysqlPdoSource(
+//    [
+//        'driver' => $pdo,
+//        'table'  => 'users',
+//        'start'  => 0,
+//        'end'    => 10,
+//    ]
+//);
 
 //$mysqli = new mysqli('localhost', 'root', '', 'test');
 //$grid[] = $source = new \Grid\Source\MysqliSource(
@@ -131,6 +132,7 @@ $grid[] = new Grid\Plugin\ProfilePlugin(
 $grid[] = new Grid\Plugin\PaginationPlugin;
 $grid[] = new Grid\Hydrator\Hydrator;
 $grid[] = new Grid\Plugin\ColumnSortablePlugin();
-$grid[] = new \Grid\Util\Links();
+$grid[] = new Grid\Util\Links();
+$grid[] = new Grid\Plugin\ColumnSearchablePlugin(['markMatches' => true]);
 
 echo $grid->render();

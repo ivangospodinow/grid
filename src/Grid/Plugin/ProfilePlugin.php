@@ -34,12 +34,16 @@ class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, Da
      */
     public function filterColumns(array $columns) : array
     {
-        foreach ($columns as $key => $column) {
-            if (!in_array($column->getName(), $this->columns)) {
-                unset($columns[$key]);
+        $sorted = [];
+        foreach ($this->columns as $name) {
+            foreach ($columns as $column) {
+                if ($column->getName() === $name) {
+                    $sorted[] = $column;
+                }
             }
         }
-        return $columns;
+        unset($columns);
+        return $sorted;
     }
 
     /**

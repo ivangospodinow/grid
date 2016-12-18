@@ -112,17 +112,6 @@ abstract class AbstractColumn implements GridInterface
 
     /**
      *
-     * @param array $config
-     * @return \self
-     * @throws Exception
-     */
-    public static function factory(array $config) : self
-    {
-        return new Column($config);
-    }
-
-    /**
-     *
      * @return string
      */
     public function getName() : string

@@ -55,20 +55,7 @@ abstract class AbstractSource implements SourceInterface
         $this->exchangeArray($config);
         $this->setLimit($this->getEnd() - $this->getStart());
     }
-
-    public static function factory(array $config) : SourceInterface
-    {
-        if (!isset($config['type'])) {
-            throw new Exception('Type is required');
-        }
-
-        if ($config['type'] === 'array') {
-            return  new ArraySource(isset($config['data']) ? $config['data'] : []);
-        }
-
-        throw new Exception('Invalid factory type');
-    }
-
+    
     /**
      *
      * @param int $start

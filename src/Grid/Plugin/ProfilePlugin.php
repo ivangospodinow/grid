@@ -26,17 +26,7 @@ class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, Da
     {
         $this->exchangeArray($config);
     }
-
-    /**
-     *
-     * @param array $config
-     * @return \self
-     */
-    public static function factory(array $config) : self
-    {
-        return new self($config);
-    }
-
+    
     /**
      *
      * @param array $columns

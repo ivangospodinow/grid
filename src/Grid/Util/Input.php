@@ -17,13 +17,21 @@ class Input
     const TYPE_TEXT   = 'text';
     const TYPE_SELECT = 'select';
 
-    public function __construct(string $name, $type = self::TYPE_TEXT)
+    public function __construct(array $config)
     {
-        $this->setAttribute('name', $name);
-        $this->setAttribute('type', $type);
+        if (!isset($config['name'])) {
+            throw new Exception('parameter name is required');
+        }
 
-        if (!in_array($type, [self::TYPE_TEXT, self::TYPE_SELECT])) {
-            throw new Exception('Unsupported type ' . $type);
+        if (!isset($config['type'])) {
+            $config['type'] = self::TYPE_TEXT;
+        }
+
+        $this->setAttribute('name', $config['name']);
+        $this->setAttribute('type', $config['type']);
+
+        if (!in_array($config['type'], [self::TYPE_TEXT, self::TYPE_SELECT])) {
+            throw new Exception('Unsupported type ' . $config['type']);
         }
     }
 

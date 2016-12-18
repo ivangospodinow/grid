@@ -127,7 +127,7 @@ class ColumnSearchablePlugin extends AbstractPlugin implements DataPluginInterfa
                 $this->getGrid()->getId(),
                 $column->getName()
             );
-            $input = new Input($name, Input::TYPE_TEXT);
+            $input = new Input(['name' => $name, 'type' => Input::TYPE_TEXT]);
             $input->setValue($this->getLinkCreator()->getFilterValue($column, 'searchable'));
             $this->setCache($key, $input);
         }

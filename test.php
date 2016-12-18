@@ -1,36 +1,68 @@
 <?php
 require_once 'autoload.php';
 
-//$config = [
-//    'renderer' => \Grid\Renderer\CliRenderer::class,
-//    'source' => [
-//        [
-//            'type' => 'array',
-//            'data' =>     [
-//                [
-//                    'id' => 1,
-//                    'name' => 'Ivan Gospodinow',
-//                ],
-//                [
-//                    'id' => 2,
-//                    'name' => 'Ivan Gospodinow The Second',
-//                ]
-//            ]
-//        ]
-//    ],
-//    'columns' => [
-//        ['name' => 'id', 'label' => '#'],
-//        ['name' => 'name', 'label' => 'Name']
-//    ],
-//    'profile' => [
-//        'columns' => ['id', 'name']
-//    ],
-//];
+$array = [];
+for ($i = 1; $i <= 1000; $i++) {
+    $array[] = [
+        'id' => $i,
+        'name' => 'Name ' .$i
+    ];
+}
+
+$config = [
+    \Grid\Renderer\HtmlRenderer::class,
+    \Grid\Plugin\PaginationPlugin::class,
+    \Grid\Hydrator\Hydrator::class,
+    \Grid\Plugin\ColumnSortablePlugin::class,
+    \Grid\Util\Links::class,
+    [
+        'class' => \Grid\Plugin\ProfilePlugin::class,
+        'options' => [
+            'columns' => ['id', 'name']
+        ]
+    ],
+    [
+        'class' => \Grid\Plugin\ColumnSearchablePlugin::class,
+        'options' => [
+            'markMatches' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'id',
+            'label' => '#',
+            'dbFields' => 'id',
+            'sortable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'name',
+            'label' => 'Name',
+            'dbFields' => 'name',
+            'sortable' => true,
+            'searchable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Source\ArraySource::class,
+        'options' => [
+            'driver' => $array,
+            'start' => 0,
+            'end' => 10,
+            'order' => ['name' => 'ASC']
+        ]
+    ],
+];
+
+
 //
-//$grid = Grid\Grid::factory($config);
-//$grid->render();
-//die;
-//var_dump($grid);die;
+$grid = Grid\Grid::factory($config);
+echo $grid->render();
+die;
+var_dump($grid);die;
 
 $array = [];
 for ($i = 1; $i <= 1000; $i++) {
@@ -134,5 +166,3 @@ $grid[] = new Grid\Hydrator\Hydrator;
 $grid[] = new Grid\Plugin\ColumnSortablePlugin();
 $grid[] = new Grid\Util\Links();
 $grid[] = new Grid\Plugin\ColumnSearchablePlugin(['markMatches' => true]);
-
-echo $grid->render();

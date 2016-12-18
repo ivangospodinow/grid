@@ -28,6 +28,7 @@ use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Cache;
 
 use \ArrayAccess;
+use \Exception;
 
 /**
  * Description of Grid
@@ -70,28 +71,69 @@ class Grid implements ArrayAccess
         $this[] = new HeaderPlugin;
     }
 
-    public static function factory(array $config) : self
+    /**
+     * Creates all the plugins and grid from config array
+     * 
+     * @param array $configs
+     * @return \self
+     * @throws Exception
+     */
+    public static function factory(array $configs) : self
     {
-        $grid = new self($config);
+        $grid = null;
+        $plugins = [];
+        foreach ($configs as $config) {
+            
+            $plugin = null;
+            if (is_string($config)) {
+                $plugins[] = new $config;
+                continue;
+            }
 
-        if (isset($config['source'])) {
-            foreach ($config['source'] as $source) {
-                $this[] = AbstractSource::factory($source);
+            if (!isset($config['options'])) {
+                $config['options'] = [];
+            }
+
+            /**
+             * Create from callback factory
+             */
+            if (isset($config['callback'])) {
+                if (!isset($config['callback'][0])
+                || !isset($config['callback'][1])) {
+                    throw new Exception('callback must have 0=>object,class 1=> method');
+                }
+
+                if (is_string($config['callback'][0])) {
+                    $config['callback'][0] = new $config['callback'][0];
+                }
+
+                $plugin = call_user_func_array(
+                    $config['callback'],
+                    [$config['options']]
+                );
+            } elseif (isset($config['class'])) {
+                $plugin = new $config['class']($config['options']);
+            } else {
+                throw new Exception('Plugin factory required callback or class');
+            }
+            
+            if (!is_object($plugin)) {
+                throw new Exception('At this point plugin most be object');
+            }
+
+            if ($plugin instanceof self) {
+                $grid = $plugin;
+            } else {
+                $plugins[] = $plugin;
             }
         }
 
-        if (isset($config['columns'])) {
-            foreach ($config['columns'] as $column) {
-                $grid[] = Column::factory($column);
-            }
+        if (!$grid instanceof self) {
+            $grid = new Grid($configs);
         }
 
-        if (isset($config['profile'])) {
-            $grid[] = ProfilePlugin::factory($config['profile']);
-        }
-        
-        if (isset($config['renderer']) && class_exists($config['renderer'])) {
-            $grid[] = new $config['renderer'];
+        foreach ($plugins as $plugin) {
+            $grid[] = $plugin;
         }
 
         return $grid;

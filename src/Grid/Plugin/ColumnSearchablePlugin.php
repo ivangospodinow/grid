@@ -95,13 +95,14 @@ class ColumnSearchablePlugin extends AbstractPlugin implements DataPluginInterfa
             $params[$this->getLinkCreator()->getPaginationPageName()]
         );
         $html[] = implode(PHP_EOL, $params);
+        $html[] = '</form>';
         return implode(PHP_EOL, $html);
     }
 
     public function filterSource(AbstractSource $source) : AbstractSource
     {
         foreach ($this->getGrid()->getColumns() as $column) {
-            if (!$column->isSortable()) {
+            if (!$column->isSearchable()) {
                 continue;
             }
 

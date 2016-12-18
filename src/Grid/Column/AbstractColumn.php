@@ -64,7 +64,20 @@ abstract class AbstractColumn implements GridInterface
      * @var AbstractExtractor
      */
     protected $extractor;
-    
+
+    /**
+     * Class that implements DataTypeInterface
+     * @var type 
+     */
+    protected $dataType;
+
+     /**
+     * Format to add to dataType
+     * @example Y-m-d for date
+     * @var type
+     */
+    protected $format;
+
     /**
      * Corresponding field or fields for this column
      * For example User full name = user.name + user.lastName;
@@ -205,6 +218,51 @@ abstract class AbstractColumn implements GridInterface
     public function hasDbFields() : bool
     {
         return !empty($this->dbFields);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getDataType() : string
+    {
+        return $this->dataType;
+    }
+
+    /**
+     *
+     * @param string $class
+     */
+    public function setDataType(string $class)
+    {
+        $this->dataType = $class;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
+    /**
+     *
+     * @param string $format
+     */
+    public function setFormat($format)
+    {
+        $this->format = $format;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function hasDataType() : bool
+    {
+        return $this->dataType && class_exists($this->dataType);
     }
 
     /**

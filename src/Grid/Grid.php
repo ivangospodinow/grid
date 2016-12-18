@@ -23,6 +23,8 @@ use Grid\Plugin\Interfaces\HidratorPluginInterface;
 use Grid\Plugin\Interfaces\RenderPluginInterface;
 use Grid\Plugin\Interfaces\ColumnPluginInterface;
 
+use Grid\Plugin\DataTypesPlugin;
+
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Cache;
@@ -46,6 +48,20 @@ class Grid implements ArrayAccess
     protected $id;
 
     /**
+     * Autoloading default plugins
+     * By disabling it, you can optimize for performance
+     * 
+     * @var type
+     */
+    protected $autoload = true;
+
+    /**
+     * marks if there is at least one column data type
+     * @var bool
+     */
+    protected $columnsHasDataType = false;
+
+    /**
      * All dependency objects
      * @var type
      */
@@ -66,9 +82,11 @@ class Grid implements ArrayAccess
         $config['id'] ?? $config['id'] = 'grid-id';
         $this->setAttribute('id', $config['id']);
         $this->exchangeArray($config);
-        
-        $this[] = new ExtractorPlugin;
-        $this[] = new HeaderPlugin;
+
+        if ($this->canAutoload()) {
+            $this[] = new ExtractorPlugin;
+            $this[] = new HeaderPlugin;
+        }
     }
 
     /**
@@ -180,6 +198,12 @@ class Grid implements ArrayAccess
             foreach ($this->iterator as $mixed) {
                 if (is_object($mixed)
                 && $mixed instanceof AbstractColumn) {
+                    
+                    if (!$this->columnsHasDataType
+                    && $mixed->hasDataType()) {
+                        $this->columnsHasDataType = true;
+                    }
+                    
                     $columns[] = $this->plugins(
                         ColumnPluginInterface::class,
                         'filterColumn',
@@ -192,6 +216,15 @@ class Grid implements ArrayAccess
                 'filterColumns',
                 $columns
             );
+
+            /**
+             * Autoload data types
+             */
+            if ($this->autoload
+            && $this->columnsHasDataType
+            && !count($this->getObjects(DataTypesPlugin::class))) {
+                $this[] = new DataTypesPlugin;
+            }
         }
         return $this->cache[__METHOD__];
     }
@@ -312,6 +345,15 @@ class Grid implements ArrayAccess
             }
         }
         return $string;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function canAutoload() : bool
+    {
+        return $this->autoload;
     }
 
     /**

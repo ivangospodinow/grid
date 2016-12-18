@@ -1,13 +1,7 @@
 <?php
-require_once 'autoload.php';
+require_once '../autoload.php';
 
-$array = [];
-for ($i = 1; $i <= 1000; $i++) {
-    $array[] = [
-        'id' => $i,
-        'name' => 'Name ' .$i
-    ];
-}
+require_once 'products.php';
 
 $config = [
     \Grid\Renderer\HtmlRenderer::class,
@@ -18,7 +12,19 @@ $config = [
     [
         'class' => \Grid\Plugin\ProfilePlugin::class,
         'options' => [
-            'columns' => ['id', 'name']
+            'columns' => [
+                'productId',
+                'userId',
+                'platformId',
+                'platformKey',
+                'title',
+                'priceCurrency',
+                'lastPriceCurrency',
+                'quantity',
+                'image',
+                'lastPriceUpdate',
+                'lastPriceChange',
+            ]
         ]
     ],
     [
@@ -30,26 +36,120 @@ $config = [
     [
         'class' => \Grid\Column\Column::class,
         'options' => [
-            'name' => 'id',
+            'name' => 'productId',
             'label' => '#',
-            'dbFields' => 'id',
+            'dbFields' => 'productId',
             'sortable' => true,
         ]
     ],
     [
         'class' => \Grid\Column\Column::class,
         'options' => [
-            'name' => 'name',
-            'label' => 'Name',
-            'dbFields' => 'name',
+            'name' => 'userId',
+            'label' => 'User',
+            'dbFields' => 'userId',
             'sortable' => true,
             'searchable' => true,
         ]
     ],
     [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'platformId',
+            'label' => 'Platform',
+            'dbFields' => 'platformId',
+            'sortable' => true,
+            'searchable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'platformKey',
+            'label' => 'Platform key',
+            'dbFields' => 'platformKey',
+            'sortable' => true,
+            'searchable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'title',
+            'label' => 'Title',
+            'dbFields' => 'title',
+            'sortable' => true,
+            'searchable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'priceCurrency',
+            'label' => 'Price',
+            'dbFields' => 'priceCurrency',
+            'sortable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'lastPriceCurrency',
+            'label' => 'Last price',
+            'dbFields' => 'lastPriceCurrency',
+            'sortable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'initialPriceCurrency',
+            'label' => 'Init price',
+            'dbFields' => 'initialPriceCurrency',
+            'sortable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'quantity',
+            'label' => 'Qty',
+            'dbFields' => 'quantity',
+            'sortable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'image',
+            'label' => 'Image',
+            'dbFields' => 'image',
+            'dataType' => \Grid\DataType\Image::class,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'lastPriceUpdate',
+            'label' => 'Last update',
+            'dbFields' => 'lastPriceUpdate',
+            'dataType' => \Grid\DataType\Date::class,
+            'sortable' => true,
+        ]
+    ],
+    [
+        'class' => \Grid\Column\Column::class,
+        'options' => [
+            'name' => 'lastPriceChange',
+            'label' => 'Last price change',
+            'dbFields' => 'lastPriceChange',
+            'dataType' => \Grid\DataType\TimeAgo::class,
+        ]
+    ],
+    [
         'class' => \Grid\Source\ArraySource::class,
         'options' => [
-            'driver' => $array,
+            'driver' => $products,
             'start' => 0,
             'end' => 10,
             'order' => ['name' => 'ASC']
@@ -75,9 +175,9 @@ for ($i = 1; $i <= 1000; $i++) {
 $grid = new Grid\Grid;
 $grid[] = new Grid\Column\Column(
     [
-        'name' => 'id',
+        'name' => 'productId',
         'label' => '#',
-        'dbFields' => 'id',
+        'dbFields' => 'productId',
         'sortable' => true,
     ]
 );

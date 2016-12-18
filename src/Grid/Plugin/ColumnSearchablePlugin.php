@@ -53,16 +53,17 @@ class ColumnSearchablePlugin extends AbstractPlugin implements DataPluginInterfa
                 if (!$column instanceof AbstractColumn) {
                     continue;
                 }
-
+                
                 $value = $this->getInput($column)->getValue();
                 if ($this->markMatches && $value) {
                     foreach ($data as $row) {
                         if (!$row->isBody()) {
                             continue;
                         }
-                        $row[$name] = str_replace(
-                            $value,
-                            $this->markMatchesBefore . $value . $this->markMatchesAfter,
+
+                        $row[$name] = preg_replace(
+                            "/({$value})/i",
+                            $this->markMatchesBefore . "$1" . $this->markMatchesAfter,
                             $row[$name]
                         );
                     }

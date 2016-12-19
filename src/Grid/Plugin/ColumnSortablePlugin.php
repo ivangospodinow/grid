@@ -24,15 +24,16 @@ class ColumnSortablePlugin extends AbstractPlugin implements RenderPluginInterfa
 
     /**
      *
-     * @param Grid $grid
+     * @param string $html
      */
-    public function preRender()
+    public function preRender(string $html) : string
     {
         foreach ($this->getGrid()->getColumns() as $column) {
             if ($column->isSortable()) {
                 $this->render($column);
             }
         }
+        return $html;
     }
 
     /**

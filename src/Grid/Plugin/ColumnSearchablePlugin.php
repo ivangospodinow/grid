@@ -5,12 +5,13 @@ namespace Grid\Plugin;
 use Grid\Column\AbstractColumn;
 use Grid\Plugin\Interfaces\DataPluginInterface;
 use Grid\Util\Traits\GridAwareTrait;
+use Grid\GridInterface;
 use Grid\Util\Traits\LinkCreatorAwareTrait;
 use Grid\Util\Traits\ExchangeArray;
-use Grid\GridInterface;
 use Grid\Plugin\Interfaces\SourcePluginInterface;
 use Grid\Source\AbstractSource;
 use Grid\GridRow;
+use Grid\Interfaces\InputsAwareTrait;
 
 use Grid\Util\Traits\Cache;
 
@@ -20,7 +21,12 @@ use Grid\Util\Input;
  *
  * @author Gospodinow
  */
-class ColumnSearchablePlugin extends AbstractPlugin implements DataPluginInterface, GridInterface, SourcePluginInterface
+class ColumnSearchablePlugin extends AbstractPlugin
+implements 
+    DataPluginInterface,
+    GridInterface,
+    SourcePluginInterface,
+    InputsAwareTrait
 {
     use GridAwareTrait, LinkCreatorAwareTrait, Cache, ExchangeArray;
 
@@ -113,6 +119,21 @@ class ColumnSearchablePlugin extends AbstractPlugin implements DataPluginInterfa
             }
         }
         return $source;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getInputs() : array
+    {
+        $inputs = [];
+        foreach ($this->getGrid()->getColumns() as $column) {
+            if ($column->isSearchable()) {
+                $inputs[] = $this->getInput($column);
+            }
+        }
+        return $inputs;
     }
 
     /**

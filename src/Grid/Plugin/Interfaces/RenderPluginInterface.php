@@ -12,7 +12,7 @@ interface RenderPluginInterface
     /**
      * 
      */
-    public function preRender();
+    public function preRender(string $html) : string;
 
     /**
      *

@@ -10,6 +10,7 @@ use Grid\Column\AbstractColumn;
 
 use Grid\Interfaces\TranslateInterface;
 
+use Grid\Plugin\AutoloaderPlugin;
 use Grid\Plugin\AbstractPlugin;
 use Grid\Plugin\HeaderPlugin;
 use Grid\Plugin\Interfaces\DataPluginInterface;
@@ -22,6 +23,7 @@ use Grid\Plugin\Interfaces\SourcePluginInterface;
 use Grid\Plugin\Interfaces\HidratorPluginInterface;
 use Grid\Plugin\Interfaces\RenderPluginInterface;
 use Grid\Plugin\Interfaces\ColumnPluginInterface;
+use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
 
 use Grid\Plugin\DataTypesPlugin;
 
@@ -83,9 +85,12 @@ class Grid implements ArrayAccess
         $this->setAttribute('id', $config['id']);
         $this->exchangeArray($config);
 
+        /**
+         * Disable autoload to full control
+         * and slim performance increase
+         */
         if ($this->canAutoload()) {
-            $this[] = new ExtractorPlugin;
-            $this[] = new HeaderPlugin;
+            $this[] = new AutoloaderPlugin;
         }
     }
 
@@ -172,10 +177,10 @@ class Grid implements ArrayAccess
      */
     public function render() : string
     {
-        $this->plugins(RenderPluginInterface::class, 'preRender');
-        
-        $renderers = $this->getObjects(RendererInterface::class);
         $html = [];
+        $html[] = $this->plugins(RenderPluginInterface::class, 'preRender', '');
+        $renderers = $this->getObjects(RendererInterface::class);
+        
         foreach ($renderers as $renderer) {
             $html[] = $renderer->render($this);
         }
@@ -188,13 +193,18 @@ class Grid implements ArrayAccess
     }
 
     /**
-     *
+     * Noting is working without columns
+     * Use preColumns for init config
      * @return array
      */
     public function getColumns() : array
     {
         if (!array_key_exists(__METHOD__, $this->cache)) {
-            $columns = [];
+            $columns =  $this->plugins(
+                ColumnsPrePluginInterface::class,
+                'preColumns',
+                []
+            );
             foreach ($this->iterator as $mixed) {
                 if (is_object($mixed)
                 && $mixed instanceof AbstractColumn) {
@@ -312,7 +322,7 @@ class Grid implements ArrayAccess
     }
 
     /**
-     *
+     * @todo can I increase performance, if columns are cached by interface ?
      * @param type $interface
      * @return array
      */

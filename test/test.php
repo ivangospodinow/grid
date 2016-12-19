@@ -2,6 +2,7 @@
 require_once '../autoload.php';
 
 require_once 'products.php';
+require_once 'TestPlugin.php';
 
 $config = [
     \Grid\Renderer\HtmlRenderer::class,
@@ -9,6 +10,12 @@ $config = [
     \Grid\Hydrator\Hydrator::class,
     \Grid\Plugin\ColumnSortablePlugin::class,
     \Grid\Util\Links::class,
+    [
+        'class' => \Grid\Plugin\HeaderPlugin::class,
+        'options' => [
+            'position' => \Grid\Plugin\HeaderPlugin::POSITION_BOTH,
+        ]
+    ],
     [
         'class' => \Grid\Plugin\ProfilePlugin::class,
         'options' => [
@@ -160,6 +167,7 @@ $config = [
 
 //
 $grid = Grid\Grid::factory($config);
+$grid[] = new TestPlugin;
 echo $grid->render();
 die;
 var_dump($grid);die;

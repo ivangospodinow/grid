@@ -108,9 +108,11 @@ class Grid implements ArrayAccess
         foreach ($configs as $config) {
             
             $plugin = null;
-            if (is_string($config)) {
+            if (is_string($config) && class_exists($config)) {
                 $plugins[] = new $config;
                 continue;
+            } elseif (is_string($config)) {
+                throw new Exception('String config expects class, given ' . $config);
             }
 
             if (!isset($config['options'])) {

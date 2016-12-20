@@ -25,8 +25,6 @@ use Grid\Plugin\Interfaces\RenderPluginInterface;
 use Grid\Plugin\Interfaces\ColumnPluginInterface;
 use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
 
-use Grid\Plugin\DataTypesPlugin;
-
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Cache;
@@ -56,12 +54,6 @@ class Grid implements ArrayAccess
      * @var type
      */
     protected $autoload = true;
-
-    /**
-     * marks if there is at least one column data type
-     * @var bool
-     */
-    protected $columnsHasDataType = false;
 
     /**
      * All dependency objects
@@ -211,11 +203,6 @@ class Grid implements ArrayAccess
                 if (is_object($mixed)
                 && $mixed instanceof AbstractColumn) {
                     
-                    if (!$this->columnsHasDataType
-                    && $mixed->hasDataType()) {
-                        $this->columnsHasDataType = true;
-                    }
-                    
                     $columns[] = $this->plugins(
                         ColumnPluginInterface::class,
                         'filterColumn',
@@ -228,15 +215,6 @@ class Grid implements ArrayAccess
                 'filterColumns',
                 $columns
             );
-
-            /**
-             * Autoload data types
-             */
-            if ($this->autoload
-            && $this->columnsHasDataType
-            && !count($this->getObjects(DataTypesPlugin::class))) {
-                $this[] = new DataTypesPlugin;
-            }
         }
         return $this->cache[__METHOD__];
     }
@@ -245,11 +223,13 @@ class Grid implements ArrayAccess
      *
      * @param string $name
      * @return AbstractColumn
+     * @throws Exception
      */
     public function getColumn(string $name) : AbstractColumn
     {
         $key = __METHOD__ . '::' . $name;
         if (!isset($this->cache[$key])) {
+            $this->cache[$key] = false;
             foreach ($this->getObjects(AbstractColumn::class) as $column) {
                 if ($column->getName() === $name) {
                     $this->cache[$key] = $column;
@@ -257,6 +237,11 @@ class Grid implements ArrayAccess
                 }
             }
         }
+
+        if ($this->cache[$key] === false) {
+            throw new Exception('Column does not exists ' . $name);
+        }
+
         return $this->cache[$key];
     }
 
@@ -342,6 +327,16 @@ class Grid implements ArrayAccess
 
     /**
      *
+     * @param type $interface
+     * @return bool
+     */
+    public function hasObject($interface) : bool
+    {
+        return count($this->getObjects($interface)) > 0;
+    }
+
+    /**
+     *
      * @param string $string
      */
     public function translate(string $string) : string
@@ -411,9 +406,14 @@ class Grid implements ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
+        if ($this->offsetExists($offset)) {
+            throw new Exception('Offset already exists ' . $offset);
+        }
+        
         if ($value instanceof GridInterface) {
             $value->setGrid($this);
         }
+        
         if ($offset === null) {
             $this->iterator[] = $value;
         } else {

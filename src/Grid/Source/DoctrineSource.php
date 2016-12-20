@@ -5,6 +5,7 @@ use Grid\Source\Interfaces\QuerySourceInterface;
 use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
+use Grid\Column\AbstractColumn;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -108,7 +109,48 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
             }
         }
     }
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function andWhere(AbstractColumn $column, string $sign, string $value)
+    {
+        //        @TODO
+    }
 
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $sign
+     * @param string $value
+     */
+    public function orWhere(AbstractColumn $column, string $sign, string $value)
+    {
+        //        @TODO
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function andLike(AbstractColumn $column, string $value)
+    {
+        //        @TODO
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function orLike(AbstractColumn $column, string $value)
+    {
+//        @TODO
+    }
+    
     /**
      *
      * @return int

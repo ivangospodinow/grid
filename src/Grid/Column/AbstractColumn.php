@@ -116,10 +116,15 @@ abstract class AbstractColumn implements GridInterface
             throw new Exception('Column required name');
         }
         $config['extract']  = $config['extract'] ?? $config['name'];
-        $config['dbFields'] = isset($config['dbFields'])
-                            && !is_array($config['dbFields'])
-                            ? [$config['dbFields']] : [];
 
+        if (isset($config['dbFields']) && is_array($config['dbFields'])) {
+            $config['dbFields'] = $config['dbFields'];
+        } elseif(isset($config['dbFields']) && is_string($config['dbFields'])) {
+            $config['dbFields'] = [$config['dbFields']];
+        } else {
+            $config['dbFields'] = [];
+        }
+        
         $this->exchangeArray($config);
     }
 
@@ -290,6 +295,9 @@ abstract class AbstractColumn implements GridInterface
     public function getExtractor($source = null) : AbstractExtractor
     {
         if (null === $this->extractor) {
+            if (null === $source) {
+                throw new Exception('Source must have value');
+            }
             $this->setExtractor(AbstractExtractor::factory($source));
         }
         return $this->extractor;

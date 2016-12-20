@@ -1,0 +1,13 @@
+<phpunit bootstrap="./autoload.php">
+  <testsuites>
+    <testsuite name="Grid">
+      <directory>./tests</directory>
+
+    </testsuite>
+  </testsuites>
+  <filter>
+  <whitelist processUncoveredFilesFromWhitelist="true">
+    <directory suffix=".php">./src/Grid</directory>
+  </whitelist>
+</filter>
+</phpunit>

@@ -5,26 +5,45 @@ namespace Grid\Plugin;
 use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
+use Grid\Plugin\Interfaces\ColumnPluginInterface;
+use Grid\Column\AbstractColumn;
 
 use Grid\Plugin\ExtractorPlugin;
 use Grid\Plugin\HeaderPlugin;
+use Grid\Plugin\DataTypesPlugin;
 
 /**
  * Creating table headers
  *
  * @author Gospodinow
  */
-class AutoloaderPlugin extends AbstractPlugin implements ColumnsPrePluginInterface, GridInterface
+class AutoloaderPlugin extends AbstractPlugin implements ColumnsPrePluginInterface, GridInterface, ColumnPluginInterface
 {
     use GridAwareTrait;
     
     protected $autoloaded = false;
+    protected $autoloadedDataTypesPlugin = false;
     
     public function preColumns(array $columns) : array
     {
         $this->autoload();
         return $columns;
     }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     */
+    public function filterColumn(AbstractColumn $column) : AbstractColumn
+    {
+        if (false === $this->autoloadedDataTypesPlugin
+        && $column->hasDataType()) {
+            $this->autoloadedDataTypesPlugin = true;
+            $this->getGrid()[] = new DataTypesPlugin;
+        }
+        return $column;
+    }
+
     /**
      * Grid essentials
      */

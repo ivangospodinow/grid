@@ -8,7 +8,7 @@ use Grid\Column\AbstractColumn;
  *
  * @author Gospodinow
  */
-class Image implements DataTypeInterface
+class Integer implements DataTypeInterface
 {
     public function filter($value, AbstractColumn $column, GridRow $contex)
     {

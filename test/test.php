@@ -1,6 +1,5 @@
 <?php
 require_once '../autoload.php';
-phpinfo();die;
 require_once 'products.php';
 require_once 'TestPlugin.php';
 

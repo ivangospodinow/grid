@@ -24,9 +24,14 @@ class TimeAgo extends AbstractDateTime implements GridInterface
      */
     public function filter($value, AbstractColumn $column, GridRow $contex)
     {
-        $granularity = 1;
         $date       = $this->strtotime($value);
+        if ($date === 0) {
+            return '';
+        }
         $difference = $this->time() - $date;
+        if ($difference === 0) {
+            $difference = 1;
+        }
         $periods    = array(
             'decade' => 315360000,
             'year' => 31536000,
@@ -42,12 +47,9 @@ class TimeAgo extends AbstractDateTime implements GridInterface
             if ($difference >= $value) {
                 $time       = floor($difference / $value);
                 $difference %= $value;
-                $retval     .= ($retval ? ' ' : '').$time.' ';
+                $retval     .= $time . ' ';
                 $label       = (($time > 1) ? $key.'s' : $key);
                 $retval     .= $this->getGrid()->translate($label);
-                $granularity--;
-            }
-            if ($granularity == '0') {
                 break;
             }
         }

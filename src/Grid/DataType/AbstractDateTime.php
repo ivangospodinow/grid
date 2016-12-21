@@ -1,10 +1,7 @@
 <?php
 namespace Grid\DataType;
 
-use Grid\GridRow;
-
 use \DateTime;
-use \Exception;
 
 /**
  *
@@ -16,18 +13,17 @@ abstract class AbstractDateTime implements DataTypeInterface
      *
      * @param DateTime $mixed
      * @return int
-     * @throws Exception
      */
     public function strtotime($mixed) : int
     {
         if (is_string($mixed)) {
             return strtotime($mixed);
-        } elseif (is_int($mixed)) {
-            return $mixed;
+        } elseif (is_int($mixed) || is_numeric($mixed)) {
+            return (int) $mixed;
         } elseif ($mixed instanceof DateTime) {
-            return $mixed;
+            return $mixed->getTimestamp();
         }
-        throw new Exception('strtotime expects sting/int/datetime');
+        return 0;
     }
 
     /**
@@ -47,6 +43,10 @@ abstract class AbstractDateTime implements DataTypeInterface
      */
     public function date($format, $mixed) : string
     {
-        return date($format, $this->strtotime($mixed));
+        $time = $this->strtotime($mixed);
+        if ($time === 0) {
+            return '';
+        }
+        return date($format, $time);
     }
 }

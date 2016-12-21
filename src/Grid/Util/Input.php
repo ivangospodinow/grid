@@ -29,6 +29,7 @@ class Input
 
         $this->setAttribute('name', $config['name']);
         $this->setAttribute('type', $config['type']);
+        $this->setAttribute('value', $config['value'] ?? '');
 
         if (!in_array($config['type'], [self::TYPE_TEXT, self::TYPE_SELECT])) {
             throw new Exception('Unsupported type ' . $config['type']);
@@ -72,19 +73,23 @@ class Input
      */
     protected function openTab() : string
     {
+        $html = '';
         if ($this->getAttribute('type') === self::TYPE_TEXT) {
-            return sprintf(
+            $html = sprintf(
                 '<input%s',
                 $this->getAttributesString(true)
             );
         }
+        return $html;
     }
 
     public function closeTag() : string
     {
+        $html = '';
         if ($this->getAttribute('type') === self::TYPE_TEXT) {
-            return '/>';
+            $html = '/>';
         }
+        return $html;
     }
 
     /**
@@ -92,7 +97,7 @@ class Input
      * @param type $params
      * @return array
      */
-    public static function createHiddenFromParams($params) : array
+    public static function createHiddenFromParams(array $params) : array
     {
         if (empty($params)) {
             return $params;

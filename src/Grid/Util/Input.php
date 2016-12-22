@@ -17,6 +17,8 @@ class Input
     const TYPE_TEXT   = 'text';
     const TYPE_SELECT = 'select';
 
+    protected $valueOptions = [];
+    
     public function __construct(array $config)
     {
         if (!isset($config['name'])) {
@@ -30,7 +32,8 @@ class Input
         $this->setAttribute('name', $config['name']);
         $this->setAttribute('type', $config['type']);
         $this->setAttribute('value', $config['value'] ?? '');
-
+        $this->setAttribute('placeholder', $config['placeholder'] ?? '');
+        
         if (!in_array($config['type'], [self::TYPE_TEXT, self::TYPE_SELECT])) {
             throw new Exception('Unsupported type ' . $config['type']);
         }
@@ -69,6 +72,15 @@ class Input
 
     /**
      *
+     * @param array $values
+     */
+    public function setValueOptions(array $values)
+    {
+        $this->valueOptions = $values;
+    }
+
+    /**
+     *
      * @return string
      */
     protected function openTab() : string
@@ -79,6 +91,25 @@ class Input
                 '<input%s',
                 $this->getAttributesString(true)
             );
+        } elseif ($this->getAttribute('type') === self::TYPE_SELECT) {
+            if (!$this->getAttribute('onchange')) {
+                $this->setAttribute('onchange', 'this.form.submit()');
+            }
+            $options = [];
+            $options[] = '<option>' . $this->getAttribute('placeholder') . '</option>';
+            foreach ($this->valueOptions as $value => $label) {
+                $options[] = sprintf(
+                    '<option value="%s"%s>%s</option>',
+                    $value,
+                    $value == $this->getValue() ? ' selected' : '',
+                    $label
+                );
+            }
+            $html = sprintf(
+                '<select%s>%s',
+                $this->getAttributesString(true),
+                implode(PHP_EOL, $options)
+            );
         }
         return $html;
     }
@@ -88,6 +119,8 @@ class Input
         $html = '';
         if ($this->getAttribute('type') === self::TYPE_TEXT) {
             $html = '/>';
+        } elseif ($this->getAttribute('type') === self::TYPE_SELECT) {
+            $html = '</select>';
         }
         return $html;
     }

@@ -22,25 +22,30 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
 
     protected $view;
 
-    protected $holderTagOpen  = '<div__ATTRIBUTES__>';
-    protected $holderTagClose = '</div>';
+    protected $holderTagOpen        = '<div__ATTRIBUTES__>';
+    protected $holderTagClose       = '</div>';
     
-    protected $itemTagOpen    = '<a__ATTRIBUTES__>';
-    protected $itemTagClose   = '</a>';
+    protected $itemTagOpen          = '<a__ATTRIBUTES__>';
+    protected $itemTagClose         = '</a>';
 
-    protected $itemSeparator  = ' | ';
+    protected $itemSeparator        = ' | ';
 
-    protected $firstLabel     = '&lsaquo;&lsaquo;';
-    protected $lastLabel      = '&rsaquo;&rsaquo;';
+    protected $firstLabel           = '&lsaquo;&lsaquo;';
+    protected $lastLabel            = '&rsaquo;&rsaquo;';
 
-    protected $prevLabel     = '&lsaquo;';
-    protected $nextLabel     = '&rsaquo;';
+    protected $prevLabel            = '&lsaquo;';
+    protected $nextLabel            = '&rsaquo;';
 
-    protected $itemsBeforeActive = 3;
-    protected $itemsAfterActive = 3;
+    protected $itemsBeforeActive    = 3;
+    protected $itemsAfterActive     = 3;
 
-    protected $itemsPerPage   = 10;
-    protected $showOnNoPages  = false;
+    protected $summaryOpenTag       = '<span style="float:right">';
+    protected $summarySeparator1    = '-';
+    protected $summarySeparator2    = '/';
+    protected $summaryCloseTag      = '</span>';
+
+    protected $itemsPerPage         = 10;
+    protected $showOnNoPages        = false;
 
     public function __construct(array $config = [])
     {

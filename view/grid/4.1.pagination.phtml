@@ -103,4 +103,9 @@ if ($this->itemTagClose) {
 
 echo implode($this->itemSeparator, $items);
 
+echo $this->summaryOpenTag;
+echo ($activePage + 1) . ' ' . $this->summarySeparator1 . ' ' . ($pages + 1);
+echo ' ' . $this->summarySeparator2 . ' ' . $count;
+echo $this->summaryCloseTag;
+
 echo $this->holderTagClose . PHP_EOL;

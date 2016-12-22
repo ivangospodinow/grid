@@ -29,6 +29,7 @@ trait Cache
     public function setCache(string $key, $value)
     {
         $this->cache[$key] = $value;
+        return $value;
     }
 
     /**

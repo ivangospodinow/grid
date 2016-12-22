@@ -139,7 +139,25 @@ class ArraySource extends AbstractSource
         // @TODO SUPPORT OR ?
         $this->andLike($column, $value);
     }
-    
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @return array
+     */
+    public function getColumnValues(AbstractColumn $column) : array
+    {
+        $dbFields = $column->getDbFields();
+        $dbField = $dbFields[key($dbFields)];
+        $values = [];
+        foreach ($this->driver as $pair) {
+            if (isset($pair[$dbField])) {
+                $values[$pair[$dbField]] = $pair[$dbField];
+            }
+        }
+        return $values;
+    }
+
     /**
      *
      * @return int

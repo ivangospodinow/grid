@@ -100,6 +100,18 @@ abstract class AbstractColumn implements GridInterface
 
     /**
      *
+     * @var type
+     */
+    protected $selectable = false;
+
+    /**
+     *
+     * @var callback, array
+     */
+    protected $selectableSource;
+    
+    /**
+     *
      * @var string
      */
     protected $searchableStrategy = self::SEARCHABLE_STRATEGY_LIKE;
@@ -286,6 +298,33 @@ abstract class AbstractColumn implements GridInterface
     public function isSearchable() : bool
     {
         return $this->hasDbFields() && $this->searchable;
+    }
+    
+    /**
+     *
+     * @return bool
+     */
+    public function isSelectable() : bool
+    {
+        return ($this->hasDbFields() || !empty($this->getSelectableSource()))
+            && $this->selectable;
+    }
+
+    /**
+     * @return callback, array[key => val]
+     */
+    public function getSelectableSource()
+    {
+        return $this->selectableSource;
+    }
+
+    /**
+     *
+     * @param array $mixed
+     */
+    public function setSelectableeSource(array $mixed) : array
+    {
+        $this->selectableSource = $mixed;
     }
 
     /**

@@ -7,7 +7,6 @@ $config = [
     \Grid\Renderer\HtmlRenderer::class,
     \Grid\Plugin\PaginationPlugin::class,
     \Grid\Hydrator\Hydrator::class,
-    \Grid\Plugin\ColumnSortablePlugin::class,
     \Grid\Util\Links::class,
     [
         'class' => \Grid\Plugin\HeaderPlugin::class,
@@ -34,7 +33,7 @@ $config = [
         ]
     ],
     [
-        'class' => \Grid\Plugin\ColumnSearchablePlugin::class,
+        'class' => \Grid\Plugin\ColumnFilterablePlugin::class,
         'options' => [
             'markMatches' => true,
         ]
@@ -55,7 +54,7 @@ $config = [
             'label' => 'User',
             'dbFields' => 'userId',
             'sortable' => true,
-            'searchable' => true,
+            'selectable' => true,
         ]
     ],
     [
@@ -65,7 +64,7 @@ $config = [
             'label' => 'Platform',
             'dbFields' => 'platformId',
             'sortable' => true,
-            'searchable' => true,
+            'selectable' => true,
         ]
     ],
     [
@@ -75,7 +74,7 @@ $config = [
             'label' => 'Platform key',
             'dbFields' => 'platformKey',
             'sortable' => true,
-            'searchable' => true,
+            'selectable' =>  true,
         ]
     ],
     [

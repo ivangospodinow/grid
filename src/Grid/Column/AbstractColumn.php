@@ -4,6 +4,7 @@ namespace Grid\Column;
 use Grid\Util\Extractor\AbstractExtractor;
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Attributes;
+use Grid\Util\Traits\Required;
 
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
@@ -18,7 +19,7 @@ use \Exception;
  */
 abstract class AbstractColumn implements GridInterface
 {
-    use ExchangeArray, Attributes, GridAwareTrait;
+    use ExchangeArray, Attributes, GridAwareTrait, Required;
 
     const SEARCHABLE_STRATEGY_EQ   = '=';
     const SEARCHABLE_STRATEGY_LIKE = 'like';
@@ -124,9 +125,8 @@ abstract class AbstractColumn implements GridInterface
      */
     public function __construct(array $config)
     {
-        if (!isset($config['name'])) {
-            throw new Exception('Column required name');
-        }
+        $this->required('name', $config, $this);
+        
         $config['extract']  = $config['extract'] ?? $config['name'];
 
         if (isset($config['dbFields']) && is_array($config['dbFields'])) {

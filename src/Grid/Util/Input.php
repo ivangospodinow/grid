@@ -3,6 +3,7 @@
 namespace Grid\Util;
 
 use Grid\Util\Traits\Attributes;
+use Grid\Util\Traits\Required;
 
 use \Exception;
 
@@ -12,7 +13,7 @@ use \Exception;
  */
 class Input
 {
-    use Attributes;
+    use Attributes, Required;
 
     const TYPE_TEXT   = 'text';
     const TYPE_SELECT = 'select';
@@ -21,9 +22,7 @@ class Input
     
     public function __construct(array $config)
     {
-        if (!isset($config['name'])) {
-            throw new Exception('parameter name is required');
-        }
+        $this->required('name', $config, $this);
 
         if (!isset($config['type'])) {
             $config['type'] = self::TYPE_TEXT;

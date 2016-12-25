@@ -12,6 +12,24 @@ trait Attributes
 
     /**
      *
+     * @return []
+     */
+    public function getAttributes() : array
+    {
+        return $this->attributes;
+    }
+    
+    /**
+     *
+     * @return []
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
+    }
+    
+    /**
+     *
      * @param string $name
      * @param string $value
      * @return \self
@@ -50,12 +68,24 @@ trait Attributes
 
     /**
      *
+     * @param type $addSplace
      * @return string
      */
     public function getAttributesString($addSplace = false) : string
     {
+        return $this->createAttributesString($this->attributes, $addSplace);
+    }
+
+    /**
+     *
+     * @param type $attributes
+     * @param type $addSplace
+     * @return string
+     */
+    public function createAttributesString($attributes, $addSplace = false) : string
+    {
         $str = [];
-        foreach ($this->attributes as $name => $val) {
+        foreach ($attributes as $name => $val) {
             $str[] = $name . '="' . $val . '"';
         }
         return ($addSplace && !empty($str) ? ' ' : '') . implode(' ', $str);

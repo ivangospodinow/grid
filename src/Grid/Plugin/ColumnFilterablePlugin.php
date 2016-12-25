@@ -11,7 +11,7 @@ use Grid\Util\Traits\ExchangeArray;
 use Grid\Plugin\Interfaces\SourcePluginInterface;
 use Grid\Source\AbstractSource;
 use Grid\GridRow;
-use Grid\Interfaces\InputsAwareTrait;
+use Grid\Interfaces\InputsInterface;
 
 use Grid\Util\Traits\Cache;
 
@@ -25,7 +25,7 @@ implements
     DataPluginInterface,
     GridInterface,
     SourcePluginInterface,
-    InputsAwareTrait
+    InputsInterface
 {
     use GridAwareTrait, LinkCreatorAwareTrait, Cache, ExchangeArray;
 

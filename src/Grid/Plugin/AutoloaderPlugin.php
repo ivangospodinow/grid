@@ -3,6 +3,7 @@
 namespace Grid\Plugin;
 
 use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
+use Grid\Plugin\Interfaces\DataPrePluginInterface;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
 use Grid\Plugin\Interfaces\ColumnPluginInterface;
@@ -17,13 +18,23 @@ use Grid\Plugin\DataTypesPlugin;
  *
  * @author Gospodinow
  */
-class AutoloaderPlugin extends AbstractPlugin implements ColumnsPrePluginInterface, GridInterface, ColumnPluginInterface
+class AutoloaderPlugin extends AbstractPlugin implements
+    ColumnsPrePluginInterface,
+    GridInterface,
+    ColumnPluginInterface,
+    DataPrePluginInterface
 {
     use GridAwareTrait;
     
     protected $autoloaded = false;
     protected $autoloadedDataTypesPlugin = false;
-    
+
+    public function preFilterData(array $data) : array
+    {
+        $this->autoload();
+        return $data;
+    }
+
     public function preColumns(array $columns) : array
     {
         $this->autoload();

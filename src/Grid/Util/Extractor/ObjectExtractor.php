@@ -32,15 +32,16 @@ class ObjectExtractor extends AbstractExtractor
             $callbacks = $callback;
         }
 
-        $firstCallbackNotExists = false;
+        $hasCall = method_exists($source, '__call');
+        
         $result = null;
         foreach ($callbacks as $method) {
-            if (!method_exists($source, $method)) {
-                if ($result === null) {
-                    $firstCallbackNotExists = true;
-                }
+
+            if (!method_exists($source, $method)
+            && (!$hasCall || substr($method, 0, 3) !== 'get')) {
                 break;
             }
+
             $source = call_user_func_array([$source, $method], []);
             if (!is_object($source)) {
                 $result = $source;
@@ -52,7 +53,7 @@ class ObjectExtractor extends AbstractExtractor
          * In case of public property access
          * $user->name;
          */
-        if ($firstCallbackNotExists) {
+        if (null === $result) {
             $variables = get_object_vars($source);
             $property = $callbacks[key($callbacks)];
             if (array_key_exists($property, $variables)) {

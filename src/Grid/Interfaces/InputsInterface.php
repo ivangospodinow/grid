@@ -2,7 +2,7 @@
 
 namespace Grid\Interfaces;
 
-interface InputsAwareTrait
+interface InputsInterface
 {
     /**
      *

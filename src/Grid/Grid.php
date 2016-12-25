@@ -24,6 +24,7 @@ use Grid\Plugin\Interfaces\HidratorPluginInterface;
 use Grid\Plugin\Interfaces\RenderPluginInterface;
 use Grid\Plugin\Interfaces\ColumnPluginInterface;
 use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
+use Grid\Plugin\Interfaces\DataPrePluginInterface;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
@@ -252,11 +253,12 @@ class Grid implements ArrayAccess
     public function getData() : array
     {
         if (!array_key_exists(__METHOD__, $this->cache)) {
+            $data = $this->plugins(DataPrePluginInterface::class, 'preFilterData', []);
+
             $sources   = $this->getObjects(SourceInterface::class);
             $plugins   = $this->getObjects(RowPluginInterface::class);
-            $hydrators = $this->getObjects(HidratorPluginInterface::class);
+            $hydrators = $this->getObjects(HidratorPluginInterface::class); 
             
-            $data = [];
             foreach ($sources as $source) {
                 $this->plugins(
                     SourcePluginInterface::class,
@@ -269,12 +271,11 @@ class Grid implements ArrayAccess
                 }
 
                 foreach ($source->getRows() as $rowData) {
-
                     foreach ($hydrators as $hydrator) {
                         $rowData = $hydrator->hydrate($rowData);
                     }
-
-                    $row = new GridRow($rowData, $this);
+                    $row = new GridRow($rowData, $this, GridRow::POSITION_BODY);
+                    
                     foreach ($plugins as $plugin) {
                         $row = $plugin->filterRow($row);
                     }

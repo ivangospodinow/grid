@@ -9,6 +9,23 @@ $config = [
     \Grid\Hydrator\Hydrator::class,
     \Grid\Util\Links::class,
     [
+        'class' => Grid\Plugin\LinksPlugin::class,
+        'options' => [
+            'column'        => 'platformKey',
+            'links' => [
+                [
+                    'uri'           => '/test/:platformKey',
+                    'uriParameters' => [
+                        'platformKey' => 'getPlatformKey',
+                    ],
+                    'attributes' => [
+                        'class' => 'btn btn-default'
+                    ],
+                ],
+            ]
+        ],
+    ],
+    [
         'class' => \Grid\Plugin\HeaderPlugin::class,
         'options' => [
             'position' => \Grid\Plugin\HeaderPlugin::POSITION_BOTH,

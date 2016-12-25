@@ -1,9 +1,13 @@
 {
-    "name": "Gospodinow/Grid",
+    "name": "ivangospodinow/grid",
     "description": "Easy to use event driven php grid",
     "type": "library",
     "license": "MIT",
     "keywords": [
+        "table",
+        "html table",
+        "Bootstrap table",
+        "grid",
         "datagrid",
         "Datagrid",
         "Datatable"
@@ -15,11 +19,7 @@
     }],
 
     "require": {
-        "php": "~7.0",
-        "wp-cli/php-cli-tools": "^0.11.1",
-        "zendframework/zend-db": "^2.8",
-        "doctrine/orm": "^2.5",
-        "phpunit/phpunit": "^5.7"
+        "php": "~7.0"
     },
 
     "require-dev": {
@@ -27,12 +27,15 @@
     },
 
     "suggest": {
-        
+        "wp-cli/php-cli-tools": "^0.11.1",
+        "zendframework/zend-db": "^2.8",
+        "doctrine/orm": "^2.5",
+        "phpunit/phpunit": "^5.7"
     },
     
     "autoload": {
         "psr-4": {
-            "Grid\\": "src/Grid"
+            "Grid\\": "src/"
         }
     }
 }

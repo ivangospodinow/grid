@@ -228,6 +228,15 @@ abstract class AbstractColumn implements GridInterface
         return $this->dbFields;
     }
 
+   /**
+     *
+     * @return array
+     */
+    public function setDbFields(array $dbFields)
+    {
+        $this->dbFields = $dbFields;
+    }
+
     /**
      *
      * @return bool

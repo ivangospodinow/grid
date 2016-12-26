@@ -6,6 +6,7 @@ use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
 use Grid\Column\AbstractColumn;
+use Grid\Plugin\Interfaces\ColumnValuesInterface;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
@@ -195,6 +196,60 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
             );
         }
         $this->getQuery()->where($set);
+    }
+    
+    /**
+     * dbFields [name]                = [name => name]         WHERE name LIKE selectable
+     * dbFields [id, name]            = [id => name]           WHERE id = selectable
+     * dbFields [id, first, last ...] = [id => first last ...] WHERE id = selectable
+     *
+     * @param AbstractColumn $column
+     * @return array
+     */
+    public function getColumnValues(AbstractColumn $column) : array
+    {
+        $query = clone $this->getQuery();
+        $dbFields = $column->getDbFields();
+        $first = key($dbFields);
+        $idKey = $dbFields[$first];
+        unset($dbFields[$first]);
+        
+        $columns = [];
+        $columns['id'] = $this->getDbFieldNamespace($idKey);
+        if (empty($dbFields)) {
+            $columns['value'] = $this->getDbFieldNamespace($idKey);
+        } elseif (count($dbFields) === 1) {
+            $columns['value'] = $this->getDbFieldNamespace($dbFields[key($dbFields)]);
+        } else {
+            $concat = [];
+            foreach ($dbFields as $dbField) {
+                $concat[] = '`' . $this->getDbFieldNamespace($dbField) . '`';
+            }
+            $columns['value'] = new Expression("CONCAT_WS(' ', " . implode(',', $concat) . ")");
+        }
+        
+        $query->columns($columns);
+        $query->reset('group');
+        $query->reset('order');
+        $query->reset('limit');
+        $query->reset('offset');
+        
+        $result = $this->getSql()
+                       ->prepareStatementForSqlObject($query)
+                       ->execute();
+
+        $values = [];
+        foreach ($result as $row) {
+            $values[$row['id']] = $row['value'];
+        }
+        asort($values);
+
+        return
+        $this->getGrid()->plugins(
+            ColumnValuesInterface::class,
+            'filterColumnValues',
+            $values
+        );
     }
 
     /**

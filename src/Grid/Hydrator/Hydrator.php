@@ -20,9 +20,7 @@ class Hydrator implements HydratorInterface, GridInterface, HidratorPluginInterf
             $object->exchangeArray($data);
             return $object;
         } elseif (is_object($data)) {
-            if ($data instanceof GridInterface) {
-                $data->setGrid($this->getGrid());
-            }
+            $this->getGrid()->setObjectDi($data);
             return $data;
         }
 

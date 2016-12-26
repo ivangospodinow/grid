@@ -121,10 +121,20 @@ implements
     public function filterSource(AbstractSource $source) : AbstractSource
     {
         foreach ($this->getGrid()->getColumns() as $column) {
-            foreach ($this->getColumnInputs($column) as $input) {
+            foreach ($this->getColumnInputs($column) as $type => $input) {
                 $value = $input->getValue();
-                if ($value) {
+                if (!$value) {
+                    continue;
+                }
+
+                if ($type === 'searchable') {
                     $source->andLike($column, $value);
+                } elseif ($type === 'selectable') {
+                    $dbFields = $column->getDbFields();
+                    $idDbField = $dbFields[key($dbFields)];
+                    $column->setDbFields([$idDbField]);
+                    $source->andWhere($column, '=', $value);
+                    $column->setDbFields($dbFields);
                 }
             }
         }
@@ -152,7 +162,7 @@ implements
                     'value' => $this->getLinkCreator()->getFilterValue($column, 'searchable'),
                 ]
             );
-            $inputs[] = $input;
+            $inputs['searchable'] = $input;
         }
 
         if ($column->isSelectable()) {
@@ -176,7 +186,7 @@ implements
                 }
             }
             $input->setValueOptions($values);
-            $inputs[] = $input;
+            $inputs['selectable'] = $input;
         }
 
         return $this->setCache($key, $inputs);

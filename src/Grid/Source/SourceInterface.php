@@ -48,6 +48,13 @@ interface SourceInterface
     public function orLike(AbstractColumn $column, string $value);
 
     /**
+     *
+     * @param AbstractColumn $column
+     * @return array
+     */
+    public function getColumnValues(AbstractColumn $column) : array;
+
+    /**
      * Query start from record
      * @param int $start
      */

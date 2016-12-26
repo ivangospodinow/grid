@@ -2,6 +2,7 @@
 namespace Grid\Source;
 
 use Grid\Column\AbstractColumn;
+use Grid\Plugin\Interfaces\ColumnValuesInterface;
 
 use \Exception;
 
@@ -155,7 +156,13 @@ class ArraySource extends AbstractSource
                 $values[$pair[$dbField]] = $pair[$dbField];
             }
         }
-        return $values;
+        asort($values);
+        return
+        $this->getGrid()->plugins(
+            ColumnValuesInterface::class,
+            'filterColumnValues',
+            $values
+        );
     }
 
     /**

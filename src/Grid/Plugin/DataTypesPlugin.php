@@ -3,7 +3,6 @@
 namespace Grid\Plugin;
 
 use Grid\Plugin\Interfaces\DataPluginInterface;
-use Grid\GridInterface;
 
 /**
  * Uses data type plugins
@@ -21,9 +20,7 @@ class DataTypesPlugin extends AbstractPlugin implements DataPluginInterface
 
             $dataTypeClass = $column->getDataType();
             $dataType = new $dataTypeClass;
-            if ($dataType instanceof GridInterface) {
-                $dataType->setGrid($this->getGrid());
-            }
+            $this->getGrid()->setObjectDi($dataType);
             foreach ($data as $row) {
                 if (!$row->isBody()) {
                     continue;

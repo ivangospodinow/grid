@@ -25,6 +25,7 @@ use Grid\Plugin\Interfaces\RenderPluginInterface;
 use Grid\Plugin\Interfaces\ColumnPluginInterface;
 use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
 use Grid\Plugin\Interfaces\DataPrePluginInterface;
+use Grid\Plugin\Interfaces\ObjectDiPluginInterface;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
@@ -365,13 +366,32 @@ class Grid implements ArrayAccess
     }
 
     /**
+     *
+     * @param type $object
+     */
+    public function setObjectDi($object)
+    {
+        if ($object instanceof GridInterface) {
+            $object->setGrid($this);
+        }
+
+        $this->plugins(
+            ObjectDiPluginInterface::class,
+            'setObjectDi',
+            $object
+        );
+
+        return $object;
+    }
+
+    /**
      * Calls plugins foreach
      * @param type $interface
      * @param type $method
      * @param type $data
      * @return type
      */
-    protected function plugins($interface, $method, $data = null)
+    public function plugins($interface, $method, $data = null)
     {
         $plugins = $this->getObjects($interface);
         foreach ($plugins as $plugin) {
@@ -410,10 +430,8 @@ class Grid implements ArrayAccess
         if ($this->offsetExists($offset)) {
             throw new Exception('Offset already exists ' . $offset);
         }
-        
-        if ($value instanceof GridInterface) {
-            $value->setGrid($this);
-        }
+
+        $this->setObjectDi($value);
         
         if ($offset === null) {
             $this->iterator[] = $value;

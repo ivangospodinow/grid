@@ -3,9 +3,8 @@ namespace Grid\Source;
 
 use Grid\Source\Interfaces\QuerySourceInterface;
 use Grid\Source\Traits\FilterGridQuery;
-use Grid\Util\Traits\GridAwareTrait;
 use Grid\Source\Traits\NamespaceAwareTrait;
-use Grid\GridInterface;
+
 use Grid\Column\AbstractColumn;
 use Grid\Plugin\Interfaces\ColumnValuesInterface;
 
@@ -23,9 +22,9 @@ use \Exception;
  *
  * @author Gospodinow
  */
-class ZendDbAdapterSource extends AbstractSource implements GridInterface, QuerySourceInterface
+class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
 {
-    use FilterGridQuery, GridAwareTrait, NamespaceAwareTrait;
+    use FilterGridQuery, NamespaceAwareTrait;
     
     /**
      *

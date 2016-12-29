@@ -2,6 +2,8 @@
 namespace Grid\Source;
 
 use Grid\Util\Traits\ExchangeArray;
+use Grid\Util\Traits\GridAwareTrait;
+use Grid\GridInterface;
 
 use \Exception;
 
@@ -10,9 +12,9 @@ use \Exception;
  *
  * @author Gospodinow
  */
-abstract class AbstractSource implements SourceInterface
+abstract class AbstractSource implements SourceInterface, GridInterface
 {
-    use ExchangeArray;
+    use ExchangeArray, GridAwareTrait;
     
     /**
      * Query start from record

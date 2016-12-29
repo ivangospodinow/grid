@@ -329,10 +329,27 @@ abstract class AbstractColumn implements GridInterface
 
     /**
      *
-     * @param array $mixed
+     * @param array $mixed $callback or [class, method]
      */
-    public function setSelectableeSource(array $mixed) : array
+    public function setSelectableSource($mixed)
     {
+        $valid = false;
+        if (is_callable($mixed)) {
+            $valid = true;
+        } elseif (is_array($mixed)
+        && isset($mixed[0])
+        && isset($mixed[1])
+        && (is_object($mixed[0]) || class_exists($mixed[0]))) {
+            $valid = true;
+        } elseif (is_string($mixed)
+        && function_exists($mixed)) {
+            $valid = true;
+        }
+
+        if (!$valid) {
+            throw new Exception('Invalid selectable source');
+        }
+
         $this->selectableSource = $mixed;
     }
 

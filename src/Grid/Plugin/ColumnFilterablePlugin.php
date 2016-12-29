@@ -13,6 +13,7 @@ use Grid\Source\AbstractSource;
 use Grid\GridRow;
 use Grid\Interfaces\InputsInterface;
 
+use Grid\Util\Traits\Callback;
 use Grid\Util\Traits\Cache;
 
 use Grid\Util\Input;
@@ -27,7 +28,7 @@ implements
     SourcePluginInterface,
     InputsInterface
 {
-    use GridAwareTrait, LinkCreatorAwareTrait, Cache, ExchangeArray;
+    use GridAwareTrait, LinkCreatorAwareTrait, Cache, ExchangeArray, Callback;
 
     const TYPE_SEARCHABLE = 'searchable';
     const TYPE_SELECTABLE = 'selectable';
@@ -184,6 +185,11 @@ implements
                 foreach ($this->getGrid()->getObjects(AbstractSource::class) as $source) {
                     $values += $source->getColumnValues($column);
                 }
+            } else {
+                $values = $this->call_user_func_array(
+                    $selectableSource,
+                    [$column]
+                );
             }
             $input->setValueOptions($values);
             $inputs['selectable'] = $input;

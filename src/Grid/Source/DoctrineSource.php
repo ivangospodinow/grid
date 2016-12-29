@@ -4,6 +4,7 @@ namespace Grid\Source;
 use Grid\Source\Interfaces\QuerySourceInterface;
 use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
+use Grid\Source\Traits\NamespaceAwareTrait;
 use Grid\GridInterface;
 use Grid\Column\AbstractColumn;
 
@@ -18,7 +19,7 @@ use \Exception;
  */
 class DoctrineSource extends AbstractSource implements GridInterface, QuerySourceInterface
 {
-    use FilterGridQuery, GridAwareTrait;
+    use FilterGridQuery, GridAwareTrait, NamespaceAwareTrait;
     
     /**
      * PSR2 class name
@@ -153,16 +154,24 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
     
     /**
      *
+     * @param AbstractColumn $column
+     * @return array
+     */
+    public function getColumnValues(AbstractColumn $column) : array
+    {
+        return [];
+    }
+
+    /**
+     *
      * @return int
      */
     public function getCount() : int
     {
         if (null === $this->count) {
             $query = clone $this->getQuery();
-            if ($this->pk && $this->namespace) {
-                $expr = 'COUNT(DISTINCT `' . $this->namespace . '`.`' . $this->pk . '`)';
-            } elseif ($this->pk) {
-                $expr = 'COUNT(DISTINCT `' . $this->pk . '`)';
+            if ($this->pk) {
+                $expr = 'COUNT(DISTINCT `' . $this->getDbFieldNamespace($this->pk) . '`)';
             } else {
                 $expr = 'COUNT(*)';
             }

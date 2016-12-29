@@ -8,5 +8,5 @@ namespace Grid\Plugin\Interfaces;
  */
 interface ObjectDiPluginInterface
 {
-    public function setObjectDi($object) : null;
+    public function setObjectDi($object);
 }

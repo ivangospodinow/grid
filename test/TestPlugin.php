@@ -4,7 +4,7 @@ use Grid\Plugin\Interfaces\RenderPluginInterface;
 
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
-use Grid\Interfaces\InputsAwareTrait;
+use Grid\Interfaces\InputsInterface;
 
 class TestPlugin implements RenderPluginInterface, GridInterface
 {
@@ -17,7 +17,7 @@ class TestPlugin implements RenderPluginInterface, GridInterface
     {
         $this->getGrid()->addAttribute('class', 'table table-hover');
 
-        foreach ($this->getGrid()->getObjects(InputsAwareTrait::class) as $plugin) {
+        foreach ($this->getGrid()->getObjects(InputsInterface::class) as $plugin) {
             foreach ($plugin->getInputs() as $input) {
                 $input->addAttribute('class', 'form-control');
             }

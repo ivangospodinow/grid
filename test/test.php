@@ -306,7 +306,12 @@ $grid[] = new Grid\Column\Column(
         'dbFields' => ['id', 'name'],
         'sortable' => true,
         'selectable' => true,
+//        'selectableSource' => function()
+//        {
+//            return [1, 2, 3];
+//        }
     ]
 );
+$grid[] = new TestPlugin;
 
 echo $grid->render();

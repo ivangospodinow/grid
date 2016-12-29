@@ -4,6 +4,7 @@ namespace Grid\Source;
 use Grid\Source\Interfaces\QuerySourceInterface;
 use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
+use Grid\Source\Traits\NamespaceAwareTrait;
 use Grid\GridInterface;
 use Grid\Column\AbstractColumn;
 use Grid\Plugin\Interfaces\ColumnValuesInterface;
@@ -24,7 +25,7 @@ use \Exception;
  */
 class ZendDbAdapterSource extends AbstractSource implements GridInterface, QuerySourceInterface
 {
-    use FilterGridQuery, GridAwareTrait;
+    use FilterGridQuery, GridAwareTrait, NamespaceAwareTrait;
     
     /**
      *
@@ -309,22 +310,6 @@ class ZendDbAdapterSource extends AbstractSource implements GridInterface, Query
     public function setQuery($query)
     {
         $this->query = $query;
-    }
-
-    /**
-     * users.name
-     * @param type $field
-     * @return string
-     */
-    protected function getDbFieldNamespace($field) : string
-    {
-        /**
-         * If field has namespace in it, return it
-         */
-        if (strpos($field, '.') !== false) {
-            return $field;
-        }
-        return ($this->namespace ? $this->namespace . '.' : '') . $field;
     }
 
     /**

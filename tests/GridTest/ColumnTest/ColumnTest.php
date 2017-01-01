@@ -116,6 +116,48 @@ class ColumnTest extends TestCase
         $this->assertFalse($instance->isSearchable());
     }
 
+    public function testSelectable()
+    {
+        $instance = $this->getInstance();
+        $this->assertFalse($instance->isSelectable());
+
+        $instance = $this->getInstance(['selectable' => true]);
+        $this->assertFalse($instance->isSelectable());
+
+        $instance = $this->getInstance(['selectable' => true, 'dbFields' => ['test']]);
+        $this->assertTrue($instance->isSelectable());
+
+        $instance = $this->getInstance(['selectable' => true, 'dbFields' => $this]);
+        $this->assertFalse($instance->isSelectable());
+
+        $instance = $this->getInstance(
+            [
+                'selectable' => true,
+                'dbFields' => ['test'],
+                'selectableSource' => $callback = function () {}
+            ]
+        );
+        $this->assertTrue($instance->getSelectableSource() === $callback);
+
+        $instance = $this->getInstance(
+            [
+                'selectable' => true,
+                'dbFields' => ['test'],
+                'selectableSource' => $array = ['test' => '123']
+            ]
+        );
+        $this->assertTrue($instance->getSelectableSource() === $array);
+
+        $instance = $this->getInstance(
+            [
+                'selectable' => true,
+                'dbFields' => ['test'],
+                'selectableSource' => 'is_array'
+            ]
+        );
+        $this->assertTrue($instance->getSelectableSource() === 'is_array');
+    }
+
     public function testExtractor()
     {
         $instance = $this->getInstance();

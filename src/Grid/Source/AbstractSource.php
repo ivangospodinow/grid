@@ -4,6 +4,7 @@ namespace Grid\Source;
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
+use Grid\Plugin\Interfaces\SourcePluginInterface;
 
 use \Exception;
 
@@ -12,7 +13,7 @@ use \Exception;
  *
  * @author Gospodinow
  */
-abstract class AbstractSource implements SourceInterface, GridInterface
+abstract class AbstractSource implements SourceInterface, GridInterface, SourcePluginInterface
 {
     use ExchangeArray, GridAwareTrait;
     
@@ -56,6 +57,18 @@ abstract class AbstractSource implements SourceInterface, GridInterface
     {
         $this->exchangeArray($config);
         $this->setLimit($this->getEnd() - $this->getStart());
+    }
+
+    /**
+     *
+     * @param \Grid\Source\AbstractSource $source
+     */
+    public function filterSource(AbstractSource $source) : AbstractSource
+    {
+        if ($this->canOrder()) {
+            $this->order();
+        }
+        return $source;
     }
     
     /**
@@ -138,6 +151,7 @@ abstract class AbstractSource implements SourceInterface, GridInterface
         return count($this->order);
     }
 
+
     /**
      *
      * @return array
@@ -160,5 +174,13 @@ abstract class AbstractSource implements SourceInterface, GridInterface
         }
 
         return $orderFields;
+    }
+
+    /**
+     * Do nothing here
+     */
+    protected function order()
+    {
+        
     }
 }

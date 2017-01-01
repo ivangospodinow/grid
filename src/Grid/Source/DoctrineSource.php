@@ -99,7 +99,7 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
     /**
      * Added order to query
      */
-    public function order()
+    protected function order()
     {
         $orderFields = $this->getOrderFields();
         if (!empty($orderFields)) {

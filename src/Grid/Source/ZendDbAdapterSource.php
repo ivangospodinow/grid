@@ -110,7 +110,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     /**
      * Added order to query
      */
-    public function order()
+    protected function order()
     {
         $orderFields = $this->getOrderFields();
         if (!empty($orderFields)) {

@@ -15,7 +15,6 @@ interface SourceInterface
     public function getCount() : int;
     public function setCount(int $count);
     public function canOrder() : bool;
-    public function order();
 
     /**
      *

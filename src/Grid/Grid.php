@@ -100,29 +100,31 @@ class Grid implements ArrayAccess
         $grid = null;
         $plugins = [];
         foreach ($configs as $config) {
-            
-            $plugin = null;
-            if (is_string($config) && class_exists($config)) {
-                $plugins[] = new $config;
-                continue;
-            } elseif (is_string($config)) {
-                throw new Exception('String config expects class, given ' . $config);
-            }
 
-            if (!isset($config['options'])) {
+            if (is_array($config)
+            && !isset($config['options'])) {
                 $config['options'] = [];
             }
 
-            /**
-             * Create from callback factory
-             */
-            if (isset($config['callback'])) {
-                if (!isset($config['callback'][0])
+            $plugin = null;
+            if (is_object($config)) {
+                $plugin = $config;
+            } elseif (is_string($config)) {
+                if (class_exists($config)) {
+                    $plugin = new $config;
+                } elseif (is_string($config)) {
+                    throw new Exception('String config expects class, given ' . $config);
+                }
+            } elseif (isset($config['callback'])) {
+               if (!isset($config['callback'][0])
                 || !isset($config['callback'][1])) {
                     throw new Exception('callback must have 0=>object,class 1=> method');
                 }
 
                 if (is_string($config['callback'][0])) {
+                    if (!class_exists($config['callback'][0])) {
+                        throw new Exception($config['callback'][0] . ' does not exists');
+                    }
                     $config['callback'][0] = new $config['callback'][0];
                 }
 
@@ -136,11 +138,7 @@ class Grid implements ArrayAccess
                 throw new Exception('Plugin factory required callback or class');
             }
             
-            if (!is_object($plugin)) {
-                throw new Exception('At this point plugin most be object');
-            }
-
-            if ($plugin instanceof self) {
+            if ($plugin instanceof Grid) {
                 $grid = $plugin;
             } else {
                 $plugins[] = $plugin;
@@ -266,10 +264,6 @@ class Grid implements ArrayAccess
                     'filterSource',
                     $source
                 );
-
-                if ($source->canOrder()) {
-                    $source->order();
-                }
 
                 foreach ($source->getRows() as $rowData) {
                     foreach ($hydrators as $hydrator) {

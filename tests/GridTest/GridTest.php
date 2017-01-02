@@ -43,6 +43,13 @@ class GridTest extends TestCase implements TranslateInterface
         } catch (\Exception $e) {
             $this->assertTrue(true);
         }
+
+        try {
+            $instance[] = 1;
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertTrue(true);
+        }
     }
 
     public function testGridId()

@@ -82,7 +82,7 @@ class DataTablesRenderer extends HtmlRenderer implements
                 $(document).ready(function(){
                     $('#' + id).DataTable(params);
                 });
-            })(jQuery, '<?php echo $this->getGrid()->getAttribute('id')?>', <?php echo json_encode($this->dataTableParams)?>);
+            })(jQuery, '<?php echo $this->getGrid()->getId()?>', <?php echo json_encode($this->dataTableParams)?>);
         //</script>
         <?php
         $script->captureEnd();        

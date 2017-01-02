@@ -238,12 +238,12 @@ class GridTest extends TestCase implements TranslateInterface
             $this->assertTrue(true);
         }
 
-            $grid = Grid::factory(
-                [
-                    $instance = new Grid,
-                ]
-            );
-            $this->assertTrue($grid === $instance);
+        $grid = Grid::factory(
+            [
+                $instance = new Grid,
+            ]
+        );
+        $this->assertTrue($grid === $instance);
     }
 
     public function createPlugin($config)

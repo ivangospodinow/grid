@@ -64,7 +64,7 @@ class Input
     public function render() : string
     {
         $html = [];
-        $html[] = $this->openTab();
+        $html[] = $this->openTag();
         $html[] = $this->closeTag();
         return implode(PHP_EOL, $html);
     }
@@ -82,7 +82,7 @@ class Input
      *
      * @return string
      */
-    protected function openTab() : string
+    protected function openTag() : string
     {
         $html = '';
         if ($this->getAttribute('type') === self::TYPE_TEXT) {

@@ -38,4 +38,17 @@ class InputTest extends TestCase
         $input = new Input(['name' => 'test']);
         $this->assertTrue($input->getAttribute('type') === Input::TYPE_TEXT);
     }
+
+    public function testSelect()
+    {
+        $input = new Input(
+            [
+                'name' => 'test',
+                'type' => Input::TYPE_SELECT,
+            ]
+        );
+        $this->assertTrue(is_string($input->render()));
+        $input->setValueOptions(['test' => 'VALUE 123']);
+        $this->assertTrue(strpos($input->render(), 'VALUE 123') !== false);
+    }
 }

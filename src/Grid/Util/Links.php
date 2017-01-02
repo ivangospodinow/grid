@@ -20,7 +20,7 @@ class Links implements GridInterface, LinksInterface
 
     public function __construct(array $config = [])
     {
-        if (!isset($config['params'])) {
+        if (!isset($config['params']) && isset($_GET)) {
             $config['params'] = $_GET;
         }
         $this->exchangeArray($config);
@@ -33,6 +33,15 @@ class Links implements GridInterface, LinksInterface
     public function getParams() : array
     {
         return $this->params;
+    }
+
+    /**
+     *
+     * @param array $params
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
     }
 
     /**

@@ -53,10 +53,10 @@ class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, Da
      */
     public function filterData(array $data) : array
     {
-        foreach ($data as $row) {
+        foreach ($data as $key => $row) {
             foreach ($row as $name => $value) {
                 if (!in_array($name, $this->columns)) {
-                    unset($row[$name]);
+                    unset($data[$key][$name]);
                 }
             }
         }

@@ -21,9 +21,8 @@ class LinkCreator implements GridInterface
      */
     public function __call($name, $arguments)
     {
-        $plugins = $this->getGrid()->getObjects(LinksInterface::class);
         $result = '';
-        foreach ($plugins as $plugin) {
+        foreach ($this->getGrid()[LinksInterface::class] as $plugin) {
             $result = call_user_func_array([$plugin, $name], $arguments);
             if (!empty($result)) {
                 break;

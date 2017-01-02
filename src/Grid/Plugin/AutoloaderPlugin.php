@@ -4,10 +4,15 @@ namespace Grid\Plugin;
 
 use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
 use Grid\Plugin\Interfaces\DataPrePluginInterface;
+use Grid\Plugin\Interfaces\RenderPluginInterface;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\GridInterface;
 use Grid\Plugin\Interfaces\ColumnPluginInterface;
 use Grid\Column\AbstractColumn;
+use Grid\Renderer\CliRenderer;
+
+use Grid\Util\JavascriptCapture;
+use Grid\Interfaces\JavascriptCaptureInterface;
 
 use Grid\Plugin\ExtractorPlugin;
 use Grid\Plugin\HeaderPlugin;
@@ -22,7 +27,8 @@ class AutoloaderPlugin extends AbstractPlugin implements
     ColumnsPrePluginInterface,
     GridInterface,
     ColumnPluginInterface,
-    DataPrePluginInterface
+    DataPrePluginInterface,
+    RenderPluginInterface
 {
     use GridAwareTrait;
     
@@ -39,6 +45,19 @@ class AutoloaderPlugin extends AbstractPlugin implements
     {
         $this->autoload();
         return $columns;
+    }
+
+    public function preRender(string $html) : string
+    {
+        if (!isset($this->getGrid()[JavascriptCaptureInterface::class])) {
+            $this->getGrid()[] = new JavascriptCapture;
+        }
+        return $html;
+    }
+
+    public function postRender(string $html) : string
+    {
+        return $html;
     }
 
     /**
@@ -65,11 +84,11 @@ class AutoloaderPlugin extends AbstractPlugin implements
         }
         $this->autoloaded = true;
 
-        if (!count($this->getGrid()->getObjects(ExtractorPlugin::class))) {
+        if (!isset($this->getGrid()[ExtractorPlugin::class])) {
             $this->getGrid()[] = new ExtractorPlugin;
         }
         
-        if (!count($this->getGrid()->getObjects(HeaderPlugin::class))) {
+        if (!isset($this->getGrid()[HeaderPlugin::class])) {
             $this->getGrid()[] = new HeaderPlugin;
         }
     }

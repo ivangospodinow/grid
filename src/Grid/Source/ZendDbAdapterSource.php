@@ -245,7 +245,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
         asort($values);
 
         return
-        $this->getGrid()->plugins(
+        $this->getGrid()->filter(
             ColumnValuesInterface::class,
             'filterColumnValues',
             $values

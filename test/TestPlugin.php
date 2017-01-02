@@ -17,7 +17,7 @@ class TestPlugin implements RenderPluginInterface, GridInterface
     {
         $this->getGrid()->addAttribute('class', 'table table-hover');
 
-        foreach ($this->getGrid()->getObjects(InputsInterface::class) as $plugin) {
+        foreach ($this->getGrid()[InputsInterface::class] as $plugin) {
             foreach ($plugin->getInputs() as $input) {
                 $input->addAttribute('class', 'form-control');
             }
@@ -28,7 +28,20 @@ class TestPlugin implements RenderPluginInterface, GridInterface
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">';
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+
+
+<script
+			  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+			  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+			  crossorigin="anonymous"></script>
+
+<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+';
+
+
 
         return $html;
     }

@@ -13,8 +13,7 @@ trait FilterGridQuery
 {
     public function filterGridQuery(Grid $grid, $query)
     {
-        $plugins = $grid->getObjects(QueryPluginInterface::class);
-        foreach ($plugins as $plugin) {
+        foreach ($grid[QueryPluginInterface::class] as $plugin) {
             $query = $plugin->filterQuery($query);
         }
         return $query;

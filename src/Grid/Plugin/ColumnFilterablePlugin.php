@@ -182,7 +182,7 @@ implements
             $selectableSource = $column->getSelectableSource();
             $values = [];
             if ($selectableSource === null) {
-                foreach ($this->getGrid()->getObjects(AbstractSource::class) as $source) {
+                foreach ($this->getGrid()[AbstractSource::class] as $source) {
                     $values += $source->getColumnValues($column);
                 }
             } else {

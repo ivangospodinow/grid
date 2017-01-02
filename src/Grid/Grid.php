@@ -9,6 +9,7 @@ use Grid\Renderer\RendererInterface;
 use Grid\Column\AbstractColumn;
 
 use Grid\Interfaces\TranslateInterface;
+use Grid\Interfaces\JavascriptCaptureInterface;
 
 use Grid\Plugin\AutoloaderPlugin;
 use Grid\Plugin\AbstractPlugin;
@@ -26,6 +27,7 @@ use Grid\Plugin\Interfaces\ColumnPluginInterface;
 use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
 use Grid\Plugin\Interfaces\DataPrePluginInterface;
 use Grid\Plugin\Interfaces\ObjectDiPluginInterface;
+use Grid\Plugin\Interfaces\JavascriptPluginInterface;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
@@ -172,14 +174,31 @@ class Grid implements ArrayAccess
     public function render() : string
     {
         $html = [];
-        $html[] = $this->plugins(RenderPluginInterface::class, 'preRender', '');
-        $renderers = $this->getObjects(RendererInterface::class);
+        $html[] = $this->filter(RenderPluginInterface::class, 'preRender', '');
         
-        foreach ($renderers as $renderer) {
+        foreach ($this[RendererInterface::class] as $renderer) {
             $html[] = $renderer->render($this);
         }
 
-        return $this->plugins(
+        foreach ($this[JavascriptCaptureInterface::class] as $scriptCapture) {
+            $this->filter(
+               JavascriptPluginInterface::class,
+               'addJavascript',
+               $scriptCapture
+            );
+            
+            $script = (string) $scriptCapture;
+            if (!empty($script)) {
+                $html[] = sprintf(
+                    '<script>%s%s%s</script>',
+                    PHP_EOL,
+                    $script,
+                    PHP_EOL
+                );
+            }
+        }
+        
+        return $this->filter(
             RenderPluginInterface::class,
             'postRender',
             implode(PHP_EOL, $html)
@@ -194,7 +213,7 @@ class Grid implements ArrayAccess
     public function getColumns() : array
     {
         if (!array_key_exists(__METHOD__, $this->cache)) {
-            $columns =  $this->plugins(
+            $columns =  $this->filter(
                 ColumnsPrePluginInterface::class,
                 'preColumns',
                 []
@@ -203,14 +222,14 @@ class Grid implements ArrayAccess
                 if (is_object($mixed)
                 && $mixed instanceof AbstractColumn) {
                     
-                    $columns[] = $this->plugins(
+                    $columns[] = $this->filter(
                         ColumnPluginInterface::class,
                         'filterColumn',
                         $mixed
                     );
                 }
             }
-            $this->cache[__METHOD__] = $this->plugins(
+            $this->cache[__METHOD__] = $this->filter(
                 ColumnsPluginInterface::class,
                 'filterColumns',
                 $columns
@@ -230,7 +249,7 @@ class Grid implements ArrayAccess
         $key = __METHOD__ . '::' . $name;
         if (!isset($this->cache[$key])) {
             $this->cache[$key] = false;
-            foreach ($this->getObjects(AbstractColumn::class) as $column) {
+            foreach ($this[AbstractColumn::class] as $column) {
                 if ($column->getName() === $name) {
                     $this->cache[$key] = $column;
                     break;
@@ -252,14 +271,13 @@ class Grid implements ArrayAccess
     public function getData() : array
     {
         if (!array_key_exists(__METHOD__, $this->cache)) {
-            $data = $this->plugins(DataPrePluginInterface::class, 'preFilterData', []);
-
-            $sources   = $this->getObjects(SourceInterface::class);
-            $plugins   = $this->getObjects(RowPluginInterface::class);
-            $hydrators = $this->getObjects(HidratorPluginInterface::class); 
+            $data = $this->filter(DataPrePluginInterface::class, 'preFilterData', []);
             
-            foreach ($sources as $source) {
-                $this->plugins(
+            $plugins   = $this[RowPluginInterface::class];
+            $hydrators = $this[HidratorPluginInterface::class];
+            
+            foreach ($this[SourceInterface::class] as $source) {
+                $this->filter(
                     SourcePluginInterface::class,
                     'filterSource',
                     $source
@@ -277,8 +295,8 @@ class Grid implements ArrayAccess
                     $data[] = $row;
                 }
             }
-            unset($plugins);
-            $this->cache[__METHOD__] = $this->plugins(
+            
+            $this->cache[__METHOD__] = $this->filter(
                 DataPluginInterface::class,
                 'filterData',
                 $data
@@ -295,42 +313,14 @@ class Grid implements ArrayAccess
     {
         if (!array_key_exists(__METHOD__, $this->cache)) {
             $count = 0;
-            $sources = $this->getObjects(SourceInterface::class);
-            foreach  ($sources as $source) {
+            foreach  ($this[SourceInterface::class] as $source) {
                 $count += $source->getCount();
             }
             $this->cache[__METHOD__] = (int) $count;
         }
         return $this->cache[__METHOD__];
     }
-
-    /**
-     * @todo can I increase performance, if columns are cached by interface ?
-     * @param type $interface
-     * @return array
-     */
-    public function getObjects($interface) : array
-    {
-        $objects = [];
-        foreach ($this->iterator as $mixed) {
-            if (is_object($mixed)
-            && $mixed instanceof $interface) {
-                $objects[] = $mixed;
-            }
-        }
-        return $objects;
-    }
-
-    /**
-     *
-     * @param type $interface
-     * @return bool
-     */
-    public function hasObject($interface) : bool
-    {
-        return count($this->getObjects($interface)) > 0;
-    }
-
+    
     /**
      *
      * @param string $string
@@ -338,7 +328,7 @@ class Grid implements ArrayAccess
     public function translate(string $string) : string
     {
         if (!isset($this->cache[__METHOD__])) {
-            $this->cache[__METHOD__] = $this->getObjects(TranslateInterface::class);
+            $this->cache[__METHOD__] = $this[TranslateInterface::class];
         }
 
         foreach ($this->cache[__METHOD__] as $translatable) {
@@ -369,7 +359,7 @@ class Grid implements ArrayAccess
             $object->setGrid($this);
         }
 
-        $this->plugins(
+        $this->filter(
             ObjectDiPluginInterface::class,
             'setObjectDi',
             $object
@@ -380,15 +370,14 @@ class Grid implements ArrayAccess
 
     /**
      * Calls plugins foreach
-     * @param type $interface
-     * @param type $method
+     * @param string $interface
+     * @param string $method
      * @param type $data
      * @return type
      */
-    public function plugins($interface, $method, $data = null)
+    public function filter(string $interface, string $method, $data = null)
     {
-        $plugins = $this->getObjects($interface);
-        foreach ($plugins as $plugin) {
+        foreach ($this[$interface] as $plugin) {
             $data = $plugin->$method($data);
         }
         return $data;
@@ -396,22 +385,28 @@ class Grid implements ArrayAccess
 
     /**
      *
-     * @param type $offset
+     * @param type $interface
      * @return bool
      */
-    function offsetExists($offset): bool
+    function offsetExists($interface): bool
     {
-        return array_key_exists($offset, $this->iterator);
+        return !empty($this->offsetGet($interface));
     }
 
     /**
      *
-     * @param type $offset
+     * @param string $interface
      * @return type
      */
-    public function offsetGet($offset)
+    public function offsetGet($interface)
     {
-        return $this->iterator[$offset] ?? null;
+        $objects = [];
+        foreach ($this->iterator as $mixed) {
+            if ($mixed instanceof $interface) {
+                $objects[] = $mixed;
+            }
+        }
+        return $objects;
     }
 
     /**
@@ -421,16 +416,15 @@ class Grid implements ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        if ($this->offsetExists($offset)) {
-            throw new Exception('Offset already exists ' . $offset);
+        if (!is_object($value)) {
+            throw new Exception('Offset must be object');
         }
 
         $this->setObjectDi($value);
-        
-        if ($offset === null) {
-            $this->iterator[] = $value;
-        } else {
+        if (null !== $offset) {
             $this->iterator[$offset] = $value;
+        } else {
+            $this->iterator[] = $value;
         }
     }
 
@@ -440,6 +434,12 @@ class Grid implements ArrayAccess
      */
     public function offsetUnset($offset)
     {
+        foreach ($this->iterator as $key => $mixed) {
+            if (is_object($mixed)
+            && $mixed instanceof $offset) {
+                unset($this->iterator[$key]);
+            }
+        }
         unset($this->iterator[$offset]);
     }
 }

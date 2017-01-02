@@ -29,13 +29,13 @@ class GridTest extends TestCase implements TranslateInterface
     {
         $instance = new Grid(['autoload' => false]);
         $instance[] = $this;
-        $this->assertTrue($instance->hasObject(self::class));
-        $this->assertTrue($instance->offsetGet(0) instanceof self);
+        $this->assertTrue(isset($instance[self::class]));
+        $this->assertTrue(isset($instance[self::class]));
         
-        $instance->offsetUnset(0);
-        $this->assertFalse($instance->hasObject(self::class));
+        $instance->offsetUnset(self::class);
+        $this->assertFalse(isset($instance[self::class]));
         $instance->offsetSet('test', $this);
-        $this->assertTrue($instance->hasObject(self::class));
+        $this->assertTrue(isset($instance[self::class]));
 
         try {
             $instance['test'] = new \DateTime;
@@ -57,7 +57,7 @@ class GridTest extends TestCase implements TranslateInterface
     {
         $instance = new Grid(['autoload' => true]);
         $this->assertAttributeEquals(true, 'autoload', $instance);
-        $this->assertTrue($instance->hasObject(\Grid\Plugin\AutoloaderPlugin::class));
+        $this->assertTrue(isset($instance[\Grid\Plugin\AutoloaderPlugin::class]));
     }
 
     public function testColumns()
@@ -65,7 +65,7 @@ class GridTest extends TestCase implements TranslateInterface
         $instance = new Grid(['autoload' => true]);
         $instance[] = new \Grid\Column\Column(['name' => 'test', 'dataType' => \Grid\DataType\Str::class]);
         $this->assertTrue(count($instance->getColumns()) === 1);
-        $this->assertTrue($instance->hasObject(\Grid\Plugin\DataTypesPlugin::class));
+        $this->assertTrue(isset($instance[\Grid\Plugin\DataTypesPlugin::class]));
 
         $this->assertTrue($instance->getColumn('test') instanceof \Grid\Column\AbstractColumn);
 
@@ -129,10 +129,10 @@ class GridTest extends TestCase implements TranslateInterface
         
         $grid = Grid::factory($config);
         $this->assertTrue(count($grid->getColumns()) === 1);
-        $this->assertTrue(count($grid->getObjects(\Grid\Source\ArraySource::class)) === 1);
-        $this->assertTrue(count($grid->getObjects(\Grid\Column\Column::class)) === 1);
-        $this->assertTrue(count($grid->getObjects(\Grid\Plugin\HeaderPlugin::class)) === 1);
-        $this->assertTrue(count($grid->getObjects(\Grid\Hydrator\Hydrator::class)) === 1);
+        $this->assertTrue(count($grid[\Grid\Source\ArraySource::class]) === 1);
+        $this->assertTrue(count($grid[\Grid\Column\Column::class]) === 1);
+        $this->assertTrue(count($grid[\Grid\Plugin\HeaderPlugin::class]) === 1);
+        $this->assertTrue(count($grid[\Grid\Hydrator\Hydrator::class]) === 1);
 
         try {
             $grid = Grid::factory(

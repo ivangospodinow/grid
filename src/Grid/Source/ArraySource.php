@@ -153,7 +153,7 @@ class ArraySource extends AbstractSource
         }
         asort($values);
         return
-        $this->getGrid()->plugins(
+        $this->getGrid()->filter(
             ColumnValuesInterface::class,
             'filterColumnValues',
             $values

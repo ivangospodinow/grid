@@ -3,6 +3,7 @@ namespace GridTest\HydratorTest;
 
 use Grid\Plugin\ProfilePlugin;
 use Grid\Grid;
+use Grid\Factory\StaticFactory;
 
 use PHPUnit\Framework\TestCase;
 
@@ -45,6 +46,6 @@ class ProfilePluginTest extends TestCase
                 ]
             ],
         ];
-        return Grid::factory($config);
+        return StaticFactory::factory($config);
     }
 }

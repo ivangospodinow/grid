@@ -30,6 +30,6 @@ class CliRenderer implements RendererInterface
         }
         
         $table = new Table($headers, $rows);
-        return implode('', $table->getDisplayLines());
+        return implode(PHP_EOL, $table->getDisplayLines());
     }
 }

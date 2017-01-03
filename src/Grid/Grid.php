@@ -114,17 +114,21 @@ class Grid implements ArrayAccess
 
         foreach ($this[JavascriptCaptureInterface::class] as $scriptCapture) {
 
-            $script =
+            $script = (string)
             $this->filter(
                JavascriptPluginInterface::class,
                'addJavascript',
                $scriptCapture
             );
+
+            if (empty($script)) {
+                continue;
+            }
             
             $html[] = sprintf(
                 '<script>%s%s%s</script>',
                 PHP_EOL,
-                (string) $script,
+                $script,
                 PHP_EOL
             );
         }

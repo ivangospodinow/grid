@@ -4,6 +4,7 @@ namespace GridTest\HydratorTest;
 use Grid\Plugin\ProfilePlugin;
 use Grid\Grid;
 use Grid\Factory\StaticFactory;
+use Grid\Plugin\ColumnsOnlyDataPlugin;
 
 use PHPUnit\Framework\TestCase;
 
@@ -14,16 +15,12 @@ class ProfilePluginTest extends TestCase
         $grid = $this->getGrid();
         $plugin = new ProfilePlugin(['columns' => ['name']]);
         $plugin->setGrid($grid);
-
-        $columns = $plugin->filterColumns($grid->getColumns());
-        $this->assertTrue(count($columns) === 1);
+        $grid[] = $plugin;
+        
+        $columns = $grid->getColumns();
         $this->assertTrue($columns[key($columns)]->getName() === 'name');
 
-        $data = [
-            ['id' => 1, 'name' => 'Ivan']
-        ];
-
-        $data = $plugin->filterData($data);
+        $data = $grid->getData();
         $this->assertTrue(!isset($data[key($data)]['id']));
         $this->assertTrue(isset($data[key($data)]['name']));
     }
@@ -45,6 +42,15 @@ class ProfilePluginTest extends TestCase
                     'label' => 'Name',
                 ]
             ],
+            [
+                'class' => \Grid\Source\ArraySource::class,
+                'options' => [
+                    'driver' => [
+                        ['id' => 1, 'name' => 'Ivan']
+                    ],
+                    'order' => ['name' => 'ASC']
+                ]
+            ]
         ];
         return StaticFactory::factory($config);
     }

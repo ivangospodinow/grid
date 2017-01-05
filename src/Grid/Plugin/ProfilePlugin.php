@@ -52,13 +52,16 @@ class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, Da
      */
     public function filterData(array $data) : array
     {
-        foreach ($data as $key => $row) {
-            foreach ($row as $name => $value) {
-                if (!in_array($name, $this->columns)) {
-                    unset($data[$key][$name]);
-                }
-            }
+        /**
+         * If the default plugin is available
+         */
+        if (!isset($this->getGrid()[ColumnsOnlyDataPlugin::class])) {
+            $plugin = new ColumnsOnlyDataPlugin;
+            $this->getGrid()->setObjectDi($plugin);
+            $data = $plugin->filterData($data);
+            unset($plugin);
         }
+        
         return $data;
     }
 }

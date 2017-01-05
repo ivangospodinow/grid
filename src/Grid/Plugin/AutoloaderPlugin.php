@@ -17,6 +17,7 @@ use Grid\Interfaces\JavascriptCaptureInterface;
 use Grid\Plugin\ExtractorPlugin;
 use Grid\Plugin\HeaderPlugin;
 use Grid\Plugin\DataTypesPlugin;
+use Grid\Plugin\ColumnsOnlyDataPlugin;
 
 /**
  * Creating table headers
@@ -90,6 +91,10 @@ class AutoloaderPlugin extends AbstractPlugin implements
         
         if (!isset($this->getGrid()[HeaderPlugin::class])) {
             $this->getGrid()[] = new HeaderPlugin;
+        }
+
+        if (!isset($this->getGrid()[ColumnsOnlyDataPlugin::class])) {
+            $this->getGrid()[] = new ColumnsOnlyDataPlugin;
         }
     }
 }

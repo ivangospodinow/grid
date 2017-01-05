@@ -38,8 +38,6 @@ class GridRow extends ArrayObject implements GridInterface
      * @var string
      */
     protected $position = self::POSITION_BODY;
-
-    protected $cache = [];
     
     /**
      *

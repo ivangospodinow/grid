@@ -29,12 +29,6 @@ class GridRow extends ArrayObject implements GridInterface
 
     /**
      *
-     * @var type Grid
-     */
-    protected $grid;
-
-    /**
-     *
      * @var string
      */
     protected $position = self::POSITION_BODY;
@@ -42,17 +36,15 @@ class GridRow extends ArrayObject implements GridInterface
     /**
      *
      * @param string | array | object [__toString, ArrayAccess] $source
-     * @param \Grid\Grid $grid
      * @param string $position
      */
-    public function __construct($source, Grid $grid, string $position = self::POSITION_BODY)
+    public function __construct($source, string $position = self::POSITION_BODY)
     {
         if (is_array($source)) {
             parent::__construct($source);
         }
         
         $this->source   = $source;
-        $this->grid     = $grid;
         $this->position = $position;
     }
 

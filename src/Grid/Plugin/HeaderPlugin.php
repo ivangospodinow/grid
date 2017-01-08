@@ -52,22 +52,28 @@ class HeaderPlugin extends AbstractPlugin implements DataPluginInterface
 
         if ($this->position === self::POSITION_BOTH
         || $this->position === self::POSITION_TOP) {
-            $gridRow = new GridRow(
-                $headers,
-                $this->getGrid(),
-                GridRow::POSITION_HEAD
+            array_unshift(
+                $data,
+                $this->getGrid()->setObjectDi(
+                    new GridRow(
+                        $headers,
+                        GridRow::POSITION_HEAD
+                    )
+                )
             );
-            array_unshift($data, $gridRow);
         }
 
         if ($this->position === self::POSITION_BOTH
         || $this->position === self::POSITION_BOTTOM) {
-            $gridRow = new GridRow(
-                $headers,
-                $this->getGrid(),
-                GridRow::POSITION_FOOTER
+            array_unshift(
+                $data,
+                $this->getGrid()->setObjectDi(
+                    new GridRow(
+                        $headers,
+                        GridRow::POSITION_FOOTER
+                    )
+                )
             );
-            array_unshift($data, $gridRow);
         }
         
         return $data;

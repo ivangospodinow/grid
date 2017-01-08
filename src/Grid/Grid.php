@@ -222,7 +222,7 @@ class Grid implements ArrayAccess
                     foreach ($hydrators as $hydrator) {
                         $rowData = $hydrator->hydrate($rowData);
                     }
-                    $row = new GridRow($rowData, $this, GridRow::POSITION_BODY);
+                    $row = $this->setObjectDi(new GridRow($rowData, GridRow::POSITION_BODY));
                     
                     foreach ($plugins as $plugin) {
                         $row = $plugin->filterRow($row);

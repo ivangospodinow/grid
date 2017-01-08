@@ -78,10 +78,11 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
         ob_start();
         include $this->view;
         $source = ob_get_clean();
-        $data[] = new GridRow(
-            $source,
-            $this->getGrid(),
-            GridRow::POSITION_FOOTER
+        $data[] = $this->getGrid()->setObjectDi(
+            new GridRow(
+                $source,
+                GridRow::POSITION_FOOTER
+            )
         );
         return $data;
     }

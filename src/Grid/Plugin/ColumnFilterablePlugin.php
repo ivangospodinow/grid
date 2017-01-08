@@ -59,7 +59,7 @@ implements
         }
 
         if (!empty($source)) {
-            $data[] = new GridRow($source, $this->getGrid(), GridRow::POSITION_HEAD);
+            $data[] = $this->getGrid()->setObjectDi(new GridRow($source, GridRow::POSITION_HEAD));
         }
         
         return $data;

@@ -14,7 +14,8 @@ class TimeTest extends TestCase
     {
         $time = time();
         $column = new Column(['name' => 'test']);
-        $row = new GridRow([], new Grid());
+        $row = new GridRow([]);
+        $row->setGrid(new Grid());
         $filter = new Time;
         $this->assertTrue($filter->filter(new \DateTime(date('Y-m-d H:i:s', $time)), $column, $row) === date('H:i:s', $time));
 

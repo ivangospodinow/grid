@@ -119,9 +119,7 @@ abstract class AbstractColumn implements GridInterface
     
     /**
      *
-     * @param string $name
-     * @param type $label
-     * @param type $extract
+     * @param array $config [name, label, extract, dbFields]
      */
     public function __construct(array $config)
     {

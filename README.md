@@ -7,6 +7,11 @@ Easy to use event driven grid (table)
 - Support wide range of existing code base. (work in progress)
 - More is less. More functionality less code.
 
+## Grid mind set
+The easy way to think about Grid.php as Service Locator.
+Grid.php will hold and create (where needed) all objects,
+that are needed for data filtering and rendering.
+
 ## Code Example
 
 See more: *./examples*

@@ -15,7 +15,7 @@ trait Callback
      * @param type $params
      * @return type
      */
-    public function call_user_func_array($callback, $params)
+    public function call_user_func_array($callback, array $params = [])
     {
         if (is_array($callback)) {
             if (!isset($callback[0])

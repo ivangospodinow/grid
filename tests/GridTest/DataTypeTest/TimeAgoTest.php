@@ -14,7 +14,8 @@ class TimeAgoTest extends TestCase
     {
         $time = strtotime('-1 hour');
         $column = new Column(['name' => 'test']);
-        $row = new GridRow([], new Grid());
+        $row = new GridRow([]);
+        $row->setGrid(new Grid());
         $filter = new TimeAgo;
         $filter->setGrid(new Grid);
         $this->assertTrue(is_string($filter->filter($time, $column, $row)));

@@ -14,6 +14,7 @@ use Grid\Renderer\CliRenderer;
 use Grid\Util\JavascriptCapture;
 use Grid\Interfaces\JavascriptCaptureInterface;
 
+use Grid\Plugin\JavascriptCapturePlugin;
 use Grid\Plugin\ExtractorPlugin;
 use Grid\Plugin\HeaderPlugin;
 use Grid\Plugin\DataTypesPlugin;
@@ -52,6 +53,7 @@ class AutoloaderPlugin extends AbstractPlugin implements
     {
         if (!isset($this->getGrid()[JavascriptCaptureInterface::class])) {
             $this->getGrid()[] = new JavascriptCapture;
+            $this->getGrid()[] = new JavascriptCapturePlugin;
         }
         return $html;
     }

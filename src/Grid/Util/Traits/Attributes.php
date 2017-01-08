@@ -34,26 +34,23 @@ trait Attributes
      * @param string $value
      * @return \self
      */
-    public function addAttribute(string $name, string $value) : self
+    public function addAttribute(string $name, string $value)
     {
         if (array_key_exists($name, $this->attributes)) {
             $this->attributes[$name] .= $value;
         } else {
             $this->attributes[$name] = $value;
         }
-        return $this;
     }
 
     /**
      *
      * @param string $name
      * @param string $value
-     * @return \self
      */
-    public function setAttribute(string $name, string $value) : self
+    public function setAttribute(string $name, string $value)
     {
         $this->attributes[$name] = $value;
-        return $this;
     }
 
     /**
@@ -61,9 +58,9 @@ trait Attributes
      * @param string $name
      * @return type
      */
-    public function getAttribute(string $name)
+    public function getAttribute(string $name) : string
     {
-        return $this->attributes[$name] ?? null;
+        return $this->attributes[$name] ?? '';
     }
 
     /**

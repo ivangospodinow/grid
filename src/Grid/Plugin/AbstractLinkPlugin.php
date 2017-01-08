@@ -11,7 +11,7 @@ use Grid\Util\Traits\Required;
 abstract class AbstractLinkPlugin extends AbstractPlugin
 {
     use Attributes, ExchangeArray, Required;
-    
+
     /**
      *
      * @param type $source

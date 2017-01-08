@@ -1,5 +1,5 @@
 <?php
-namespace GridTest\HydratorTest;
+namespace GridTest\UtilTest;
 
 use Grid\Util\Input;
 

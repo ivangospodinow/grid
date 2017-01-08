@@ -28,9 +28,8 @@ class GridTest extends TestCase implements TranslateInterface
 
     public function testIterator()
     {
-        $instance = new Grid(['autoload' => false]);
+        $instance = new Grid;
         $instance[] = $this;
-        $this->assertTrue(isset($instance[self::class]));
         $this->assertTrue(isset($instance[self::class]));
         
         $instance->offsetUnset(self::class);
@@ -61,16 +60,9 @@ class GridTest extends TestCase implements TranslateInterface
         $this->assertTrue($instance->getId() === $id);
     }
 
-    public function testAutoload()
-    {
-        $instance = new Grid(['autoload' => true]);
-        $this->assertAttributeEquals(true, 'autoload', $instance);
-        $this->assertTrue(isset($instance[\Grid\Plugin\AutoloaderPlugin::class]));
-    }
-
     public function testColumns()
     {
-        $instance = new Grid(['autoload' => true]);
+        $instance = new Grid;
         $instance[] = new \Grid\Column\Column(['name' => 'test', 'dataType' => \Grid\DataType\Str::class]);
         $this->assertTrue(count($instance->getColumns()) === 1);
         $this->assertTrue(isset($instance[\Grid\Plugin\DataTypesPlugin::class]));
@@ -83,10 +75,10 @@ class GridTest extends TestCase implements TranslateInterface
 
     public function testTranslate()
     {
-        $instance = new Grid(['autoload' => true]);
+        $instance = new Grid;
         $this->assertTrue($instance->translate('test') === 'test');
 
-        $instance = new Grid(['autoload' => true]);
+        $instance = new Grid;
         $instance[] = $this;
         $this->assertTrue($instance->translate('test') === '1test');
     }
@@ -98,7 +90,7 @@ class GridTest extends TestCase implements TranslateInterface
 
     public function testRender()
     {
-        $instance = new Grid(['autoload' => true]);
+        $instance = new Grid;
         $instance[] = new HtmlRenderer;
         $instance[] = new Hydrator;
         $instance[] = new ArraySource(['driver' => $this->data]);

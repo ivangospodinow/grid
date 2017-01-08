@@ -44,21 +44,7 @@ use \Exception;
 class Grid implements ArrayAccess
 {
     use Attributes, ExchangeArray, Cache;
-
-    /**
-     * Unique grid Id
-     * @var type
-     */
-    protected $id;
-
-    /**
-     * Autoloading default plugins
-     * By disabling it, you can optimize for performance
-     * 
-     * @var type
-     */
-    protected $autoload = true;
-
+    
     /**
      * All dependency objects
      * @var type
@@ -77,17 +63,9 @@ class Grid implements ArrayAccess
      */
     public function __construct(array $config = [])
     {
-        $config['id'] ?? $config['id'] = 'grid-id';
-        $this->setAttribute('id', $config['id']);
+        $this->setAttribute('id', $config['id'] ?? 'grid-id');
         $this->exchangeArray($config);
-
-        /**
-         * Disable autoload to full control
-         * and slim performance increase
-         */
-        if ($this->canAutoload()) {
-            $this[] = new AutoloaderPlugin;
-        }
+        $this[] = new AutoloaderPlugin;
     }
     
     /**
@@ -96,7 +74,7 @@ class Grid implements ArrayAccess
      */
     public function getId() : string
     {
-        return (string) $this->getAttribute('id');
+        return $this->getAttribute('id');
     }
 
     /**
@@ -107,32 +85,9 @@ class Grid implements ArrayAccess
     {
         $html = [];
         $html[] = $this->filter(RenderPluginInterface::class, 'preRender', '');
-        
         foreach ($this[RendererInterface::class] as $renderer) {
             $html[] = $renderer->render($this);
         }
-
-        foreach ($this[JavascriptCaptureInterface::class] as $scriptCapture) {
-
-            $script = (string)
-            $this->filter(
-               JavascriptPluginInterface::class,
-               'addJavascript',
-               $scriptCapture
-            );
-
-            if (empty($script)) {
-                continue;
-            }
-            
-            $html[] = sprintf(
-                '<script>%s%s%s</script>',
-                PHP_EOL,
-                $script,
-                PHP_EOL
-            );
-        }
-        
         return $this->filter(
             RenderPluginInterface::class,
             'postRender',
@@ -147,30 +102,29 @@ class Grid implements ArrayAccess
      */
     public function getColumns() : array
     {
-        if (!array_key_exists(__METHOD__, $this->cache)) {
+        if (!$this->hasCache(__METHOD__)) {
             $columns =  $this->filter(
                 ColumnsPrePluginInterface::class,
                 'preColumns',
                 []
             );
-            foreach ($this->iterator as $mixed) {
-                if (is_object($mixed)
-                && $mixed instanceof AbstractColumn) {
-                    
-                    $columns[] = $this->filter(
-                        ColumnPluginInterface::class,
-                        'filterColumn',
-                        $mixed
-                    );
-                }
+            foreach ($this[AbstractColumn::class] as $column) {
+                $columns[] = $this->filter(
+                    ColumnPluginInterface::class,
+                    'filterColumn',
+                    $column
+                );
             }
-            $this->cache[__METHOD__] = $this->filter(
-                ColumnsPluginInterface::class,
-                'filterColumns',
-                $columns
+            $this->setCache(
+                __METHOD__,
+                $this->filter(
+                    ColumnsPluginInterface::class,
+                    'filterColumns',
+                    $columns
+                )
             );
         }
-        return $this->cache[__METHOD__];
+        return $this->getCache(__METHOD__);
     }
 
     /**
@@ -182,21 +136,21 @@ class Grid implements ArrayAccess
     public function getColumn(string $name) : AbstractColumn
     {
         $key = __METHOD__ . '::' . $name;
-        if (!isset($this->cache[$key])) {
-            $this->cache[$key] = false;
+        if (!$this->hasCache($key)) {
+            $this->setCache($key, false);
             foreach ($this[AbstractColumn::class] as $column) {
                 if ($column->getName() === $name) {
-                    $this->cache[$key] = $column;
+                    $this->setCache($key, $column);
                     break;
                 }
             }
         }
 
-        if ($this->cache[$key] === false) {
+        if ($this->getCache($key) === false) {
             throw new Exception('Column does not exists ' . $name);
         }
 
-        return $this->cache[$key];
+        return $this->getCache($key);
     }
 
     /**
@@ -205,7 +159,7 @@ class Grid implements ArrayAccess
      */
     public function getData() : array
     {
-        if (!array_key_exists(__METHOD__, $this->cache)) {
+        if (!$this->hasCache(__METHOD__)) {
             $data = $this->filter(DataPrePluginInterface::class, 'preFilterData', []);
             
             $plugins   = $this[RowPluginInterface::class];
@@ -231,13 +185,16 @@ class Grid implements ArrayAccess
                 }
             }
             
-            $this->cache[__METHOD__] = $this->filter(
-                DataPluginInterface::class,
-                'filterData',
-                $data
+            $this->setCache(
+                __METHOD__,
+                $this->filter(
+                    DataPluginInterface::class,
+                    'filterData',
+                    $data
+                )
             );
         }
-        return $this->cache[__METHOD__];
+        return $this->getCache(__METHOD__);
     }
 
     /**
@@ -246,14 +203,14 @@ class Grid implements ArrayAccess
      */
     public function getCount() : int
     {
-        if (!array_key_exists(__METHOD__, $this->cache)) {
+        if (!$this->hasCache(__METHOD__)) {
             $count = 0;
             foreach  ($this[SourceInterface::class] as $source) {
                 $count += $source->getCount();
             }
-            $this->cache[__METHOD__] = (int) $count;
+            $this->setCache(__METHOD__, (int) $count);
         }
-        return $this->cache[__METHOD__];
+        return $this->getCache(__METHOD__);
     }
     
     /**
@@ -262,11 +219,7 @@ class Grid implements ArrayAccess
      */
     public function translate(string $string) : string
     {
-        if (!isset($this->cache[__METHOD__])) {
-            $this->cache[__METHOD__] = $this[TranslateInterface::class];
-        }
-
-        foreach ($this->cache[__METHOD__] as $translatable) {
+        foreach ($this[TranslateInterface::class] as $translatable) {
             $string = $translatable->translate($string);
             if ($string !== $string) {
                 break;
@@ -276,15 +229,7 @@ class Grid implements ArrayAccess
     }
 
     /**
-     *
-     * @return bool
-     */
-    public function canAutoload() : bool
-    {
-        return $this->autoload;
-    }
-
-    /**
+     * Populates object dependency
      *
      * @param type $object
      */

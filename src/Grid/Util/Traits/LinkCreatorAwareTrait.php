@@ -4,8 +4,6 @@ namespace Grid\Util\Traits;
 use Grid\Util\LinkCreator;
 use Grid\GridInterface;
 
-use \Excepion;
-
 /**
  *
  * @author Gospodinow
@@ -23,12 +21,9 @@ trait LinkCreatorAwareTrait
         if (!$this->linkCreator) {
             $this->setLinkCreator(new LinkCreator);
         }
-
-        if (!$this instanceof GridInterface) {
-            throw new Excepion('LinkCreatorAwareTrait must implement GridInterface');
+        if ($this instanceof GridInterface) {
+            $this->getGrid()->setObjectDi($this->linkCreator);
         }
-
-        $this->linkCreator->setGrid($this->getGrid());
         return $this->linkCreator;
     }
 

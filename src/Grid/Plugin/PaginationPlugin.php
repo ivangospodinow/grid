@@ -14,7 +14,7 @@ use Grid\GridRow;
  * Default pagination
  * To be extended for supporting bootstrap
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, SourcePluginInterface
 {

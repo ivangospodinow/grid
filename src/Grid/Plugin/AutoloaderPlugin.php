@@ -22,7 +22,7 @@ use Grid\Plugin\ColumnsOnlyDataPlugin;
 /**
  * Creating table headers
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class AutoloaderPlugin extends AbstractPlugin implements
     ColumnsPluginInterface,
@@ -32,7 +32,6 @@ class AutoloaderPlugin extends AbstractPlugin implements
 {
     use GridAwareTrait;
     
-    protected $autoloaded = false;
     protected $autoloadedDataTypesPlugin = false;
     
     public function filterColumns(array $columns) : array
@@ -74,11 +73,6 @@ class AutoloaderPlugin extends AbstractPlugin implements
      */
     public function autoload()
     {
-        if (true === $this->autoloaded) {
-            return;
-        }
-        $this->autoloaded = true;
-
         if (!isset($this->getGrid()[ExtractorPlugin::class])) {
             $this->getGrid()[] = new ExtractorPlugin;
         }

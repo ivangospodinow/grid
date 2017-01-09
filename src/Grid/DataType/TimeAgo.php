@@ -9,7 +9,7 @@ use Grid\Interfaces\GridInterface;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class TimeAgo extends AbstractDateTime implements GridInterface
 {

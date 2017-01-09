@@ -3,7 +3,7 @@ namespace Grid\Util\Traits;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 trait Cache
 {

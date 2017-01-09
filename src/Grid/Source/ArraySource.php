@@ -9,7 +9,7 @@ use \Exception;
 /**
  * Description of AbstractSource
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ArraySource extends AbstractSource
 {

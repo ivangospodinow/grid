@@ -8,6 +8,9 @@ use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Required;
 
+/**
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
+ */
 abstract class AbstractLinkPlugin extends AbstractPlugin
 {
     use Attributes, ExchangeArray, Required;

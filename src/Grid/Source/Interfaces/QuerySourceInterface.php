@@ -7,7 +7,7 @@ namespace Grid\Source\Interfaces;
  * depending on the implementation
  * for example: Pdo, Doctrine and etc
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 interface QuerySourceInterface
 {

@@ -7,7 +7,7 @@ use Grid\Interfaces\DataPluginInterface;
 /**
  * Uses data type plugins
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class DataTypesPlugin extends AbstractPlugin implements DataPluginInterface
 {

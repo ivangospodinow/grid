@@ -5,6 +5,9 @@ namespace Grid\Plugin;
 use Grid\Interfaces\DataPluginInterface;
 use Grid\GridRow;
 
+/**
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
+ */
 class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
 {
     /**

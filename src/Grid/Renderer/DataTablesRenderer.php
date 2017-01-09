@@ -15,7 +15,7 @@ use Grid\Plugin\ColumnFilterablePlugin;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class DataTablesRenderer extends HtmlRenderer implements
     JavascriptPluginInterface,

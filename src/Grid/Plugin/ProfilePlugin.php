@@ -9,7 +9,7 @@ use Grid\Interfaces\DataPluginInterface;
 /**
  * Allows grid to have different columns for different profiles
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, DataPluginInterface
 {

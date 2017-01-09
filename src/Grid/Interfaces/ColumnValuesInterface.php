@@ -5,7 +5,7 @@ namespace Grid\Interfaces;
 /**
  * $values [id => name]
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 interface ColumnValuesInterface
 {

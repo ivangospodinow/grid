@@ -5,7 +5,7 @@ namespace Grid\Column;
 /**
  * Default column, nothing to extend
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class Column extends AbstractColumn
 {

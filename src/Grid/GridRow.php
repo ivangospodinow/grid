@@ -11,7 +11,7 @@ use \ArrayObject;
 /**
  * Description of Grid
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class GridRow extends ArrayObject implements GridInterface
 {

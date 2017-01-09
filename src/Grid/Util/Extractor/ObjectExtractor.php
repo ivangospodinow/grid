@@ -6,7 +6,7 @@ use \Exception;
 /**
  * Description of AbstractExtractor
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ObjectExtractor extends AbstractExtractor
 {

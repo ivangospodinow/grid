@@ -15,7 +15,7 @@ use \Exception;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class DoctrineSource extends AbstractSource implements GridInterface, QuerySourceInterface
 {

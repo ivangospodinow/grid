@@ -9,7 +9,7 @@ use Grid\Util\Traits\ExchangeArray;
 /**
  * Creating table headers
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class HeaderPlugin extends AbstractPlugin implements DataPluginInterface
 {

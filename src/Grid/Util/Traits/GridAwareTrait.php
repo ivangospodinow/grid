@@ -6,7 +6,7 @@ use Grid\Grid;
 /**
  * Description of GridAwareTrait
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 trait GridAwareTrait
 {

@@ -7,7 +7,7 @@ use Grid\Interfaces\QueryPluginInterface;
 /**
  * Description of AbstractSource
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 trait FilterGridQuery
 {

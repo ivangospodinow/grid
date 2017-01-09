@@ -13,7 +13,7 @@ use Grid\Grid;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ColumnSortablePlugin extends AbstractPlugin implements RenderPluginInterface, GridInterface, SourcePluginInterface
 {

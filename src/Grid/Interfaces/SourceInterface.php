@@ -6,7 +6,7 @@ use Grid\Column\AbstractColumn;
 /**
  * Description of SourceInterface
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 interface SourceInterface
 {

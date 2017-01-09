@@ -7,7 +7,7 @@ use Grid\Interfaces\RenderPluginInterface;
 /**
  * Adds javascript to the render output
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class JavascriptCapturePlugin extends AbstractPlugin implements RenderPluginInterface
 {

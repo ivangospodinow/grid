@@ -6,6 +6,9 @@ use Grid\Grid;
 
 use \Exception;
 
+/**
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
+ */
 class ConfigFactory
 {
     /**

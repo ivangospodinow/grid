@@ -7,7 +7,7 @@ use Grid\Source\AbstractSource;
 /**
  * 
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 interface SourcePluginInterface
 {

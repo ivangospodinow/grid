@@ -8,7 +8,7 @@ use Grid\GridRow;
 /**
  * This class will get the column value from provided source
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ExtractorPlugin extends AbstractPlugin implements RowPluginInterface
 {

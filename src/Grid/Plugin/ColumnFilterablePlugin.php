@@ -17,9 +17,10 @@ use Grid\Util\Traits\Callback;
 use Grid\Util\Traits\Cache;
 
 use Grid\Util\Input;
+
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ColumnFilterablePlugin extends AbstractPlugin
 implements

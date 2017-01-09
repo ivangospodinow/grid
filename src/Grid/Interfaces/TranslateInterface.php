@@ -2,6 +2,9 @@
 
 namespace Grid\Interfaces;
 
+/**
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
+ */
 interface TranslateInterface
 {
     /**

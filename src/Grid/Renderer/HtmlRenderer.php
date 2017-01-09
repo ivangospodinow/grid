@@ -8,7 +8,7 @@ use Grid\Interfaces\RendererInterface;
 /**
  * Description of HtmlRenderer
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class HtmlRenderer implements RendererInterface
 {

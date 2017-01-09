@@ -10,7 +10,7 @@ use Grid\Interfaces\SourcePluginInterface;
 /**
  * Description of AbstractSource
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 abstract class AbstractSource implements SourceInterface, GridInterface, SourcePluginInterface
 {

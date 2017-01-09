@@ -6,7 +6,7 @@ use Grid\Interfaces\GridInterface;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 trait LinkCreatorAwareTrait
 {

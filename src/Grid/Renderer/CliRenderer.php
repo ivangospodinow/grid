@@ -10,7 +10,7 @@ use cli\Table;
 /**
  * Description of CliRenderer
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class CliRenderer implements RendererInterface
 {

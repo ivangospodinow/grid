@@ -6,7 +6,7 @@ use Grid\Grid;
 /**
  * Description of RendererInterface
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 interface RendererInterface
 {

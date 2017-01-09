@@ -8,7 +8,7 @@ use Grid\GridRow;
 /**
  * Allows grid to have different columns for different profiles
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ColumnsOnlyDataPlugin extends AbstractPlugin implements DataPluginInterface
 {

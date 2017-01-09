@@ -10,7 +10,7 @@ use Grid\Interfaces\LinksInterface;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class Links implements GridInterface, LinksInterface
 {

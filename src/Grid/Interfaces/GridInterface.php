@@ -4,6 +4,9 @@ namespace Grid\Interfaces;
 
 use Grid\Grid;
 
+/**
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
+ */
 interface GridInterface
 {
     /**

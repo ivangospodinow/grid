@@ -8,7 +8,7 @@ use Grid\Interfaces\GridInterface;
 /**
  * Grid aware class
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 abstract class AbstractPlugin implements GridInterface
 {

@@ -15,7 +15,7 @@ use \Exception;
  * Every column must extend this class
  * More features coming
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 abstract class AbstractColumn implements GridInterface
 {

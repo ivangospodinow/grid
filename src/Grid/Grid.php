@@ -28,7 +28,7 @@ use \Exception;
 /**
  * Extend by plugins
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 final class Grid implements ArrayAccess
 {
@@ -138,6 +138,7 @@ final class Grid implements ArrayAccess
     {
         if (!$this->hasCache(__METHOD__)) {
             $data      = [];
+            $columns   = $this->getColumns();
             $plugins   = $this[RowPluginInterface::class];
             $hydrators = $this[HydratorInterface::class];
             

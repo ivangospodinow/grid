@@ -4,7 +4,7 @@ namespace Grid\Interfaces;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 interface ObjectDiPluginInterface
 {

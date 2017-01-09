@@ -6,7 +6,7 @@ namespace Grid\Interfaces;
  * All objects added to the grid with
  * this interface will be able to filter the columns
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 interface ColumnsPluginInterface
 {

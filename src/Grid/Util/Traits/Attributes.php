@@ -4,7 +4,7 @@ namespace Grid\Util\Traits;
 /**
  * Description of Attributes
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 trait Attributes
 {

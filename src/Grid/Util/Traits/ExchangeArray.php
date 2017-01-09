@@ -4,7 +4,7 @@ namespace Grid\Util\Traits;
 /**
  * Description of ParamsSetter
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 trait ExchangeArray
 {

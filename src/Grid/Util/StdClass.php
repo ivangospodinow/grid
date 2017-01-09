@@ -7,7 +7,7 @@ use \Exception;
 /**
  * Description of StdClass
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class StdClass
 {

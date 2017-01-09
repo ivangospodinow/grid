@@ -9,6 +9,9 @@ use Grid\Interfaces\HydratorInterface;
 
 use \Exception;
 
+/**
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
+ */
 class Hydrator implements GridInterface, HydratorInterface
 {
     use GridAwareTrait;

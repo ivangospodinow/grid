@@ -6,7 +6,7 @@ use Grid\Column\AbstractColumn;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class Str implements DataTypeInterface
 {

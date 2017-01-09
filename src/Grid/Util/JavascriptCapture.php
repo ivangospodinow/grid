@@ -6,7 +6,7 @@ use Grid\Interfaces\JavascriptCaptureInterface;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class JavascriptCapture implements JavascriptCaptureInterface
 {

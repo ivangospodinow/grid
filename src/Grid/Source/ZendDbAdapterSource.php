@@ -20,7 +20,7 @@ use \Exception;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
 {

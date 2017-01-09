@@ -6,7 +6,7 @@ use \Exception;
 /**
  * Throws exception if no array key defined
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 trait Required
 {

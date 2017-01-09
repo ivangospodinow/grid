@@ -8,7 +8,7 @@ use Grid\GridRow;
 /**
  * Removing all html in column value, used for cli view
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class StripHtmlPlugin extends AbstractPlugin implements RowPluginInterface
 {

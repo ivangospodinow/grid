@@ -7,7 +7,7 @@ use Grid\Interfaces\GridInterface;
 use Grid\Interfaces\LinksInterface;
 
 /**
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class LinkCreator implements GridInterface
 {

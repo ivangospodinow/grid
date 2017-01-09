@@ -9,7 +9,7 @@ use \Exception;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class Input
 {

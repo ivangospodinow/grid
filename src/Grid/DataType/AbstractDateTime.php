@@ -5,7 +5,7 @@ use \DateTime;
 
 /**
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 abstract class AbstractDateTime implements DataTypeInterface
 {

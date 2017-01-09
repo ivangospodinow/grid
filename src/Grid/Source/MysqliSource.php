@@ -10,7 +10,7 @@ use \Exception;
 /**
  * Zf pdo driver
  *
- * @author Gospodinow
+ * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class MysqliSource extends ZendDbAdapterSource
 {

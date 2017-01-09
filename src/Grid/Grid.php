@@ -10,7 +10,7 @@ use Grid\Interfaces\RendererInterface;
 use Grid\Interfaces\ColumnPluginInterface;
 use Grid\Interfaces\ColumnsPluginInterface;
 use Grid\Interfaces\RowPluginInterface;
-use Grid\Interfaces\HidratorPluginInterface;
+use Grid\Interfaces\HydratorInterface;
 use Grid\Interfaces\SourceInterface;
 use Grid\Interfaces\SourcePluginInterface;
 use Grid\Interfaces\DataPluginInterface;
@@ -139,7 +139,7 @@ final class Grid implements ArrayAccess
         if (!$this->hasCache(__METHOD__)) {
             $data      = [];
             $plugins   = $this[RowPluginInterface::class];
-            $hydrators = $this[HidratorPluginInterface::class];
+            $hydrators = $this[HydratorInterface::class];
             
             foreach ($this[SourceInterface::class] as $source) {
                 $this->filter(SourcePluginInterface::class, 'filterSource', $source);

@@ -2,14 +2,14 @@
 
 namespace Grid\Hydrator;
 
-use Grid\Interfaces\HidratorPluginInterface;
 use Grid\Util\StdClass;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\Interfaces\GridInterface;
+use Grid\Interfaces\HydratorInterface;
 
 use \Exception;
 
-class Hydrator implements HydratorInterface, GridInterface, HidratorPluginInterface
+class Hydrator implements GridInterface, HydratorInterface
 {
     use GridAwareTrait;
     

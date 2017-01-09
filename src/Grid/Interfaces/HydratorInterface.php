@@ -1,6 +1,6 @@
 <?php
 
-namespace Grid\Hydrator;
+namespace Grid\Interfaces;
 
 interface HydratorInterface
 {

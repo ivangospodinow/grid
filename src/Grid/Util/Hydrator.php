@@ -1,6 +1,6 @@
 <?php
 
-namespace Grid\Hydrator;
+namespace Grid\Util;
 
 use Grid\Util\StdClass;
 use Grid\Util\Traits\GridAwareTrait;

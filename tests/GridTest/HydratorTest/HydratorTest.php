@@ -2,7 +2,7 @@
 namespace GridTest\HydratorTest;
 
 use Grid\Grid;
-use Grid\Hydrator\Hydrator;
+use Grid\Util\Hydrator;
 use Grid\Interfaces\GridInterface;
 use Grid\Util\Traits\GridAwareTrait;
 

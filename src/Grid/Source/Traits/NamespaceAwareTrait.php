@@ -8,6 +8,12 @@ namespace Grid\Source\Traits;
 trait NamespaceAwareTrait
 {
     /**
+     *
+     * @var string
+     */
+    protected $namespace;
+    
+    /**
      * users.name
      * @param type $field
      * @return string

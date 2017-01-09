@@ -4,7 +4,7 @@ namespace GridTest;
 use Grid\Grid;
 use Grid\Interfaces\TranslateInterface;
 use Grid\Renderer\HtmlRenderer;
-use Grid\Hydrator\Hydrator;
+use Grid\Util\Hydrator;
 use Grid\Source\ArraySource;
 use Grid\Factory\StaticFactory;
 
@@ -103,7 +103,7 @@ class GridTest extends TestCase implements TranslateInterface
         $config = [
             \Grid\Renderer\HtmlRenderer::class,
             \Grid\Plugin\PaginationPlugin::class,
-            \Grid\Hydrator\Hydrator::class,
+            \Grid\Util\Hydrator::class,
             [
                 'class' => \Grid\Plugin\HeaderPlugin::class,
                 'options' => [
@@ -132,7 +132,7 @@ class GridTest extends TestCase implements TranslateInterface
         $this->assertTrue(count($grid[\Grid\Source\ArraySource::class]) === 1);
         $this->assertTrue(count($grid[\Grid\Column\Column::class]) === 1);
         $this->assertTrue(count($grid[\Grid\Plugin\HeaderPlugin::class]) === 1);
-        $this->assertTrue(count($grid[\Grid\Hydrator\Hydrator::class]) === 1);
+        $this->assertTrue(count($grid[\Grid\Util\Hydrator::class]) === 1);
 
         try {
             $grid = StaticFactory::factory(

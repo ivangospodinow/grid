@@ -28,12 +28,6 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
      * @var string
      */
     protected $table;
-
-    /**
-     *
-     * @var string
-     */
-    protected $namespace;
     
     /**
      * Primary key

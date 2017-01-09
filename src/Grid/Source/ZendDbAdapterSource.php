@@ -31,15 +31,9 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
      * @var string
      */
     protected $table;
-
-    /**
-     *
-     * @var string
-     */
-    protected $namespace;
     
     /**
-     * Primery key
+     * Primary key
      * @var type
      */
     protected $pk;

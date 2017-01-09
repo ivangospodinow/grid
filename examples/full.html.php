@@ -133,7 +133,7 @@ $config[] = [
             [
                 'uri'           => 'https://www.amazon.co.uk/dp/:platformKey',
                 'uriParameters' => [
-                    'platformKey' => 'getPlatformKey',
+                    'platformKey' => 'platformKey',
                 ],
                 'attributes' => [
                     'class' => 'btn btn-default',

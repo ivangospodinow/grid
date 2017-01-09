@@ -3,11 +3,11 @@
 namespace Grid\Plugin;
 
 use Grid\Column\AbstractColumn;
-use Grid\Plugin\Interfaces\RenderPluginInterface;
+use Grid\Interfaces\RenderPluginInterface;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\Util\Traits\LinkCreatorAwareTrait;;
-use Grid\GridInterface;
-use Grid\Plugin\Interfaces\SourcePluginInterface;
+use Grid\Interfaces\GridInterface;
+use Grid\Interfaces\SourcePluginInterface;
 use Grid\Source\AbstractSource;
 use Grid\Grid;
 

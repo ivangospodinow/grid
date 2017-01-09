@@ -1,12 +1,12 @@
 <?php
 namespace Grid\Renderer;
 
-use Grid\Plugin\Interfaces\SourcePluginInterface;
-use Grid\Plugin\Interfaces\JavascriptPluginInterface;
-use Grid\Plugin\Interfaces\RenderPluginInterface;
+use Grid\Interfaces\SourcePluginInterface;
+use Grid\Interfaces\JavascriptPluginInterface;
+use Grid\Interfaces\RenderPluginInterface;
 use Grid\Interfaces\JavascriptCaptureInterface;
 use Grid\Util\Traits\GridAwareTrait;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 use Grid\Source\AbstractSource;
 
 use Grid\Plugin\PaginationPlugin;

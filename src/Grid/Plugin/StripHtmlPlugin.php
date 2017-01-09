@@ -2,7 +2,7 @@
 
 namespace Grid\Plugin;
 
-use Grid\Plugin\Interfaces\RowPluginInterface;
+use Grid\Interfaces\RowPluginInterface;
 use Grid\GridRow;
 
 /**

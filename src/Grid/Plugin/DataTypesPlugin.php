@@ -2,7 +2,7 @@
 
 namespace Grid\Plugin;
 
-use Grid\Plugin\Interfaces\DataPluginInterface;
+use Grid\Interfaces\DataPluginInterface;
 
 /**
  * Uses data type plugins

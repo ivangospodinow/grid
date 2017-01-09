@@ -1,6 +1,6 @@
 <?php
 
-namespace Grid\Plugin\Interfaces;
+namespace Grid\Interfaces;
 
 /**
  * All objects added to the grid with
@@ -8,7 +8,7 @@ namespace Grid\Plugin\Interfaces;
  *
  * @author Gospodinow
  */
-interface ColumnsPrePluginInterface
+interface ColumnsPluginInterface
 {
-    public function preColumns(array $columns) : array;
+    public function filterColumns(array $columns) : array;
 }

@@ -3,7 +3,7 @@ namespace GridTest\HydratorTest;
 
 use Grid\Grid;
 use Grid\Hydrator\Hydrator;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 use Grid\Util\Traits\GridAwareTrait;
 
 use PHPUnit\Framework\TestCase;

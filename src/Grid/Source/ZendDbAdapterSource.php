@@ -6,7 +6,7 @@ use Grid\Source\Traits\FilterGridQuery;
 use Grid\Source\Traits\NamespaceAwareTrait;
 
 use Grid\Column\AbstractColumn;
-use Grid\Plugin\Interfaces\ColumnValuesInterface;
+use Grid\Interfaces\ColumnValuesInterface;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;

@@ -2,7 +2,7 @@
 
 namespace Grid\Plugin;
 
-use Grid\Plugin\Interfaces\RenderPluginInterface;
+use Grid\Interfaces\RenderPluginInterface;
 
 /**
  * Adds javascript to the render output

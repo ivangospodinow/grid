@@ -2,7 +2,7 @@
 namespace Grid\Util\Traits;
 
 use Grid\Util\LinkCreator;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 
 /**
  *

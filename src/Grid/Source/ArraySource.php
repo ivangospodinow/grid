@@ -2,7 +2,7 @@
 namespace Grid\Source;
 
 use Grid\Column\AbstractColumn;
-use Grid\Plugin\Interfaces\ColumnValuesInterface;
+use Grid\Interfaces\ColumnValuesInterface;
 
 use \Exception;
 

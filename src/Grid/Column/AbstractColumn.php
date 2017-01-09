@@ -7,7 +7,7 @@ use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\Required;
 
 use Grid\Util\Traits\GridAwareTrait;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 
 use \Exception;
 

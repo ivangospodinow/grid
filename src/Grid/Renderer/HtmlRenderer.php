@@ -3,6 +3,7 @@ namespace Grid\Renderer;
 
 use Grid\Grid;
 use Grid\Util\Traits\ExchangeArray;
+use Grid\Interfaces\RendererInterface;
 
 /**
  * Description of HtmlRenderer

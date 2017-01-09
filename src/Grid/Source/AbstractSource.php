@@ -3,10 +3,9 @@ namespace Grid\Source;
 
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\GridAwareTrait;
-use Grid\GridInterface;
-use Grid\Plugin\Interfaces\SourcePluginInterface;
-
-use \Exception;
+use Grid\Interfaces\GridInterface;
+use Grid\Interfaces\SourceInterface;
+use Grid\Interfaces\SourcePluginInterface;
 
 /**
  * Description of AbstractSource

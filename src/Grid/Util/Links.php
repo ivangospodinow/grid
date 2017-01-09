@@ -4,7 +4,7 @@ namespace Grid\Util;
 
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\Util\Traits\ExchangeArray;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 use Grid\Column\AbstractColumn;
 use Grid\Interfaces\LinksInterface;
 

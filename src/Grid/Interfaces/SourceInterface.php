@@ -1,5 +1,5 @@
 <?php
-namespace Grid\Source;
+namespace Grid\Interfaces;
 
 use Grid\Column\AbstractColumn;
 

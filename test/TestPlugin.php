@@ -1,9 +1,9 @@
 <?php
 
-use Grid\Plugin\Interfaces\RenderPluginInterface;
+use Grid\Interfaces\RenderPluginInterface;
 
 use Grid\Util\Traits\GridAwareTrait;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 use Grid\Interfaces\InputsInterface;
 
 class TestPlugin implements RenderPluginInterface, GridInterface

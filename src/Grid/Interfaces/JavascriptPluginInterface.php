@@ -1,6 +1,6 @@
 <?php
 
-namespace Grid\Plugin\Interfaces;
+namespace Grid\Interfaces;
 
 use Grid\Interfaces\JavascriptCaptureInterface;
 

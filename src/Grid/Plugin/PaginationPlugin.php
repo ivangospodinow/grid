@@ -5,8 +5,8 @@ namespace Grid\Plugin;
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\LinkCreatorAwareTrait;
-use Grid\Plugin\Interfaces\DataPluginInterface;
-use Grid\Plugin\Interfaces\SourcePluginInterface;
+use Grid\Interfaces\DataPluginInterface;
+use Grid\Interfaces\SourcePluginInterface;
 use Grid\Source\AbstractSource;
 use Grid\GridRow;
 

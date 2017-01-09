@@ -3,8 +3,8 @@
 namespace Grid\Plugin;
 
 use Grid\Util\Traits\ExchangeArray;
-use Grid\Plugin\Interfaces\ColumnsPluginInterface;
-use Grid\Plugin\Interfaces\DataPluginInterface;
+use Grid\Interfaces\ColumnsPluginInterface;
+use Grid\Interfaces\DataPluginInterface;
 
 /**
  * Allows grid to have different columns for different profiles

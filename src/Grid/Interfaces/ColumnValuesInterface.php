@@ -1,6 +1,6 @@
 <?php
 
-namespace Grid\Plugin\Interfaces;
+namespace Grid\Interfaces;
 
 /**
  * $values [id => name]

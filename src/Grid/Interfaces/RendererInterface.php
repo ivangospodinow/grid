@@ -1,5 +1,5 @@
 <?php
-namespace Grid\Renderer;
+namespace Grid\Interfaces;
 
 use Grid\Grid;
 

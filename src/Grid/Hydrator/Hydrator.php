@@ -2,10 +2,10 @@
 
 namespace Grid\Hydrator;
 
-use Grid\Plugin\Interfaces\HidratorPluginInterface;
+use Grid\Interfaces\HidratorPluginInterface;
 use Grid\Util\StdClass;
 use Grid\Util\Traits\GridAwareTrait;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 
 use \Exception;
 

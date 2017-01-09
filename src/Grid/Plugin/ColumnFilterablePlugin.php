@@ -3,12 +3,12 @@
 namespace Grid\Plugin;
 
 use Grid\Column\AbstractColumn;
-use Grid\Plugin\Interfaces\DataPluginInterface;
+use Grid\Interfaces\DataPluginInterface;
 use Grid\Util\Traits\GridAwareTrait;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 use Grid\Util\Traits\LinkCreatorAwareTrait;
 use Grid\Util\Traits\ExchangeArray;
-use Grid\Plugin\Interfaces\SourcePluginInterface;
+use Grid\Interfaces\SourcePluginInterface;
 use Grid\Source\AbstractSource;
 use Grid\GridRow;
 use Grid\Interfaces\InputsInterface;

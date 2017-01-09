@@ -2,32 +2,21 @@
 
 namespace Grid;
 
-use Grid\Column\Column;
-
-use Grid\Source\SourceInterface;
-use Grid\Renderer\RendererInterface;
+use Grid\Plugin\AutoloaderPlugin;
 use Grid\Column\AbstractColumn;
 
+use Grid\Interfaces\RenderPluginInterface;
+use Grid\Interfaces\RendererInterface;
+use Grid\Interfaces\ColumnPluginInterface;
+use Grid\Interfaces\ColumnsPluginInterface;
+use Grid\Interfaces\RowPluginInterface;
+use Grid\Interfaces\HidratorPluginInterface;
+use Grid\Interfaces\SourceInterface;
+use Grid\Interfaces\SourcePluginInterface;
+use Grid\Interfaces\DataPluginInterface;
 use Grid\Interfaces\TranslateInterface;
-use Grid\Interfaces\JavascriptCaptureInterface;
-
-use Grid\Plugin\AutoloaderPlugin;
-use Grid\Plugin\AbstractPlugin;
-use Grid\Plugin\HeaderPlugin;
-use Grid\Plugin\Interfaces\DataPluginInterface;
-use Grid\Plugin\Interfaces\ColumnsPluginInterface;
-use Grid\Plugin\ExtractorPlugin;
-use Grid\Plugin\Interfaces\RowPluginInterface;
-use Grid\Plugin\ProfilePlugin;
-use Grid\Source\AbstractSource;
-use Grid\Plugin\Interfaces\SourcePluginInterface;
-use Grid\Plugin\Interfaces\HidratorPluginInterface;
-use Grid\Plugin\Interfaces\RenderPluginInterface;
-use Grid\Plugin\Interfaces\ColumnPluginInterface;
-use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
-use Grid\Plugin\Interfaces\DataPrePluginInterface;
-use Grid\Plugin\Interfaces\ObjectDiPluginInterface;
-use Grid\Plugin\Interfaces\JavascriptPluginInterface;
+use Grid\Interfaces\GridInterface;
+use Grid\Interfaces\ObjectDiPluginInterface;
 
 use Grid\Util\Traits\Attributes;
 use Grid\Util\Traits\ExchangeArray;
@@ -37,11 +26,11 @@ use \ArrayAccess;
 use \Exception;
 
 /**
- * Description of Grid
+ * Extend by plugins
  *
  * @author Gospodinow
  */
-class Grid implements ArrayAccess
+final class Grid implements ArrayAccess
 {
     use Attributes, ExchangeArray, Cache;
     
@@ -83,31 +72,23 @@ class Grid implements ArrayAccess
      */
     public function render() : string
     {
-        $html = [];
+        $html   = [];
         $html[] = $this->filter(RenderPluginInterface::class, 'preRender', '');
         foreach ($this[RendererInterface::class] as $renderer) {
             $html[] = $renderer->render($this);
         }
-        return $this->filter(
-            RenderPluginInterface::class,
-            'postRender',
-            implode(PHP_EOL, $html)
-        );
+        return $this->filter(RenderPluginInterface::class, 'postRender', implode(PHP_EOL, $html));
     }
 
     /**
-     * Noting is working without columns
+     * Nothing is working without columns
      * Use preColumns for init config
      * @return array
      */
     public function getColumns() : array
     {
         if (!$this->hasCache(__METHOD__)) {
-            $columns =  $this->filter(
-                ColumnsPrePluginInterface::class,
-                'preColumns',
-                []
-            );
+            $columns = [];
             foreach ($this[AbstractColumn::class] as $column) {
                 $columns[] = $this->filter(
                     ColumnPluginInterface::class,
@@ -117,11 +98,7 @@ class Grid implements ArrayAccess
             }
             $this->setCache(
                 __METHOD__,
-                $this->filter(
-                    ColumnsPluginInterface::class,
-                    'filterColumns',
-                    $columns
-                )
+                $this->filter(ColumnsPluginInterface::class, 'filterColumns', $columns)
             );
         }
         return $this->getCache(__METHOD__);
@@ -155,22 +132,17 @@ class Grid implements ArrayAccess
 
     /**
      * Grid rows
-     * @return array
+     * @return array [GridRow]
      */
     public function getData() : array
     {
         if (!$this->hasCache(__METHOD__)) {
-            $data = $this->filter(DataPrePluginInterface::class, 'preFilterData', []);
-            
+            $data      = [];
             $plugins   = $this[RowPluginInterface::class];
             $hydrators = $this[HidratorPluginInterface::class];
             
             foreach ($this[SourceInterface::class] as $source) {
-                $this->filter(
-                    SourcePluginInterface::class,
-                    'filterSource',
-                    $source
-                );
+                $this->filter(SourcePluginInterface::class, 'filterSource', $source);
 
                 foreach ($source->getRows() as $rowData) {
                     foreach ($hydrators as $hydrator) {
@@ -187,11 +159,7 @@ class Grid implements ArrayAccess
             
             $this->setCache(
                 __METHOD__,
-                $this->filter(
-                    DataPluginInterface::class,
-                    'filterData',
-                    $data
-                )
+                $this->filter(DataPluginInterface::class, 'filterData', $data)
             );
         }
         return $this->getCache(__METHOD__);

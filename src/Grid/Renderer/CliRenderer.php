@@ -3,6 +3,7 @@ namespace Grid\Renderer;
 
 use Grid\Grid;
 use Grid\Plugin\StripHtmlPlugin;
+use Grid\Interfaces\RendererInterface;
 
 use cli\Table;
 

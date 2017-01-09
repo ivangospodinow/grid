@@ -5,7 +5,7 @@ use Grid\Source\Interfaces\QuerySourceInterface;
 use Grid\Source\Traits\FilterGridQuery;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\Source\Traits\NamespaceAwareTrait;
-use Grid\GridInterface;
+use Grid\Interfaces\GridInterface;
 use Grid\Column\AbstractColumn;
 
 use Doctrine\ORM\EntityManager;

@@ -1,6 +1,8 @@
 <?php
 
-namespace Grid;
+namespace Grid\Interfaces;
+
+use Grid\Grid;
 
 interface GridInterface
 {

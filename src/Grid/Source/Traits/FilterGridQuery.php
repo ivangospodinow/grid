@@ -2,7 +2,7 @@
 namespace Grid\Source\Traits;
 
 use Grid\Grid;
-use Grid\Plugin\Interfaces\QueryPluginInterface;
+use Grid\Interfaces\QueryPluginInterface;
 
 /**
  * Description of AbstractSource

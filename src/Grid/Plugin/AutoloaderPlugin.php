@@ -2,12 +2,11 @@
 
 namespace Grid\Plugin;
 
-use Grid\Plugin\Interfaces\ColumnsPrePluginInterface;
-use Grid\Plugin\Interfaces\DataPrePluginInterface;
-use Grid\Plugin\Interfaces\RenderPluginInterface;
+use Grid\Interfaces\ColumnsPluginInterface;
+use Grid\Interfaces\RenderPluginInterface;
 use Grid\Util\Traits\GridAwareTrait;
-use Grid\GridInterface;
-use Grid\Plugin\Interfaces\ColumnPluginInterface;
+use Grid\Interfaces\GridInterface;
+use Grid\Interfaces\ColumnPluginInterface;
 use Grid\Column\AbstractColumn;
 use Grid\Renderer\CliRenderer;
 
@@ -26,24 +25,17 @@ use Grid\Plugin\ColumnsOnlyDataPlugin;
  * @author Gospodinow
  */
 class AutoloaderPlugin extends AbstractPlugin implements
-    ColumnsPrePluginInterface,
+    ColumnsPluginInterface,
     GridInterface,
     ColumnPluginInterface,
-    DataPrePluginInterface,
     RenderPluginInterface
 {
     use GridAwareTrait;
     
     protected $autoloaded = false;
     protected $autoloadedDataTypesPlugin = false;
-
-    public function preFilterData(array $data) : array
-    {
-        $this->autoload();
-        return $data;
-    }
-
-    public function preColumns(array $columns) : array
+    
+    public function filterColumns(array $columns) : array
     {
         $this->autoload();
         return $columns;

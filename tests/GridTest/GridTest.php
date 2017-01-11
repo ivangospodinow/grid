@@ -7,6 +7,8 @@ use Grid\Renderer\HtmlRenderer;
 use Grid\Util\Hydrator;
 use Grid\Source\ArraySource;
 use Grid\Factory\StaticFactory;
+use Grid\Interfaces\InputsInterface;
+use Grid\Interfaces\LinksInterface;
 
 use PHPUnit\Framework\TestCase;
 
@@ -67,10 +69,10 @@ class GridTest extends TestCase implements TranslateInterface
         $this->assertTrue(count($instance->getColumns()) === 1);
         $this->assertTrue(isset($instance[\Grid\Plugin\DataTypesPlugin::class]));
 
-        $this->assertTrue($instance->getColumn('test') instanceof \Grid\Column\AbstractColumn);
+        $this->assertTrue($instance->getColumns()['test'] instanceof \Grid\Column\AbstractColumn);
 
-        $this->expectException(\Exception::class);
-        $this->assertFalse($instance->getColumn('test2') instanceof \Grid\Column\AbstractColumn);
+//        $this->expectException(\Exception::class);
+        $this->assertFalse(isset($instance->getColumns()['test2']));
     }
 
     public function testTranslate()
@@ -117,22 +119,73 @@ class GridTest extends TestCase implements TranslateInterface
                     'label' => '#',
                     'dbFields' => 'id',
                     'sortable' => true,
+                    'selectable' => true,
+                    'searchable' => true,
                 ]
             ],
             [
                 'class' => \Grid\Source\ArraySource::class,
                 'options' => [
-                    'driver' => [],
+                    'driver' => [
+                        ['id' => 1],
+                        ['id' => 2]
+                    ],
+                ]
+            ],
+            [
+                'class' => \Grid\Plugin\ColumnFilterablePlugin::class,
+                'options' => [
+                    'markMatches' => true,
+                ]
+            ],
+            [
+                'class' => \Grid\Util\Links::class,
+                'options' => [
+                    'params' => [
+                        'grid' => [
+                            'grid-id' => [
+                                'searchable' => [
+                                    'id' => 1
+                                ],
+                                'selectable' => [
+                                    'id' => 1
+                                ]
+                            ]
+                        ]
+                    ],
                 ]
             ],
         ];
-        
+
+        //grid[grid-id][searchable][title]=cable
+
+        $_SERVER['REQUEST_URI']= '/';
+
         $grid = StaticFactory::factory($config);
+
         $this->assertTrue(count($grid->getColumns()) === 1);
         $this->assertTrue(count($grid[\Grid\Source\ArraySource::class]) === 1);
         $this->assertTrue(count($grid[\Grid\Column\Column::class]) === 1);
         $this->assertTrue(count($grid[\Grid\Plugin\HeaderPlugin::class]) === 1);
         $this->assertTrue(count($grid[\Grid\Util\Hydrator::class]) === 1);
+        $this->assertTrue(isset($grid[InputsInterface::class]));
+        foreach ($grid[InputsInterface::class] as $object) {
+            $this->assertTrue(count($object->getInputs()) > 0);
+        }
+
+        $body = [];
+        foreach ($grid->getData()as $row) {
+            if ($row->isBody()) {
+                $body[] = $row;
+            }
+        }
+        $this->assertTrue(count($body) === 1);
+
+
+        $html = $grid->render();
+
+        $this->assertTrue(strpos($html, 'name="grid[grid-id][searchable][id]"') !== false);
+        $this->assertTrue(strpos($html, 'name="grid[grid-id][selectable][id]"') !== false);
 
         try {
             $grid = StaticFactory::factory(
@@ -237,6 +290,8 @@ class GridTest extends TestCase implements TranslateInterface
 //            ]
 //        );
 //        $this->assertTrue($grid === $instance);
+
+        
     }
 
     public function createPlugin($config)

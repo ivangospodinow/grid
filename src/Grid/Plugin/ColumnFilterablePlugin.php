@@ -107,8 +107,11 @@ implements
             '<form action="%s" method="GET">',
             $this->getLinkCreator()->getPageBasePath()
         );
-
-        $params = Input::createHiddenFromParams($this->getLinkCreator()->getParams());
+        $urlParams = $this->getLinkCreator()->getParams();
+        if (empty($urlParams)) {
+            $urlParams = [];
+        }
+        $params = Input::createHiddenFromParams($urlParams);
         foreach ($this->getColumnInputs($column) as $input) {
             $html[] = $input->render();
             unset($params[$input->getName()]);

@@ -17,7 +17,7 @@ class ObjectExtractor extends AbstractExtractor
      * $key = ['getUser', 'getName']
      *
      * @param type $source
-     * @param type $key
+     * @param type $callback
      * @return type
      * @throws Exception
      */

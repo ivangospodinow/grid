@@ -14,7 +14,6 @@ class IntegerTest extends TestCase
     {
         $column = new Column(['name' => 'test']);
         $row = new GridRow([]);
-        $row->setGrid(new Grid());
         $filter = new Integer;
         $this->assertTrue(is_int($filter->filter('test', $column, $row)));
         $this->assertTrue(is_int($filter->filter('2.01', $column, $row)));

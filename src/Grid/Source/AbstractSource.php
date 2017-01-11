@@ -160,7 +160,7 @@ abstract class AbstractSource implements SourceInterface, GridInterface, SourceP
         $order = $this->getOrder();
         $orderFields = [];
         foreach ($order as $name => $direction) {
-            $column = $this->getGrid()->getColumn($name);
+            $column = $this->getGrid()->getColumns()[$name];
             if (!$column->hasDbFields()) {
                 trigger_error('Sortable column requires dbFields');
                 continue;

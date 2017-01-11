@@ -90,11 +90,8 @@ final class Grid implements ArrayAccess
         if (!$this->hasCache(__METHOD__)) {
             $columns = [];
             foreach ($this[AbstractColumn::class] as $column) {
-                $columns[] = $this->filter(
-                    ColumnPluginInterface::class,
-                    'filterColumn',
-                    $column
-                );
+                $columns[$column->getName()] =
+                $this->filter(ColumnPluginInterface::class, 'filterColumn', $column);
             }
             $this->setCache(
                 __METHOD__,
@@ -102,32 +99,6 @@ final class Grid implements ArrayAccess
             );
         }
         return $this->getCache(__METHOD__);
-    }
-
-    /**
-     *
-     * @param string $name
-     * @return AbstractColumn
-     * @throws Exception
-     */
-    public function getColumn(string $name) : AbstractColumn
-    {
-        $key = __METHOD__ . '::' . $name;
-        if (!$this->hasCache($key)) {
-            $this->setCache($key, false);
-            foreach ($this[AbstractColumn::class] as $column) {
-                if ($column->getName() === $name) {
-                    $this->setCache($key, $column);
-                    break;
-                }
-            }
-        }
-
-        if ($this->getCache($key) === false) {
-            throw new Exception('Column does not exists ' . $name);
-        }
-
-        return $this->getCache($key);
     }
 
     /**

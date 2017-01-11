@@ -3,19 +3,17 @@
 namespace Grid;
 
 use Grid\Util\Traits\Attributes;
-use Grid\Util\Traits\GridAwareTrait;
-use Grid\Interfaces\GridInterface;
 
 use \ArrayObject;
 
 /**
- * Description of Grid
+ * Holds all related data for each row
  *
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
-class GridRow extends ArrayObject implements GridInterface
+class GridRow extends ArrayObject
 {
-    use Attributes, GridAwareTrait;
+    use Attributes;
     
     const POSITION_HEAD   = 'head';
     const POSITION_BODY   = 'body';

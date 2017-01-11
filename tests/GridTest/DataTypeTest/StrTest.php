@@ -19,7 +19,6 @@ class StrTest extends TestCase
     {
         $column = new Column(['name' => 'test']);
         $row = new GridRow([]);
-        $row->setGrid(new Grid());
         $filter = new Str;
         $this->assertTrue(is_string($filter->filter('test', $column, $row)));
         $this->assertTrue(is_string($filter->filter(2.42, $column, $row)));

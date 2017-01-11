@@ -5,13 +5,18 @@ namespace Grid\Plugin;
 use Grid\Interfaces\RowPluginInterface;
 use Grid\GridRow;
 
+use Grid\Util\Traits\GridAwareTrait;
+use Grid\Interfaces\GridInterface;
+
 /**
  * Removing all html in column value, used for cli view
  *
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
-class StripHtmlPlugin extends AbstractPlugin implements RowPluginInterface
+class StripHtmlPlugin extends AbstractPlugin implements RowPluginInterface, GridInterface
 {
+    use GridAwareTrait;
+    
     /**
      * gets the column value from source
      * 
@@ -20,7 +25,7 @@ class StripHtmlPlugin extends AbstractPlugin implements RowPluginInterface
      */
     public function filterRow(GridRow $gridRow) : GridRow
     {
-        $columns = $gridRow->getGrid()->getColumns();
+        $columns = $this->getGrid()->getColumns();
         foreach ($columns as $column) {
             $gridRow[$column->getName()] = trim(strip_tags($gridRow[$column->getName()]));
         }

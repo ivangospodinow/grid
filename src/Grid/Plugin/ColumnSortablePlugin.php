@@ -57,12 +57,6 @@ class ColumnSortablePlugin extends AbstractPlugin implements RenderPluginInterfa
         $value = strtoupper($link->getFilterValue($column, 'sortable'));
         $direction = $value === 'ASC' ? 'desc' : 'asc';
         $url = $link->createFilterLink($column, 'sortable', $direction);
-
-        if (empty($url)) {
-            trigger_error('LinksInterface is required for sortable to work');
-            return;
-        }
-        
         $column->setPreLabel('<a href="' . $url . '">');
         if ($value && $value === 'ASC') {
             $column->setPostLabel(' ' . $this->ascLabel . '</a>');

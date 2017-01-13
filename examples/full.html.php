@@ -151,6 +151,7 @@ $config[] = [
 ];
 $config[] = \Grid\Renderer\HtmlRenderer::class;
 $config[] = \Grid\Plugin\PaginationPlugin::class;
+$config[] = \Grid\Plugin\ColumnSortablePlugin::class;
 $config[] = \TestPlugin::class;
 
 

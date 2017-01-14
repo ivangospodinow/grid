@@ -124,9 +124,6 @@ class Links implements GridInterface, LinksInterface
                     unset($params['grid'][$name]);
                 }
             }
-            if (empty($params['grid'])) {
-                unset($params['grid']);
-            }
         }
         
         return count($params) > 0

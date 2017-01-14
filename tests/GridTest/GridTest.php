@@ -109,7 +109,7 @@ class GridTest extends TestCase implements TranslateInterface
             [
                 'class' => \Grid\Plugin\HeaderPlugin::class,
                 'options' => [
-                    'position' => \Grid\Plugin\HeaderPlugin::POSITION_BOTH,
+                    'position' => 'ASD',
                 ]
             ],
             [
@@ -449,7 +449,8 @@ class GridTest extends TestCase implements TranslateInterface
             'class' => \Grid\Source\ArraySource::class,
             'options' => [
                 'driver' => $products,
-                'order' => ['name' => 'ASC']
+                'order' => ['name' => 'ASC'],
+                'limit' => 5,
             ]
         ];
         
@@ -461,7 +462,8 @@ class GridTest extends TestCase implements TranslateInterface
                         'grid-id' => [
                             'sortable' =>[
                                 'lastPriceCurrency' => 'asc'
-                            ]
+                            ],
+                            'page' => 2
                         ]
                     ]
                 ],
@@ -501,11 +503,31 @@ class GridTest extends TestCase implements TranslateInterface
         ];
         
         $config[] = \Grid\Renderer\HtmlRenderer::class;
-        $config[] = \Grid\Plugin\PaginationPlugin::class;
-
-
+        $config[] = [
+            'class' => \Grid\Plugin\PaginationPlugin::class,
+            'options' => [
+                'itemsPerPage' => 5,
+            ]
+        ];
+        $config[] = [
+            'class' => \Grid\Plugin\HeaderPlugin::class,
+            'options' => [
+                'position' => \Grid\Plugin\HeaderPlugin::POSITION_BOTH,
+            ]
+        ];
         $grid = \Grid\Factory\StaticFactory::factory($config);
 
         $html = $grid->render();
+        $html = urldecode($html);
+//        $url = '?grid%5Bgrid-id%5D%5Bsortable%5D%5BplatformKey%5D=asc&grid%5Bgrid-id%5D%5Bsortable%5D%5Btitle%5D=desc';
+//        echo urldecode($url);die;
+        $this->assertTrue(strpos($html, 'grid[grid-id][sortable][title]=asc') !== false);
+        $this->assertTrue(strpos($html, 'grid[grid-id][sortable][lastPriceCurrency]=desc') !== false);
+        $this->assertTrue(strpos($html, 'grid[grid-id][page]=3') !== false);
+
+
+//        var_dump($grid[\Grid\Util\Links::class][0]->getParams());die;
+
+//        echo $html;die;
     }
 }

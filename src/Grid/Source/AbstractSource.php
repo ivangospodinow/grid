@@ -55,6 +55,9 @@ abstract class AbstractSource implements SourceInterface, GridInterface, SourceP
     public function __construct(array $config)
     {
         $this->exchangeArray($config);
+        /**
+         * @TODO check if needed, dont assume
+         */
         $this->setLimit($this->getEnd() - $this->getStart());
     }
 

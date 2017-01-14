@@ -4,14 +4,13 @@ namespace Grid\Plugin;
 
 use Grid\Util\Traits\ExchangeArray;
 use Grid\Interfaces\ColumnsPluginInterface;
-use Grid\Interfaces\DataPluginInterface;
 
 /**
  * Allows grid to have different columns for different profiles
  *
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
-class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, DataPluginInterface
+class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface
 {
     use ExchangeArray;
     
@@ -43,25 +42,5 @@ class ProfilePlugin extends AbstractPlugin implements ColumnsPluginInterface, Da
         }
         unset($columns);
         return $sorted;
-    }
-
-    /**
-     * Remove all fields that are not in the profile
-     * @param array $data
-     * @return array
-     */
-    public function filterData(array $data) : array
-    {
-        /**
-         * If the default plugin is available
-         */
-        if (!isset($this->getGrid()[ColumnsOnlyDataPlugin::class])) {
-            $plugin = new ColumnsOnlyDataPlugin;
-            $this->getGrid()->setObjectDi($plugin);
-            $data = $plugin->filterData($data);
-            unset($plugin);
-        }
-        
-        return $data;
     }
 }

@@ -45,6 +45,9 @@ class AutoloaderPlugin extends AbstractPlugin implements
         if (!isset($this->getGrid()[JavascriptCaptureInterface::class])) {
             $this->getGrid()[] = new JavascriptCapture;
             $this->getGrid()[] = new JavascriptCapturePlugin;
+            foreach ($this->getGrid()[JavascriptCapturePlugin::class] as $plugin) {
+                $plugin->preRender($html);
+            }
         }
         return $html;
     }

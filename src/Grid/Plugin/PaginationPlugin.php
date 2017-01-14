@@ -61,9 +61,10 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
     public function filterSource(AbstractSource $source) : AbstractSource
     {
         $page = $this->getLinkCreator()->getActivePaginationPage();
-        if ($page > 0 && $source->getLimit() > 0) {
-            $source->setStart($page * $source->getLimit());
-            $source->setEnd($page * $source->getLimit() + $source->getLimit());
+        if ($page > 0 && $this->itemsPerPage) {
+            $source->setStart($page * $this->itemsPerPage);
+            $source->setEnd($page * $this->itemsPerPage + $this->itemsPerPage);
+            $source->setLimit($source->getEnd() - $source->getStart());
         }
         return $source;
     }

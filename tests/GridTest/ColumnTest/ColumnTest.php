@@ -130,13 +130,15 @@ class ColumnTest extends TestCase
         $instance = $this->getInstance(['selectable' => true, 'dbFields' => $this]);
         $this->assertFalse($instance->isSelectable());
 
+        $callback = function () {};
         $instance = $this->getInstance(
             [
                 'selectable' => true,
                 'dbFields' => ['test'],
-                'selectableSource' => $callback = function () {}
+                'selectableSource' => $callback
             ]
         );
+
         $this->assertTrue($instance->getSelectableSource() === $callback);
 
         $instance = $this->getInstance(
@@ -156,6 +158,19 @@ class ColumnTest extends TestCase
             ]
         );
         $this->assertTrue($instance->getSelectableSource() === 'is_array');
+
+        try {
+            $instance = $this->getInstance(
+                [
+                    'selectable' => true,
+                    'dbFields' => ['test'],
+                    'selectableSource' => 'there is no such function'
+                ]
+            );
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertTrue(true);
+        }
     }
 
     public function testExtractor()

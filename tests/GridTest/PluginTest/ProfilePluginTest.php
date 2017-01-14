@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProfilePluginTest extends TestCase
 {
-    public function testHydrator()
+    public function testProfilePlugin()
     {
         $grid = $this->getGrid();
         $plugin = new ProfilePlugin(['columns' => ['name']]);

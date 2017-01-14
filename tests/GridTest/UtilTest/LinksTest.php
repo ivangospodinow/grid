@@ -62,4 +62,27 @@ class LinksTest extends TestCase
         $_SERVER['REQUEST_URI'] = '/?test=1';
         $this->assertTrue($link->getPageBasePath() === '/');
     }
+
+    public function testEmptyParams()
+    {
+        $link = new Links(
+            [
+                'params' => [
+                    'grid' => [
+                        'filterable' => [],
+                        'sortable' => [],
+                    ]
+                ]
+            ]
+        );
+        $column = new Column(
+            [
+                'name' => 'test'
+            ]
+        );
+        $link->setGrid(new Grid);
+
+        $url = $link->createFilterLink($column, 'sortable', 'asc');
+        $this->assertTrue(strpos($url, 'filterable') === false);
+    }
 }

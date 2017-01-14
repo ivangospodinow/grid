@@ -146,6 +146,11 @@ implements
         return $source;
     }
 
+    /**
+     * @TODO improve this method, it is too big
+     * @param AbstractColumn $column
+     * @return array
+     */
     public function getColumnInputs(AbstractColumn $column) : array
     {
         $key = $column->getName();

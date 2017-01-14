@@ -16,12 +16,12 @@ abstract class AbstractDateTime implements DataTypeInterface
      */
     public function strtotime($mixed) : int
     {
-        if (is_string($mixed)) {
+         if ($mixed instanceof DateTime) {
+            return $mixed->getTimestamp();
+        } elseif (is_string($mixed)) {
             return strtotime($mixed);
         } elseif (is_int($mixed) || is_numeric($mixed)) {
             return (int) $mixed;
-        } elseif ($mixed instanceof DateTime) {
-            return $mixed->getTimestamp();
         }
         return 0;
     }

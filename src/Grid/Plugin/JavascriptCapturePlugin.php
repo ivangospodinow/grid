@@ -3,6 +3,8 @@
 namespace Grid\Plugin;
 
 use Grid\Interfaces\RenderPluginInterface;
+use Grid\Interfaces\JavascriptCaptureInterface;
+use Grid\Interfaces\JavascriptPluginInterface;
 
 /**
  * Adds javascript to the render output

@@ -68,7 +68,7 @@ class StaticFactory
             }
         }
 
-        if (!$grid instanceof self) {
+        if (!$grid instanceof Grid) {
             $grid = new Grid($configs);
         }
 

@@ -63,11 +63,6 @@ class ArraySource extends AbstractSource
     {
         $order = $this->getOrder();
         foreach ($order as $name => $direction) {
-            if (!array_key_exists($name, $this->driver[key($this->driver)])) {
-                error_log('Sorting ' . $name . ' does not exists in array');
-                continue;
-            }
-            
             uasort($this->driver, function ($a, $b) use ($name, $direction) {
                 if ($direction === 'ASC') {
                     return $a[$name] <=> $b[$name];

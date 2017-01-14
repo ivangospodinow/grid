@@ -449,7 +449,7 @@ class GridTest extends TestCase implements TranslateInterface
             'class' => \Grid\Source\ArraySource::class,
             'options' => [
                 'driver' => $products,
-                'order' => ['name' => 'ASC'],
+                'order' => ['productId' => 'ASC'],
                 'limit' => 5,
             ]
         ];

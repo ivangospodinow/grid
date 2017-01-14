@@ -13,10 +13,6 @@ use PHPUnit\Framework\TestCase;
 
 class JavascriptCapturePluginTest extends TestCase implements JavascriptPluginInterface
 {
-
-    /**
-     * @group failing
-     */
     public function testPaginationPlugin()
     {
         $grid = new Grid;

@@ -85,6 +85,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     public function getRows()
     {
         if (null === $this->rows) {
+            $this->order();
             $this->rows = $this->getSql()
                            ->prepareStatementForSqlObject($this->getQuery())
                            ->execute();
@@ -104,7 +105,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     /**
      * Added order to query
      */
-    protected function order()
+    public function order()
     {
         $orderFields = $this->getOrderFields();
         if (!empty($orderFields)) {
@@ -120,29 +121,6 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
      */
     public function andWhere(AbstractColumn $column, string $sign, string $value)
     {
-        $this->where($column, $sign, $value, PredicateSet::OP_AND);
-    }
-
-    /**
-     *
-     * @param AbstractColumn $column
-     * @param string $sign
-     * @param string $value
-     */
-    public function orWhere(AbstractColumn $column, string $sign, string $value)
-    {
-        $this->where($column, $sign, $value, PredicateSet::OP_OR);
-    }
-
-    /**
-     *
-     * @param AbstractColumn $column
-     * @param string $sign
-     * @param string $value
-     * @param type $op
-     */
-    public function where(AbstractColumn $column, string $sign, string $value, $op = PredicateSet::OP_OR)
-    {
         $set = new PredicateSet;
         foreach ($column->getDbFields() as $field) {
             $set->addPredicate(
@@ -151,7 +129,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
                     $sign,
                     $value
                 ),
-                $op
+                PredicateSet::OP_OR
             );
         }
         $this->getQuery()->where($set);
@@ -164,21 +142,6 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
      */
     public function andLike(AbstractColumn $column, string $value)
     {
-        $this->like($column, $value, PredicateSet::OP_AND);
-    }
-
-    /**
-     *
-     * @param AbstractColumn $column
-     * @param string $value
-     */
-    public function orLike(AbstractColumn $column, string $value)
-    {
-        $this->like($column, $value, PredicateSet::OP_AND);
-    }
-    
-    public function like(AbstractColumn $column, string $value, $op = PredicateSet::OP_OR)
-    {
         $set = new PredicateSet;
         foreach ($column->getDbFields() as $field) {
             $set->addPredicate(
@@ -186,7 +149,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
                     $this->getDbFieldNamespace($field),
                     "%$value%"
                 ),
-                $op
+                PredicateSet::OP_AND
             );
         }
         $this->getQuery()->where($set);
@@ -266,8 +229,11 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
             $query->limit(1);
             $query->offset(0);
             
-            $result = $this->getSql()->prepareStatementForSqlObject($query)->execute()->current();
-            $this->setCount((int) ($result && isset($result['count']) ? $result['count'] : 0));
+            $result = $this->getSql()
+                           ->prepareStatementForSqlObject($query)
+                           ->execute()
+                           ->current();
+            $this->setCount((int) ($result['count'] ?? 0));
         }
         return $this->count;
     }
@@ -285,9 +251,9 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     {
         if (null === $this->query) {
             $select = $this->getSql()->select($this->table);
-            if ($this->getStart() || $this->getEnd()) {
-                $select->limit($this->getEnd() - $this->getStart());
-                $select->offset($this->getStart());
+            if ($this->getOffset() || $this->getLimit()) {
+                $select->limit($this->getLimit());
+                $select->offset($this->getOffset());
             }
             $this->setQuery(
                 $this->filterGridQuery(

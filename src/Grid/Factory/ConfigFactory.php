@@ -38,11 +38,10 @@ class ConfigFactory
      */
     public static function factory(string $id, string $profile, array $config) : Grid
     {
-        $gridConfig = $config['grid'];
-        if (!isset($gridConfig[$id]['profiles'][$profile])) {
+        if (!isset($config['grid'][$id]['profiles'][$profile])) {
             throw new Exception('Grid id or profile does not exists');
         }
-
+        $gridConfig = $config['grid'];
         if (!isset($gridConfig['plugins'])) {
             $gridConfig['plugins'] = [];
         }

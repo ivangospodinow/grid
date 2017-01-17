@@ -1,5 +1,5 @@
 <?php
-namespace GridTest\HydratorTest;
+namespace GridTest\SourceTest;
 
 use Grid\Grid;
 use Grid\Source\ArraySource;

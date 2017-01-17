@@ -93,9 +93,6 @@ class ConfigFactoryTest extends TestCase
                             'columns' => [
                                 0 => 'productId',
                             ],
-                            'plugins' => [
-
-                            ]
                         ]
                     ]
                 ],
@@ -105,5 +102,16 @@ class ConfigFactoryTest extends TestCase
         $grid = \Grid\Factory\ConfigFactory::factory('MyFirstGrid', 'admin', $config);
         $html = $grid->render();
 
+    }
+
+    public function testEmptyConfig()
+    {
+        try {
+            $grid = \Grid\Factory\ConfigFactory::factory('MyFirstGrid', 'admin', []);
+            $html = $grid->render();
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertTrue(true);
+        }
     }
 }

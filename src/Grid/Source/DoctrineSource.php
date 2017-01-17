@@ -93,7 +93,7 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
     /**
      * Added order to query
      */
-    protected function order()
+    public function order()
     {
         $orderFields = $this->getOrderFields();
         if (!empty($orderFields)) {
@@ -118,32 +118,11 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
     /**
      *
      * @param AbstractColumn $column
-     * @param string $sign
-     * @param string $value
-     */
-    public function orWhere(AbstractColumn $column, string $sign, string $value)
-    {
-        //        @TODO
-    }
-
-    /**
-     *
-     * @param AbstractColumn $column
      * @param string $value
      */
     public function andLike(AbstractColumn $column, string $value)
     {
         //        @TODO
-    }
-
-    /**
-     *
-     * @param AbstractColumn $column
-     * @param string $value
-     */
-    public function orLike(AbstractColumn $column, string $value)
-    {
-//        @TODO
     }
     
     /**
@@ -195,9 +174,9 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
             $query = $this->driver->createQueryBuilder();
             $query->from($this->table, $this->namespace);
             
-            if ($this->getStart() || $this->getEnd()) {
+            if ($this->getOffset() || $this->getLimit()) {
                 $query->setMaxResults($this->getLimit());
-                $query->setFirstResult($this->getStart());
+                $query->setFirstResult($this->getOffset());
             }
             $this->setQuery(
                 $this->filterGridQuery(

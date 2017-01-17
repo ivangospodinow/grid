@@ -5,14 +5,13 @@ use Grid\Util\Traits\ExchangeArray;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\Interfaces\GridInterface;
 use Grid\Interfaces\SourceInterface;
-use Grid\Interfaces\SourcePluginInterface;
 
 /**
  * Description of AbstractSource
  *
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
-abstract class AbstractSource implements SourceInterface, GridInterface, SourcePluginInterface
+abstract class AbstractSource implements SourceInterface, GridInterface
 {
     use ExchangeArray, GridAwareTrait;
     
@@ -20,16 +19,9 @@ abstract class AbstractSource implements SourceInterface, GridInterface, SourceP
      * Query start from record
      * @var int
      */
-    protected $start = 0;
+    protected $offset = 0;
 
     /**
-     * Query ends to record
-     * @var type
-     */
-    protected $end = 0;
-
-    /**
-     * $end - start
      * @var type
      */
     protected $limit = 0;
@@ -55,60 +47,30 @@ abstract class AbstractSource implements SourceInterface, GridInterface, SourceP
     public function __construct(array $config)
     {
         $this->exchangeArray($config);
-        /**
-         * @TODO check if needed, dont assume
-         */
-        $this->setLimit($this->getEnd() - $this->getStart());
-    }
-
-    /**
-     *
-     * @param \Grid\Source\AbstractSource $source
-     */
-    public function filterSource(AbstractSource $source) : AbstractSource
-    {
-        if ($this->canOrder()) {
-            $this->order();
-        }
-        return $source;
-    }
-    
-    /**
-     *
-     * @param int $start
-     */
-    public function setStart(int $start)
-    {
-        $this->start = $start;
-    }
-
-    /**
-     *
-     * @param int $end
-     */
-    public function setEnd(int $end)
-    {
-        $this->end = $end;
-    }
-
-    /**
-     *
-     * @return type
-     */
-    public function getStart() : int
-    {
-        return $this->start;
     }
 
     /**
      *
      * @return int
      */
-    public function getEnd() : int
+    public function getOffset() : int
     {
-        return $this->end;
+        return $this->offset;
     }
 
+    /**
+     *
+     * @param int $offset
+     */
+    public function setOffset(int $offset)
+    {
+        $this->offset = $offset;
+    }
+
+    /**
+     *
+     * @return int
+     */
     public function getLimit() : int
     {
         return $this->limit;
@@ -143,17 +105,7 @@ abstract class AbstractSource implements SourceInterface, GridInterface, SourceP
         }
         $this->order = $order;
     }
-
-        /**
-     *
-     * @return bool
-     */
-    public function canOrder() : bool
-    {
-        return count($this->order);
-    }
-
-
+    
     /**
      *
      * @return array
@@ -176,13 +128,5 @@ abstract class AbstractSource implements SourceInterface, GridInterface, SourceP
         }
 
         return $orderFields;
-    }
-
-    /**
-     * Do nothing here
-     */
-    protected function order()
-    {
-        
     }
 }

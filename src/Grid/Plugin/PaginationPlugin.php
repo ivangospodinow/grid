@@ -62,9 +62,8 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
     {
         $page = $this->getLinkCreator()->getActivePaginationPage();
         if ($page > 0 && $this->itemsPerPage) {
-            $source->setStart($page * $this->itemsPerPage);
-            $source->setEnd($page * $this->itemsPerPage + $this->itemsPerPage);
-            $source->setLimit($source->getEnd() - $source->getStart());
+            $source->setOffset($page * $this->itemsPerPage);
+            $source->setLimit($this->itemsPerPage);
         }
         return $source;
     }

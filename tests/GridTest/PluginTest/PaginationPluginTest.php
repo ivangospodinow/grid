@@ -33,6 +33,5 @@ class PaginationPluginTest extends TestCase
         $pagination->filterSource($source);
 
         $this->assertTrue($source->getLimit() === 13);
-        $this->assertTrue($source->getLimit() === $source->getEnd() - $source->getStart());
     }
 }

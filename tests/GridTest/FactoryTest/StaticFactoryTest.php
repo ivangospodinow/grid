@@ -9,10 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class StaticFactoryTest extends TestCase
 {
-    
-    /**
-     * @group failing
-     */
     public function testStaticFactory()
     {
         $config = [];

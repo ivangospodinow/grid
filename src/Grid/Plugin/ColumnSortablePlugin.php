@@ -79,7 +79,7 @@ class ColumnSortablePlugin extends AbstractPlugin implements RenderPluginInterfa
                 $order[$column->getName()] = strtoupper($value) === 'ASC' ? 'ASC' : 'DESC';
             }
         }
-
+        
         if (!empty($order)) {
             $source->setOrder($order);
         }

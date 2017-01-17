@@ -64,8 +64,8 @@ class DataTablesRenderer extends HtmlRenderer implements
      */
     public function filterSource(AbstractSource $source) : AbstractSource
     {
-        $source->setStart(0);
-        $source->setEnd(0);
+        $source->setLimit(0);
+        $source->setOffset(0);
         return $source;
     }
 

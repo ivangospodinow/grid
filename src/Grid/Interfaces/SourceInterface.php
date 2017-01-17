@@ -14,7 +14,7 @@ interface SourceInterface
     public function setRows(array $rows);
     public function getCount() : int;
     public function setCount(int $count);
-    public function canOrder() : bool;
+    public function order();
 
     /**
      *
@@ -23,29 +23,14 @@ interface SourceInterface
      * @param string $value
      */
     public function andWhere(AbstractColumn $column, string $sign, string $value);
-
-    /**
-     *
-     * @param AbstractColumn $column
-     * @param string $sign
-     * @param string $value
-     */
-    public function orWhere(AbstractColumn $column, string $sign, string $value);
-
+    
     /**
      *
      * @param AbstractColumn $column
      * @param string $value
      */
     public function andLike(AbstractColumn $column, string $value);
-
-    /**
-     *
-     * @param AbstractColumn $column
-     * @param string $value
-     */
-    public function orLike(AbstractColumn $column, string $value);
-
+    
     /**
      *
      * @param AbstractColumn $column
@@ -55,15 +40,15 @@ interface SourceInterface
 
     /**
      * Query start from record
-     * @param int $start
+     * @param int $offset
      */
-    public function setStart(int $start);
-    public function getStart() : int;
+    public function setOffset(int $offset);
+    public function getOffset() : int;
 
     /**
      * Query ends to record
-     * @param int $end
+     * @param int $limit
      */
-    public function setEnd(int $end);
-    public function getEnd() : int;
+    public function setLimit(int $limit);
+    public function getLimit() : int;
 }

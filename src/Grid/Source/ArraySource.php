@@ -40,10 +40,11 @@ class ArraySource extends AbstractSource
      */
     public function getRows()
     {
-        if ($this->getStart() || $this->getEnd()) {
+        $this->order();
+        if ($this->getOffset() || $this->getLimit()) {
             return array_slice(
                 $this->driver,
-                $this->getStart(),
+                $this->getOffset(),
                 $this->getLimit()
             );
         }
@@ -59,7 +60,10 @@ class ArraySource extends AbstractSource
         $this->driver = $rows;
     }
 
-    protected function order()
+    /**
+     * $order = [column => direction]
+     */
+    public function order()
     {
         $order = $this->getOrder();
         foreach ($order as $name => $direction) {
@@ -94,18 +98,6 @@ class ArraySource extends AbstractSource
     /**
      *
      * @param AbstractColumn $column
-     * @param string $sign
-     * @param string $value
-     */
-    public function orWhere(AbstractColumn $column, string $sign, string $value)
-    {
-        // @TODO SUPPORT OR ?
-        $this->andWhere($column, $sign, $value);
-    }
-
-    /**
-     *
-     * @param AbstractColumn $column
      * @param string $value
      */
     public function andLike(AbstractColumn $column, string $value)
@@ -118,17 +110,6 @@ class ArraySource extends AbstractSource
                 unset($this->driver[$key]);
             }
         }
-    }
-
-    /**
-     *
-     * @param AbstractColumn $column
-     * @param string $value
-     */
-    public function orLike(AbstractColumn $column, string $value)
-    {
-        // @TODO SUPPORT OR ?
-        $this->andLike($column, $value);
     }
 
     /**

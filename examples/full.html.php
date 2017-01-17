@@ -121,7 +121,7 @@ $config[] = [
     'class' => \Grid\Source\ArraySource::class,
     'options' => [
         'driver' => $products,
-        'order' => ['name' => 'ASC']
+        'order' => ['productId' => 'ASC']
     ]
 ];
 $config[] = \Grid\Util\Links::class;

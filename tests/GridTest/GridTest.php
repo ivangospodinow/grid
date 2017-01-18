@@ -129,6 +129,9 @@ class GridTest extends TestCase implements TranslateInterface
                     'name' => 'name',
                     'label' => 'Name',
                     'dbFields' => 'name',
+                    'sortable' => true,
+                    'selectable' => true,
+                    'selectableSource' => [$this, 'getSelectOptions']
                 ]
             ],
             [
@@ -157,11 +160,47 @@ class GridTest extends TestCase implements TranslateInterface
                                 ],
                                 'selectable' => [
                                     'id' => 1
+                                ],
+                                'sortable' => [
+                                    'name' => 'DESC'
                                 ]
                             ]
                         ]
                     ],
                 ]
+            ],
+            [
+                'class' => \Grid\Plugin\LinkPlugin::class,
+                'options' => [
+                    'column'        => 'name',
+                    'uri'           => 'https://www.amazon.co.uk/dp/:name',
+                    'uriParameters' => [
+                        'name' => 'name',
+                    ],
+                    'attributes' => [
+                        'class' => 'btn btn-default',
+                        'target' => '_blank'
+                    ],
+                ],
+            ],
+            [
+                'class' => \Grid\Plugin\LinksPlugin::class,
+                'options' => [
+                    'column'        => 'id',
+                    'links' => [
+                        [
+                            'uri'           => 'https://www.amazon.co.uk/dp/:id',
+                            'label'         => 'TEST_LABEL_123',
+                            'uriParameters' => [
+                                'id' => 'id',
+                            ],
+                            'attributes' => [
+                                'class' => 'btn btn-default',
+                                'target' => '_blank'
+                            ],
+                        ],
+                    ]
+                ],
             ],
             \Grid\Plugin\ColumnSortablePlugin::class,
         ];
@@ -192,9 +231,13 @@ class GridTest extends TestCase implements TranslateInterface
 
 
         $html = $grid->render();
-
+        
         $this->assertTrue(strpos($html, 'name="grid[grid-id][searchable][id]"') !== false);
         $this->assertTrue(strpos($html, 'name="grid[grid-id][selectable][id]"') !== false);
+        $this->assertTrue(strpos($html, 'https://www.amazon.co.uk/dp/1') !== false);
+        $this->assertTrue(strpos($html, 'https://www.amazon.co.uk/dp/name 1') !== false);
+        $this->assertTrue($grid[\Grid\Plugin\LinkPlugin::class][0]->getLabel() === '');
+        $this->assertTrue(strpos($html, 'SELECTABLE_SOURCE"') !== false);
 
         try {
             $grid = StaticFactory::factory(
@@ -529,5 +572,10 @@ class GridTest extends TestCase implements TranslateInterface
 //        var_dump($grid[\Grid\Util\Links::class][0]->getParams());die;
 
 //        echo $html;die;
+    }
+
+    public function getSelectOptions()
+    {
+        return ['SELECTABLE_SOURCE' => '22222'];
     }
 }

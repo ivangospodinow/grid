@@ -26,11 +26,11 @@ class LinksPlugin extends AbstractLinkPlugin implements DataPluginInterface
 
     public function filterData(array $data) : array
     {
+        
         foreach ($data as $row) {
             if (!$row->isBody()) {
                 continue;
             }
-
             $linkTags = [];
             $links = $this->getLinks();
             foreach ($links as $link) {
@@ -51,7 +51,7 @@ class LinksPlugin extends AbstractLinkPlugin implements DataPluginInterface
         $links = [];
         foreach ($this->links as $link) {
             $link['column'] = $this->column;
-            $links[] = new LinkPlugin($link);
+            $links[] = $this->getGrid()->setObjectDi(new LinkPlugin($link));
         }
         return $links;
     }

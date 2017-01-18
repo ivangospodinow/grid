@@ -108,10 +108,7 @@ implements
             $this->getLinkCreator()->getPageBasePath()
         );
         $urlParams = $this->getLinkCreator()->getParams();
-        if (empty($urlParams)) {
-            $urlParams = [];
-        }
-        $params = Input::createHiddenFromParams($urlParams);
+        $params = Input::createHiddenFromParams(is_array($urlParams) ? $urlParams : []);
         foreach ($this->getColumnInputs($column) as $input) {
             $html[] = $input->render();
             unset($params[$input->getName()]);

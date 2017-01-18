@@ -72,12 +72,11 @@ final class Grid implements ArrayAccess
      */
     public function render() : string
     {
-        $html   = [];
-        $html[] = $this->filter(RenderPluginInterface::class, 'preRender', '');
+        $html = $this->filter(RenderPluginInterface::class, 'preRender', '');
         foreach ($this[RendererInterface::class] as $renderer) {
-            $html[] = $renderer->render($this);
+            $html .= $renderer->render($this);
         }
-        return $this->filter(RenderPluginInterface::class, 'postRender', implode(PHP_EOL, $html));
+        return $this->filter(RenderPluginInterface::class, 'postRender', $html);
     }
 
     /**

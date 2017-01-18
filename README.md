@@ -2,7 +2,7 @@
 Easy to use event driven grid (table)
 
 ## Strong points and Goals
-- Easy to extend and add new functionality.
+- Easy to extend, plug in and add new functionality.
 - Fast, use only the code you need for each case.
 - Support wide range of existing code base. (work in progress)
 - More is less. More functionality less code.

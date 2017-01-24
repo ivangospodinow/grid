@@ -17,7 +17,8 @@ class Input
 
     const TYPE_TEXT   = 'text';
     const TYPE_SELECT = 'select';
-
+    const TYPE_BUTTON = 'button';
+    
     protected $valueOptions = [];
     
     public function __construct(array $config)
@@ -33,7 +34,7 @@ class Input
         $this->setAttribute('value', $config['value'] ?? '');
         $this->setAttribute('placeholder', $config['placeholder'] ?? '');
         
-        if (!in_array($config['type'], [self::TYPE_TEXT, self::TYPE_SELECT])) {
+        if (!in_array($config['type'], [self::TYPE_TEXT, self::TYPE_SELECT, self::TYPE_BUTTON])) {
             throw new Exception('Unsupported type ' . $config['type']);
         }
     }
@@ -109,6 +110,12 @@ class Input
                 $this->getAttributesString(true),
                 implode(PHP_EOL, $options)
             );
+        } else if ($this->getAttribute('type') === self::TYPE_BUTTON) {
+            $html = sprintf(
+                '<button%s>$s',
+                $this->getAttributesString(true),
+                $this->getAttribute('placeholder') ?? $this->getValue()
+            );
         }
         return $html;
     }
@@ -120,6 +127,8 @@ class Input
             $html = '/>';
         } elseif ($this->getAttribute('type') === self::TYPE_SELECT) {
             $html = '</select>';
+        } elseif ($this->getAttribute('type') === self::TYPE_BUTTON) {
+            $html = '</button>';
         }
         return $html;
     }

@@ -3,6 +3,7 @@
 namespace Grid\Plugin;
 
 use Grid\Interfaces\DataPluginInterface;
+use Grid\Row\BodyRow;
 
 /**
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
@@ -28,7 +29,7 @@ class LinksPlugin extends AbstractLinkPlugin implements DataPluginInterface
     {
         
         foreach ($data as $row) {
-            if (!$row->isBody()) {
+            if (!$row instanceof BodyRow) {
                 continue;
             }
             $linkTags = [];

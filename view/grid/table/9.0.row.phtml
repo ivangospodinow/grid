@@ -6,7 +6,7 @@ echo sprintf(
     PHP_EOL
 );
 
-$tag = $row->isHead() ? 'th' : 'td';
+$tag = $row instanceof Grid\Row\HeadRow? 'th' : 'td';
 if ($row->isString()) {
     $row->setAttribute('colspan', count($this->grid->getColumns()));
     echo sprintf(

@@ -3,7 +3,7 @@
 namespace Grid\Plugin;
 
 use Grid\Interfaces\RowPluginInterface;
-use Grid\GridRow;
+use Grid\Row\AbstractRow;
 
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\Interfaces\GridInterface;
@@ -20,17 +20,17 @@ class ExtractorPlugin extends AbstractPlugin implements RowPluginInterface, Grid
     /**
      * gets the column value from source
      * 
-     * @param GridRow $gridRow
-     * @return GridRow
+     * @param AbstractRow $row
+     * @return $row
      */
-    public function filterRow(GridRow $gridRow) : GridRow
+    public function filterRow(AbstractRow $row) : AbstractRow
     {
         $columns = $this->getGrid()->getColumns();
         foreach ($columns as $column) {
-            $gridRow[$column->getName()] =
-            $column->getExtractor($gridRow->getSource())
-                   ->extract($gridRow->getSource(), $column->getExtract());
+            $row[$column->getName()] =
+            $column->getExtractor($row->getSource())
+                   ->extract($row->getSource(), $column->getExtract());
         }
-        return $gridRow;
+        return $row;
     }
 }

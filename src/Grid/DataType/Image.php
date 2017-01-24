@@ -1,7 +1,7 @@
 <?php
 namespace Grid\DataType;
 
-use Grid\GridRow;
+use Grid\Row\AbstractRow;
 use Grid\Column\AbstractColumn;
 
 /**
@@ -10,7 +10,7 @@ use Grid\Column\AbstractColumn;
  */
 class Image implements DataTypeInterface
 {
-    public function filter($value, AbstractColumn $column, GridRow $contex)
+    public function filter($value, AbstractColumn $column, AbstractRow $contex)
     {
         if (filter_var($value, FILTER_VALIDATE_URL)) {
             return sprintf(

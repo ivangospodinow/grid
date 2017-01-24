@@ -97,10 +97,8 @@ abstract class AbstractSource implements SourceInterface, GridInterface
     public function setOrder(array $order)
     {
         foreach ($order as $name => &$direction) {
-            $direction = strtoupper($direction);
-            if (!in_array($direction, ['ASC', 'DESC'])) {
-                unset($order[$name]);
-                trigger_error('order requires ASC or DESC');
+            if (!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+                throw new Exception('order requires ASC or DESC');
             }
         }
         $this->order = $order;

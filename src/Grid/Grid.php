@@ -4,6 +4,7 @@ namespace Grid;
 
 use Grid\Plugin\AutoloaderPlugin;
 use Grid\Column\AbstractColumn;
+use Grid\Row\BodyRow;
 
 use Grid\Interfaces\RenderPluginInterface;
 use Grid\Interfaces\RendererInterface;
@@ -102,7 +103,7 @@ final class Grid implements ArrayAccess
 
     /**
      * Grid rows
-     * @return array [GridRow]
+     * @return array [AbstractRow]
      */
     public function getData() : array
     {
@@ -119,7 +120,7 @@ final class Grid implements ArrayAccess
                     foreach ($hydrators as $hydrator) {
                         $rowData = $hydrator->hydrate($rowData);
                     }
-                    $row = $this->setObjectDi(new GridRow($rowData, GridRow::POSITION_BODY));
+                    $row = $this->setObjectDi(new BodyRow($rowData));
                     
                     foreach ($plugins as $plugin) {
                         $row = $plugin->filterRow($row);

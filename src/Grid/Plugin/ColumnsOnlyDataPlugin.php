@@ -3,7 +3,7 @@
 namespace Grid\Plugin;
 
 use Grid\Interfaces\DataPluginInterface;
-use Grid\GridRow;
+use Grid\Row\AbstractRow;
 
 /**
  * Allows grid to have different columns for different profiles
@@ -29,7 +29,7 @@ class ColumnsOnlyDataPlugin extends AbstractPlugin implements DataPluginInterfac
         return $data;
     }
 
-    public function filterDataRow(GridRow $row, array $columns)
+    public function filterDataRow(AbstractRow $row, array $columns)
     {
         foreach ($row as $column => $value) {
             if (!in_array($column, $columns)) {

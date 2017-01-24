@@ -278,17 +278,8 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     protected function getSql()
     {
         if (null === $this->sql) {
-            $this->sql = new Sql($this->getAdapter());
+            $this->sql = new Sql($this->driver);
         }
         return $this->sql;
-    }
-
-    /**
-     *
-     * @return AdapterInterface
-     */
-    protected function getAdapter() : AdapterInterface
-    {
-        return $this->driver;
     }
 }

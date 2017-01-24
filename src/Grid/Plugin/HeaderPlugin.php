@@ -3,7 +3,8 @@
 namespace Grid\Plugin;
 
 use Grid\Interfaces\DataPluginInterface;
-use Grid\GridRow;
+use Grid\Row\HeadRow;
+use Grid\Row\FootRow;
 use Grid\Util\Traits\ExchangeArray;
 
 /**
@@ -15,19 +16,19 @@ class HeaderPlugin extends AbstractPlugin implements DataPluginInterface
 {
     use ExchangeArray;
 
-    const POSITION_TOP    = 'top';
-    const POSITION_BOTTOM = 'bottom';
-    const POSITION_BOTH   = 'both';
+    const POSITION_HEAD = 'head';
+    const POSITION_FOOT = 'foot';
+    const POSITION_BOTH = 'both';
     
     protected $position;
 
     public function __construct(array $config = [])
     {
         if (!isset($config['position'])) {
-            $config['position'] = self::POSITION_TOP;
+            $config['position'] = self::POSITION_HEAD;
         }
-        if (!in_array($config['position'], [self::POSITION_BOTH, self::POSITION_BOTTOM, self::POSITION_TOP])) {
-            $config['position'] = self::POSITION_TOP;
+        if (!in_array($config['position'], [self::POSITION_BOTH, self::POSITION_FOOT, self::POSITION_HEAD])) {
+            $config['position'] = self::POSITION_HEAD;
         }
         $this->exchangeArray($config);
     }
@@ -36,7 +37,7 @@ class HeaderPlugin extends AbstractPlugin implements DataPluginInterface
      * gets the column value from source
      * 
      * @param array $data
-     * @return GridRow
+     * @return AbstractRow
      */
     public function filterData(array $data) : array
     {
@@ -51,28 +52,18 @@ class HeaderPlugin extends AbstractPlugin implements DataPluginInterface
         }
 
         if ($this->position === self::POSITION_BOTH
-        || $this->position === self::POSITION_TOP) {
+        || $this->position === self::POSITION_HEAD) {
             array_unshift(
                 $data,
-                $this->getGrid()->setObjectDi(
-                    new GridRow(
-                        $headers,
-                        GridRow::POSITION_HEAD
-                    )
-                )
+                $this->getGrid()->setObjectDi(new HeadRow($headers))
             );
         }
 
         if ($this->position === self::POSITION_BOTH
-        || $this->position === self::POSITION_BOTTOM) {
+        || $this->position === self::POSITION_FOOT) {
             array_unshift(
                 $data,
-                $this->getGrid()->setObjectDi(
-                    new GridRow(
-                        $headers,
-                        GridRow::POSITION_FOOTER
-                    )
-                )
+                $this->getGrid()->setObjectDi(new FootRow($headers))
             );
         }
         

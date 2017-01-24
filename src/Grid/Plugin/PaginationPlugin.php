@@ -8,7 +8,7 @@ use Grid\Util\Traits\LinkCreatorAwareTrait;
 use Grid\Interfaces\DataPluginInterface;
 use Grid\Interfaces\SourcePluginInterface;
 use Grid\Source\AbstractSource;
-use Grid\GridRow;
+use Grid\Row\FootRow;
 
 /**
  * Default pagination
@@ -49,13 +49,13 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
 
     public function __construct(array $config = [])
     {
-        $this->view = __DIR__ . '/../../../view/grid/4.1.pagination.phtml';
+        $this->view = __DIR__ . '/../../../view/grid/plugin/pagination/pagination.phtml';
         $this->exchangeArray($config);
     }
 
     /**
      *
-     * @param AbstractSource $query
+     * @param AbstractSource $source
      * @return AbstractSource
      */
     public function filterSource(AbstractSource $source) : AbstractSource
@@ -78,12 +78,7 @@ class PaginationPlugin extends AbstractPlugin implements DataPluginInterface, So
         ob_start();
         include $this->view;
         $source = ob_get_clean();
-        $data[] = $this->getGrid()->setObjectDi(
-            new GridRow(
-                $source,
-                GridRow::POSITION_FOOTER
-            )
-        );
+        $data[] = $this->getGrid()->setObjectDi(new FootRow($source));
         return $data;
     }
 }

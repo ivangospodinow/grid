@@ -2,7 +2,7 @@
 
 namespace Grid\Interfaces;
 
-use Grid\GridRow;
+use Grid\Row\AbstractRow;
 
 /**
  * All objects added to the grid with
@@ -12,5 +12,5 @@ use Grid\GridRow;
  */
 interface RowPluginInterface
 {
-    public function filterRow(GridRow $gridRow) : GridRow;
+    public function filterRow(AbstractRow $row) : AbstractRow;
 }

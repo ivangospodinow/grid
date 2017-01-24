@@ -46,6 +46,8 @@ class ZendDbAdapterSourceTest extends TestCase
             ]
         );
         $source->setGrid(new Grid);
+        $source->setOrder(['name' => 'asc']);
+        
         $rows = [0 => ['id' => 1], 1 => ['id' => 1]];
         $source->setRows($rows);
         $this->assertTrue(count($source->getRows()) === 2);

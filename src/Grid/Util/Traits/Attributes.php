@@ -56,6 +56,15 @@ trait Attributes
     /**
      *
      * @param string $name
+     */
+    public function removeAttribute(string $name)
+    {
+        unset($this->attributes[$name]);
+    }
+
+    /**
+     *
+     * @param string $name
      * @return type
      */
     public function getAttribute(string $name) : string

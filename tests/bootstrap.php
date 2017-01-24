@@ -9,4 +9,4 @@ require_once __DIR__ . '/mockup/Expression.php';
 require_once __DIR__ . '/mockup/Statement.php';
 require_once __DIR__ . '/mockup/Result.php';
 require_once __DIR__ . '/mockup/Table.php';
-
+require_once __DIR__ . '/mockup/Pdo.php';

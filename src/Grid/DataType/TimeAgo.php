@@ -2,7 +2,7 @@
 
 namespace Grid\DataType;
 
-use Grid\GridRow;
+use Grid\Row\AbstractRow;
 use Grid\Column\AbstractColumn;
 use Grid\Util\Traits\GridAwareTrait;
 use Grid\Interfaces\GridInterface;
@@ -19,10 +19,10 @@ class TimeAgo extends AbstractDateTime implements GridInterface
      * @see http://stackoverflow.com/questions/6679010/converting-a-unix-time-stamp-to-twitter-facebook-style
      * @param int $value
      * @param AbstractColumn $column
-     * @param GridRow $contex
+     * @param AbstractRow $contex
      * @return type
      */
-    public function filter($value, AbstractColumn $column, GridRow $contex)
+    public function filter($value, AbstractColumn $column, AbstractRow $contex)
     {
         $date       = $this->strtotime($value);
         if ($date === 0) {

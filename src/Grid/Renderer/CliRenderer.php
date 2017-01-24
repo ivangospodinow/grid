@@ -5,6 +5,9 @@ use Grid\Grid;
 use Grid\Plugin\StripHtmlPlugin;
 use Grid\Interfaces\RendererInterface;
 
+use Grid\Row\HeadRow;
+use Grid\Row\BodyRow;
+
 use cli\Table;
 
 /**
@@ -23,9 +26,9 @@ class CliRenderer implements RendererInterface
         $headers = [];
         $rows = [];
         foreach ($data as $key => $row) {
-            if ($row->isHead()) {
+            if ($row instanceof HeadRow && !$row->isString()) {
                 $headers = (array) $row;
-            } elseif ($row->isBody()) {
+            } elseif ($row instanceof BodyRow) {
                 $rows[] = (array) $row;
             }
         }

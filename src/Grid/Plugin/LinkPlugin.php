@@ -3,7 +3,8 @@
 namespace Grid\Plugin;
 
 use Grid\Interfaces\DataPluginInterface;
-use Grid\GridRow;
+use Grid\Row\AbstractRow;
+use Grid\Row\BodyRow;
 
 /**
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
@@ -52,7 +53,7 @@ class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
     public function filterData(array $data) : array
     {
         foreach ($data as $row) {
-            if (!$row->isBody()
+            if (!$row instanceof BodyRow
             || !isset($row[$this->column])) {
                 continue;
             }
@@ -61,7 +62,7 @@ class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
         return $data;
     }
 
-    public function createLinkFromRow(GridRow $row) : string
+    public function createLinkFromRow(AbstractRow $row) : string
     {
         return
         $this->createLink(

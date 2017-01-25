@@ -92,7 +92,7 @@ trait Attributes
     {
         $str = [];
         foreach ($attributes as $name => $val) {
-            $str[] = $name . '="' . $val . '"';
+            $str[] = $name . '="' . trim($val) . '"';
         }
         return ($addSplace && !empty($str) ? ' ' : '') . implode(' ', $str);
     }

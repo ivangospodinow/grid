@@ -254,6 +254,7 @@ implements
                 'value' => true,
             ]
         );
+        $input->addAttribute('class', ' grid-action-button');
         return $this->setCache(__METHOD__, $input);
     }
 

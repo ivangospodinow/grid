@@ -8,21 +8,17 @@ echo sprintf(
 
 $tag = $row instanceof Grid\Row\HeadRow? 'th' : 'td';
 if ($row->isString()) {
-    $row->setAttribute('colspan', count($this->grid->getColumns()));
     echo sprintf(
-            '<%s%s>%s</%s>%s',
-            $tag,
-            $row->getAttributesString(true),
+            '<td colspan="%s">%s</td>%s',
+            count($this->grid->getColumns()),
             (string) $row->getSource(),
-            $tag,
             PHP_EOL
       );
 } else {
     foreach ($this->grid->getColumns() as $column) {
         echo sprintf(
-            '<%s%s>%s</%s>%s',
+            '<%s>%s</%s>%s',
             $tag,
-            $row->getAttributesString(true),
             $row[$column->getName()],
             $tag,
             PHP_EOL

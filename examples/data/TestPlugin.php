@@ -20,9 +20,9 @@ class TestPlugin implements RenderPluginInterface, GridInterface
         foreach ($this->getGrid()[InputsInterface::class] as $plugin) {
             foreach ($plugin->getInputs() as $input) {
                 if ($input->getAttribute('type') === $input::TYPE_BUTTON) {
-                    $input->addAttribute('class', 'btn btn-default');
+                    $input->addAttribute('class', ' btn btn-default');
                 } else {
-                    $input->addAttribute('class', 'form-control');
+                    $input->addAttribute('class', ' form-control');
                 }
             }
         }

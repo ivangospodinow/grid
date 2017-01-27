@@ -12,14 +12,24 @@ class LinkCreatorTest extends TestCase
 {
     public function testLinkCreator()
     {
+        $_SERVER['REQUEST_URI'] = '/?test=1';
         $link = new Links;
         $grid = new Grid;
         $grid[] = $link;
+
         
         $creator = new LinkCreator;
         $creator->setGrid($grid);
-
-       $_SERVER['REQUEST_URI'] = '/?test=1';
         $this->assertTrue($creator->getPageBasePath() === '/');
+
+        unset($_SERVER['REQUEST_URI']);
+        $link = new Links;
+        $grid = new Grid;
+        $grid[] = $link;
+
+
+        $creator = new LinkCreator;
+        $creator->setGrid($grid);
+        $this->assertTrue($creator->getPageBasePath() === '');
     }
 }

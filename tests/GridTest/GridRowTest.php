@@ -2,11 +2,11 @@
 namespace GridTest;
 
 use Grid\Grid;
-use Grid\GridRow;
+use Grid\Row\BodyRow;
 
 use PHPUnit\Framework\TestCase;
 
-class GridRowTest extends TestCase
+class BodyRowTest extends TestCase
 {
     public function __toString()
     {
@@ -16,7 +16,7 @@ class GridRowTest extends TestCase
     public function testEmptyConstruct()
     {
         try {
-            $instance = new GridRow;
+            $instance = new BodyRow;
             $this->assertTrue(false);
         } catch (\Exception $e) {
             $this->assertTrue(true);
@@ -26,7 +26,7 @@ class GridRowTest extends TestCase
     public function testArrayContruct()
     {
         $grid = $this->getGrid();
-        $instance = new GridRow([]);
+        $instance = new BodyRow([]);
         $this->assertEmpty((array) $instance);
         $this->assertTrue(is_array($instance->getSource()));
     }
@@ -34,37 +34,22 @@ class GridRowTest extends TestCase
     public function testStdContruct()
     {
         $grid = $this->getGrid();
-        $instance = new GridRow(new \stdClass);
+        $instance = new BodyRow(new \stdClass);
         $this->assertEmpty((array) $instance);
         $this->assertTrue($instance->getSource() instanceof \stdClass);
     }
 
     public function testStringContruct()
     {
-        $instance = new GridRow('');
+        $instance = new BodyRow('');
         $this->assertEmpty((array) $instance);
         $this->assertTrue(is_string($instance->getSource()));
         $this->assertTrue($instance->isString());
         
-        $instance = new GridRow($this);
+        $instance = new BodyRow($this);
         $this->assertEmpty((array) $instance);
         $this->assertTrue($instance->getSource() === $this);
         $this->assertTrue($instance->isString());
-    }
-
-    public function testPosition()
-    {
-        $instance = new GridRow('');
-        $this->assertTrue($instance->getPosition() === $instance::POSITION_BODY);
-        $this->assertTrue($instance->isBody());
-
-        $instance = new GridRow('', $instance::POSITION_HEAD);
-        $this->assertTrue($instance->getPosition() === $instance::POSITION_HEAD);
-        $this->assertTrue($instance->isHead());
-
-        $instance = new GridRow('', $instance::POSITION_FOOTER);
-        $this->assertTrue($instance->getPosition() === $instance::POSITION_FOOTER);
-        $this->assertTrue($instance->isFoot());
     }
 
     public function getGrid()

@@ -12,6 +12,7 @@ class LinksTest extends TestCase
     public function testLinkCreator()
     {
         $_GET = ['123'];
+        $_SERVER['REQUEST_URI'] = '/testuri';
         $link = new Links;
         $this->assertTrue($link->getParams() === $_GET);
 
@@ -58,9 +59,7 @@ class LinksTest extends TestCase
 
         $this->assertTrue(is_string($link->getPaginationPageName()));
         $_SERVER['REQUEST_URI'] = '/';
-        $this->assertTrue($link->getPageBasePath() === '/');
-        $_SERVER['REQUEST_URI'] = '/?test=1';
-        $this->assertTrue($link->getPageBasePath() === '/');
+        $this->assertTrue($link->getPageBasePath() !== '/');
     }
 
     public function testEmptyParams()

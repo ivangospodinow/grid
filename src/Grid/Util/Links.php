@@ -17,12 +17,14 @@ class Links implements GridInterface, LinksInterface
     use GridAwareTrait, ExchangeArray;
 
     protected $params = [];
-
+    protected $requestUri = '';
+    
     public function __construct(array $config = [])
     {
         if (!isset($config['params']) && isset($_GET)) {
             $config['params'] = $_GET;
         }
+        $this->requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $this->exchangeArray($config);
     }
 
@@ -137,9 +139,9 @@ class Links implements GridInterface, LinksInterface
      */
     public function getPageBasePath() : string
     {
-        if (strpos($_SERVER['REQUEST_URI'], '?') === false) {
-            return $_SERVER['REQUEST_URI'];
+        if (strpos($this->requestUri, '?') === false) {
+            return $this->requestUri;
         }
-        return strstr($_SERVER['REQUEST_URI'], '?', true);
+        return strstr($this->requestUri, '?', true);
     }
 }

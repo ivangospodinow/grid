@@ -223,7 +223,7 @@ class GridTest extends TestCase implements TranslateInterface
 
         $body = [];
         foreach ($grid->getData()as $row) {
-            if ($row->isBody()) {
+            if ($row instanceof \Grid\Row\BodyRow) {
                 $body[] = $row;
             }
         }

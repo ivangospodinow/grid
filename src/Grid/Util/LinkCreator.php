@@ -12,6 +12,8 @@ use Grid\Interfaces\LinksInterface;
 class LinkCreator implements GridInterface
 {
     use GridAwareTrait;
+    
+    protected $loaded = false;
 
     /**
      *
@@ -21,6 +23,13 @@ class LinkCreator implements GridInterface
      */
     public function __call($name, $arguments)
     {
+        if (false === $this->loaded) {
+            $this->loaded = true;
+            if (!isset($this->getGrid()[LinksInterface::class])) {
+                $this->getGrid()[] = new Links;
+            }
+        }
+
         $result = '';
         foreach ($this->getGrid()[LinksInterface::class] as $plugin) {
             $result = call_user_func_array([$plugin, $name], $arguments);

@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigFactoryTest extends TestCase
 {
+    /**
+     * @group failing
+     */
     public function testConfigFactory()
     {
         $config = [

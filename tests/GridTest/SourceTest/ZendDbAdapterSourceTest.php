@@ -61,9 +61,6 @@ class ZendDbAdapterSourceTest extends TestCase
         $this->assertTrue($source->getCount() === 0);
     }
     
-    /**
-     * @group failing
-     */
     public function testRows()
     {
         require_once __DIR__ . '/../..//mockup/Sql.php';

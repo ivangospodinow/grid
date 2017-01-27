@@ -3,7 +3,7 @@ namespace GridTest\DataTypeTest;
 
 use Grid\Grid;
 use Grid\Column\Column;
-use Grid\GridRow;
+use Grid\Row\BodyRow;
 use Grid\DataType\TimeAgo;
 
 use PHPUnit\Framework\TestCase;
@@ -14,7 +14,7 @@ class TimeAgoTest extends TestCase
     {
         $time = strtotime('-1 hour');
         $column = new Column(['name' => 'test']);
-        $row = new GridRow([]);
+        $row = new BodyRow([]);
         $filter = new TimeAgo;
         $filter->setGrid(new Grid);
         $this->assertTrue(is_string($filter->filter($time, $column, $row)));

@@ -3,7 +3,7 @@ namespace GridTest\DataTypeTest;
 
 use Grid\Grid;
 use Grid\Column\Column;
-use Grid\GridRow;
+use Grid\Row\BodyRow;
 use Grid\DataType\DateTime;
 
 use PHPUnit\Framework\TestCase;
@@ -14,7 +14,7 @@ class DateTimeTest extends TestCase
     {
         $time = time();
         $column = new Column(['name' => 'test']);
-        $row = new GridRow([]);
+        $row = new BodyRow([]);
         $filter = new DateTime;
         $this->assertTrue($filter->filter($time, $column, $row) === date('Y-m-d H:i:s', $time));
 

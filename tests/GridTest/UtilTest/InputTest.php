@@ -51,4 +51,17 @@ class InputTest extends TestCase
         $input->setValueOptions(['test' => 'VALUE 123']);
         $this->assertTrue(strpos($input->render(), 'VALUE 123') !== false);
     }
+
+    public function testButton()
+    {
+        $input = new Input(
+            [
+                'name' => 'test',
+                'type' => Input::TYPE_BUTTON,
+            ]
+        );
+        $this->assertTrue(is_string($input->render()));
+        $this->assertTrue(strpos($input->render(), '<button') !== false);
+        $this->assertTrue(strpos($input->render(), '</button>') !== false);
+    }
 }

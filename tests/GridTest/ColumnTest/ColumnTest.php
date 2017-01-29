@@ -197,6 +197,14 @@ class ColumnTest extends TestCase
         $this->assertTrue($instance->getExtractor(new \stdClass) instanceof \Grid\Util\Extractor\AbstractExtractor);
     }
 
+    public function testIsExportable()
+    {
+        $column = $this->getInstance();
+        $this->assertTrue($column->isExportable());
+        $column = $this->getInstance(['exportable' => false]);
+        $this->assertFalse($column->isExportable());
+    }
+
     public function getInstance($config = [])
     {
         $instance = new Column(['name' => 'test'] + $config);

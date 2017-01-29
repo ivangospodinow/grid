@@ -48,7 +48,7 @@ implements
     protected $markMatchesAfter     = '</u>';
     protected $placeholder          = null;
     
-    protected $clearButton          = true;
+    protected $clearButton          = false;
     protected $clearButtonLabel     = 'Clear filters';
     protected $clearButtonName      = 'clear-filters';
     /**

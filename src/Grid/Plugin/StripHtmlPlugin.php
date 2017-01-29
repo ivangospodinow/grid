@@ -18,9 +18,6 @@ class StripHtmlPlugin extends AbstractPlugin implements DataPluginInterface
     public function filterData(array $data) : array
     {
         foreach ($data as $row) {
-            if ($row->isString()) {
-                continue;
-            }
             foreach ($row as $name => $value) {
                 $row[$name] = trim(strip_tags($value));
             }

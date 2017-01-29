@@ -8,7 +8,8 @@ use Grid\Util\Traits\Required;
 use \Exception;
 
 /**
- *
+ * @TODO going to make separate objects for each type
+ * but for now I need them to be an object
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class Input

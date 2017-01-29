@@ -20,15 +20,13 @@ class CliRenderer implements RendererInterface
     public function render(Grid $grid) : string
     {
         $grid[] = new StripHtmlPlugin;
-        
-        $data = $grid->getData();
-
         $headers = [];
+        foreach ($grid->getColumns() as $column) {
+            $headers[] = $column->getLabel();
+        }
         $rows = [];
-        foreach ($data as $key => $row) {
-            if ($row instanceof HeadRow && !$row->isString()) {
-                $headers = (array) $row;
-            } elseif ($row instanceof BodyRow) {
+        foreach ($grid->getData() as $key => $row) {
+            if ($row instanceof BodyRow) {
                 $rows[] = (array) $row;
             }
         }

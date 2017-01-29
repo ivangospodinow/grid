@@ -1,11 +1,13 @@
 # Grid (php 7)
-Easy to use event driven grid (table)
+Easy to use event driven grid (table) and general purpose data manager
 
-## Strong points and Goals
+## Strong points
 - Easy to extend, plug in and add new functionality.
 - Fast, use only the code you need for each case.
-- Support wide range of existing code base. (work in progress)
 - More is less. More functionality less code.
+
+## Goals
+- Support wide range of existing code base. (work in progress)
 
 ## Grid mind set
 The easy way to think about Grid.php as Service Locator.
@@ -114,7 +116,7 @@ composer require ivangospodinow/grid
 
 ## Tests
 
-Currently 50% unit tested.
+Currently 90% unit tested.
 Run in project directory
 ```
 phpunit

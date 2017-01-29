@@ -40,7 +40,7 @@ abstract class AbstractRow extends ArrayObject
             parent::__construct($source);
         }
         
-        $this->source   = $source;
+        $this->setSource($source);
         $this->index    = $index;
     }
 

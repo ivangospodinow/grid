@@ -2,34 +2,29 @@
 
 namespace Grid\Plugin;
 
-use Grid\Interfaces\RowPluginInterface;
+use Grid\Interfaces\DataPluginInterface;
 use Grid\Row\AbstractRow;
-
-use Grid\Util\Traits\GridAwareTrait;
-use Grid\Interfaces\GridInterface;
 
 /**
  * Removing all html in column value, used for cli view
  *
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
-class StripHtmlPlugin extends AbstractPlugin implements RowPluginInterface, GridInterface
+class StripHtmlPlugin extends AbstractPlugin implements DataPluginInterface
 {
-    use GridAwareTrait;
-    
     /**
-     * gets the column value from source
-     * 
-     * @param AbstractRow $row
-     * @return AbstractRow
+     * @param array $data
      */
-    public function filterRow(AbstractRow $row) : AbstractRow
+    public function filterData(array $data) : array
     {
-        $columns = $this->getGrid()->getColumns();
-        foreach ($columns as $column) {
-            $row[$column->getName()] = trim(strip_tags($row[$column->getName()]));
+        foreach ($data as $row) {
+            if ($row->isString()) {
+                continue;
+            }
+            foreach ($row as $name => $value) {
+                $row[$name] = trim(strip_tags($value));
+            }
         }
-
-        return $row;
+        return $data;
     }
 }

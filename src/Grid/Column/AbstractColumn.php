@@ -110,7 +110,13 @@ abstract class AbstractColumn implements GridInterface
      * @var callback, array
      */
     protected $selectableSource;
-    
+
+    /**
+     *
+     * @var type
+     */
+    protected $exportable = true;
+
     /**
      *
      * @var string
@@ -336,6 +342,15 @@ abstract class AbstractColumn implements GridInterface
         } else {
             throw new Exception('Invalid selectable source');
         }
+    }
+    
+    /**
+     *
+     * @return bool
+     */
+    public function isExportable() : bool
+    {
+        return (bool) $this->exportable;
     }
 
     /**

@@ -40,12 +40,6 @@ final class Grid implements ArrayAccess
      * @var type
      */
     protected $iterator = [];
-
-    /**
-     *
-     * @var SourceInterface
-     */
-    protected $source;
     
     /**
      *

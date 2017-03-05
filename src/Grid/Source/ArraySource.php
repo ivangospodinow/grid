@@ -18,6 +18,8 @@ class ArraySource extends AbstractSource
      * @var []
      */
     protected $driver = [];
+
+    protected $orLike = [];
     
     /**
      *
@@ -41,6 +43,7 @@ class ArraySource extends AbstractSource
     public function getRows()
     {
         $this->order();
+        $this->applyOrLike();
         if ($this->getOffset() || $this->getLimit()) {
             return array_slice(
                 $this->driver,
@@ -108,6 +111,40 @@ class ArraySource extends AbstractSource
         foreach ($this->driver as $key => $row) {
             if (strpos(strtolower($row[$name]), $value) === false) {
                 unset($this->driver[$key]);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param AbstractColumn $column
+     * @param string $value
+     */
+    public function orLike(AbstractColumn $column, string $value)
+    {
+        $this->orLike[] = [
+            'column' => $column,
+            'value'  => strtolower($value),
+        ];
+    }
+
+    /**
+     * Apply one or more orLike
+     */
+    public function applyOrLike()
+    {
+        if (!empty($this->orLike)) {
+            foreach ($this->driver as $key => $row) {
+                $has = false;
+                foreach ($this->orLike as $pair) {
+                    if (strpos(strtolower($row[$pair['column']->getName()]), $pair['value']) !== false) {
+                        $has = true;
+                        break;
+                    }
+                }
+                if (!$has) {
+                    unset($this->driver[$key]);
+                }
             }
         }
     }

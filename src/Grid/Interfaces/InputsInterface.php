@@ -8,8 +8,7 @@ namespace Grid\Interfaces;
 interface InputsInterface
 {
     /**
-     *
-     * @param string $string
+     * @return []
      */
     public function getInputs() : array;
 }

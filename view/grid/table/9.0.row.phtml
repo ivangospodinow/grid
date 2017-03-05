@@ -17,8 +17,9 @@ if ($row->isString()) {
 } else {
     foreach ($this->grid->getColumns() as $column) {
         echo sprintf(
-            '<%s>%s</%s>%s',
+            '<%s%s>%s</%s>%s',
             $tag,
+            $this->addNamesToCells ? ' ' . $this->tagNamesToCells . '="' . $column->getName() . '"' : '',
             $row[$column->getName()],
             $tag,
             PHP_EOL

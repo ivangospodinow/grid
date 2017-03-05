@@ -11,32 +11,57 @@ use Grid\Row\BodyRow;
 use Grid\Row\FootRow;
 
 /**
- * Description of HtmlRenderer
+ * Translated Grid to html
  *
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class HtmlRenderer implements RendererInterface
 {
     use ExchangeArray;
-
-    protected $renderParts = [
-        'open',
-        'head',
-        'body',
-        'foot',
-        'close'
-    ];
-
+    
+    /**
+     * <table>
+     * @var type
+     */
     protected $open;
-    
+
+    /**
+     * <head>
+     * @var type
+     */
     protected $head;
+
+    /**
+     * <body>
+     * @var type
+     */
     protected $body;
+
+    /**
+     * <foot>
+     * @var type
+     */
     protected $foot;
-    
+
+    /**
+     * </table>
+     * @var type
+     */
     protected $close;
-    
+
+    /**
+     *
+     * @var Grid\Grid
+     */
     protected $grid;
-    
+
+    /**
+     * <td data-colum="field-name"></td>
+     * @var type
+     */
+    protected $addNamesToCells    = false;
+    protected $tagNamesToCells    = 'data-column';
+
     public function __construct(array $config = [])
     {
         $this->open         = __DIR__ . '/../../../view/grid/table/1.0.open.phtml';
@@ -73,7 +98,7 @@ class HtmlRenderer implements RendererInterface
         
         $this->rows = $rows;
         ob_start();
-        foreach ($this->renderParts as $part) {
+        foreach (['open', 'head', 'body', 'foot', 'close'] as $part) {
             include $this->$part;
         }
         return ob_get_clean();

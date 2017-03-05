@@ -113,7 +113,7 @@ class Input
             );
         } else if ($this->getAttribute('type') === self::TYPE_BUTTON) {
             $html = sprintf(
-                '<button%s>$s',
+                '<button%s>%s',
                 $this->getAttributesString(true),
                 $this->getAttribute('placeholder') ?? $this->getValue()
             );

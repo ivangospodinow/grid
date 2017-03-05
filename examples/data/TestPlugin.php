@@ -40,6 +40,9 @@ class TestPlugin implements RenderPluginInterface, GridInterface
 {
 margin-right:10px;
 }
+table form{
+margin-bottom:0;
+}
 </style>
 
 <script

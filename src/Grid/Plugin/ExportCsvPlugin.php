@@ -75,7 +75,6 @@ implements
 
     public function filterData(array $data) : array
     {
-        $button = $this->renderButton();
         $rows = $this->getIndexRows($data, HeadRow::class, AbstractRow::DEFAULT_INDEX - 10);
         if (empty($rows)) {
             $row = $this->getGrid()->setObjectDi(
@@ -84,7 +83,7 @@ implements
             $data[] = $row;
             $rows[] = $row;
         }
-        $rows[0]->setSource($rows[0]->getSource() . $button);
+        $rows[0]->setSource($rows[0]->getSource() . $this->renderButton());
         
         return $data;
     }

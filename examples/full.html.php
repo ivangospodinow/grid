@@ -147,14 +147,27 @@ $config[] = [
     'class' => \Grid\Plugin\ColumnFilterablePlugin::class,
     'options' => [
         'markMatches' => true,
+        'clearButton' => true,
     ]
 ];
-$config[] = \Grid\Renderer\HtmlRenderer::class;
+$config[] = [
+    'class' => \Grid\Plugin\SearchAllPlugin::class,
+    'options' => [
+        'markMatches' => true,
+    ]
+];
+
 $config[] = \Grid\Plugin\PaginationPlugin::class;
 $config[] = \Grid\Plugin\ColumnSortablePlugin::class;
-$config[] = \Grid\Plugin\ExportCsvPlugin::class;
-$config[] = \TestPlugin::class;
 
+$config[] = \TestPlugin::class;
+$config[] = [
+    'class' => \Grid\Renderer\HtmlRenderer::class,
+    'options' => [
+//        'addNamesToCells' => true,
+    ]
+];
+$config[] = \Grid\Plugin\ExportCsvPlugin::class;
 
 $grid = \Grid\Factory\StaticFactory::factory($config);
 

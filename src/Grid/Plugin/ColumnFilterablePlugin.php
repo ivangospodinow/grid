@@ -18,6 +18,7 @@ use Grid\Interfaces\InputsInterface;
 use Grid\Util\Traits\Callback;
 use Grid\Util\Traits\Cache;
 use Grid\Util\Traits\RowAwareTrait;
+use Grid\Util\Traits\MarkMatches;
 
 use Grid\Util\Input;
 
@@ -37,17 +38,19 @@ implements
         Cache,
         ExchangeArray,
         Callback,
-        RowAwareTrait
+        RowAwareTrait,
+        MarkMatches
     ;
 
     const TYPE_SEARCHABLE           = 'searchable';
     const TYPE_SELECTABLE           = 'selectable';
-
-    protected $markMatches          = false;
-    protected $markMatchesBefore    = '<u>';
-    protected $markMatchesAfter     = '</u>';
-    protected $placeholder          = null;
     
+    protected $placeholder          = null;
+
+    /**
+     * Move to plugin
+     * @var type
+     */
     protected $clearButton          = false;
     protected $clearButtonLabel     = 'Clear filters';
     protected $clearButtonName      = 'clear-filters';
@@ -84,7 +87,6 @@ implements
         }
 
         if ($this->clearButton) {
-            $clearButtonSource = $this->renderClearButton();
             $rows = $this->getIndexRows($data, HeadRow::class, AbstractRow::DEFAULT_INDEX - 10);
             if (empty($rows)) {
                 $row = $this->getGrid()->setObjectDi(
@@ -93,7 +95,7 @@ implements
                 $data[] = $row;
                 $rows[] = $row;
             }
-            $rows[0]->setSource($rows[0]->getSource() . $clearButtonSource);
+            $rows[0]->setSource($rows[0]->getSource() . $this->renderClearButton());
         }
         
         return $data;
@@ -112,18 +114,7 @@ implements
             if (empty($value)) {
                 continue;
             }
-            $name  = $column->getName();
-            foreach ($data as $row) {
-                if (!$row instanceof BodyRow) {
-                    continue;
-                }
-
-                $row[$name] = preg_replace(
-                    "/({$value})/i",
-                    $this->markMatchesBefore . "$1" . $this->markMatchesAfter,
-                    $row[$name]
-                );
-            }
+            $this->markMatches($column, $value, $data);
         }
 
         return $data;

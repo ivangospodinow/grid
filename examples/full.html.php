@@ -168,6 +168,19 @@ $config[] = [
     ]
 ];
 $config[] = \Grid\Plugin\ExportCsvPlugin::class;
+$config[] = [
+    'class' => \Grid\Plugin\LinkPlugin::class,
+    'options' => [
+        'rowIndex' => \Grid\Row\AbstractRow::DEFAULT_INDEX - 11,
+        'label' => 'Add record',
+        'uri' => '/add-record',
+        'attributes' => [
+            'class' => 'btn btn-success',
+        ],
+    ]
+];
+
+
 
 $grid = \Grid\Factory\StaticFactory::factory($config);
 

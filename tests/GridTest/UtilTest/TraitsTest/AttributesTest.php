@@ -28,5 +28,7 @@ class AttributesTest extends TestCase
 
         $this->addAttribute('attr', 'button');
         $this->assertTrue(strpos($this->getAttributesString(), 'attr="') !== false);
+        $this->removeAttribute('name');
+        $this->assertTrue($this->getAttribute('name') === '');
     }
 }

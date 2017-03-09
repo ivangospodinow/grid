@@ -9,5 +9,5 @@ namespace Grid\Row;
  */
 class BodyRow extends AbstractRow
 {
-    
+    const INDEX = 20;
 }

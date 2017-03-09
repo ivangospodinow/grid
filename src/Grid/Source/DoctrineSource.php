@@ -14,7 +14,7 @@ use Doctrine\ORM\QueryBuilder;
 use \Exception;
 
 /**
- *
+ * @todo TEST it
  * @author Ivan Gospodinow <ivangospodinow@gmail.com>
  */
 class DoctrineSource extends AbstractSource implements GridInterface, QuerySourceInterface

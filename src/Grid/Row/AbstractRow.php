@@ -15,10 +15,11 @@ abstract class AbstractRow extends ArrayObject
 {
     use Attributes;
 
-    const DEFAULT_INDEX = 100;
+    const DEFAULT_INDEX = 0;
 
     /**
      * Can be object, array or string, useful info ah ?
+     * Holds original data as passed to the constructor
      * @var type
      */
     protected $source;
@@ -41,7 +42,7 @@ abstract class AbstractRow extends ArrayObject
         }
         
         $this->setSource($source);
-        $this->index    = $index;
+        $this->index = $index === self::DEFAULT_INDEX ? $this::INDEX : $index;
     }
 
     /**

@@ -80,7 +80,7 @@ class HtmlRenderer implements RendererInterface
         $rows['head'] = [];
         $rows['body'] = [];
         $rows['foot'] = [];
-
+        
         foreach ($data as $row) {
             $row->setAttribute('data-index', $row->getIndex());
             if ($row instanceof BodyRow) {
@@ -91,7 +91,7 @@ class HtmlRenderer implements RendererInterface
                 $rows['foot'][$row->getIndex()][] = $row;
             }
         }
-
+        
         foreach ($rows as &$grouped) {
             ksort($grouped);
         }

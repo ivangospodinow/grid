@@ -16,7 +16,8 @@ class Links implements GridInterface, LinksInterface
 {
     use GridAwareTrait, ExchangeArray;
 
-    protected $params = [];
+    protected $params     = [];
+    protected $post       = [];
     protected $requestUri = '';
     
     public function __construct(array $config = [])
@@ -44,6 +45,24 @@ class Links implements GridInterface, LinksInterface
     public function setParams(array $params)
     {
         $this->params = $params;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getPost() : array
+    {
+        return $this->post;
+    }
+
+    /**
+     *
+     * @param array $post
+     */
+    public function setPost(array $post)
+    {
+        $this->post = $post;
     }
 
     /**

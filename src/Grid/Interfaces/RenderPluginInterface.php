@@ -10,7 +10,8 @@ namespace Grid\Interfaces;
 interface RenderPluginInterface
 {
     /**
-     * 
+     *
+     * @param string $html
      */
     public function preRender(string $html) : string;
 

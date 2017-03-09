@@ -4,20 +4,21 @@ namespace Grid\Plugin;
 
 use Grid\Interfaces\ColumnsPluginInterface;
 use Grid\Interfaces\RenderPluginInterface;
-use Grid\Util\Traits\GridAwareTrait;
 use Grid\Interfaces\GridInterface;
 use Grid\Interfaces\ColumnPluginInterface;
-use Grid\Column\AbstractColumn;
-use Grid\Renderer\CliRenderer;
-
-use Grid\Util\JavascriptCapture;
 use Grid\Interfaces\JavascriptCaptureInterface;
+use Grid\Interfaces\ActionHandlerInterface;
+
+use Grid\Util\Traits\GridAwareTrait;
+use Grid\Util\JavascriptCapture;
+use Grid\Column\AbstractColumn;
 
 use Grid\Plugin\JavascriptCapturePlugin;
 use Grid\Plugin\ExtractorPlugin;
 use Grid\Plugin\HeaderPlugin;
 use Grid\Plugin\DataTypesPlugin;
 use Grid\Plugin\ColumnsOnlyDataPlugin;
+use Grid\Plugin\ActionHandlerPlugin;
 
 /**
  * Creating table headers
@@ -42,6 +43,13 @@ class AutoloaderPlugin extends AbstractPlugin implements
 
     public function preRender(string $html) : string
     {
+        if (!isset($this->getGrid()[ActionHandlerInterface::class])) {
+            $this->getGrid()[] = new ActionHandlerPlugin;
+            foreach ($this->getGrid()[ActionHandlerInterface::class] as $plugin) {
+                $plugin->preRender($html);
+            }
+        }
+        
         if (!isset($this->getGrid()[JavascriptCaptureInterface::class])) {
             $this->getGrid()[] = new JavascriptCapture;
             $this->getGrid()[] = new JavascriptCapturePlugin;

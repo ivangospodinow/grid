@@ -23,7 +23,8 @@ class DataTypesPlugin extends AbstractPlugin implements DataPluginInterface
             $dataType = new $dataTypeClass;
             $this->getGrid()->setObjectDi($dataType);
             foreach ($data as $row) {
-                if (!$row instanceof BodyRow) {
+                if (!$row instanceof BodyRow
+                || !array_key_exists($column->getName(), $row)) {
                     continue;
                 }
 

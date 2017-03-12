@@ -179,7 +179,7 @@ $config[] = [
         ],
     ]
 ];
-
+$config[] = Grid\Plugin\AjaxPlugin::class;
 
 
 $grid = \Grid\Factory\StaticFactory::factory($config);

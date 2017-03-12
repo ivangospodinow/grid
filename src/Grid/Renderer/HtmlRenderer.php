@@ -75,12 +75,26 @@ class HtmlRenderer implements RendererInterface
 
     public function render(Grid $grid) : string
     {
+        $this->prepareData($grid);
+        ob_start();
+        include $this->open;
+        foreach (['head', 'body', 'foot'] as $part) {
+            echo '<t' . $part . '>';
+            include $this->$part;
+            echo '</t' . $part . '>';
+        }
+        include $this->close;
+        return ob_get_clean();
+    }
+
+    protected function prepareData(Grid $grid)
+    {
         $this->grid   = $grid;
         $data         = $grid->getData();
         $rows['head'] = [];
         $rows['body'] = [];
         $rows['foot'] = [];
-        
+
         foreach ($data as $row) {
             $row->setAttribute('data-index', $row->getIndex());
             if ($row instanceof BodyRow) {
@@ -91,16 +105,11 @@ class HtmlRenderer implements RendererInterface
                 $rows['foot'][$row->getIndex()][] = $row;
             }
         }
-        
+
         foreach ($rows as &$grouped) {
             ksort($grouped);
         }
-        
+
         $this->rows = $rows;
-        ob_start();
-        foreach (['open', 'head', 'body', 'foot', 'close'] as $part) {
-            include $this->$part;
-        }
-        return ob_get_clean();
     }
 }

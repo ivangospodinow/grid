@@ -12,5 +12,5 @@ interface ActionHandleInterface
     /**
      * @return []
      */
-    public function handle(array $params) : array;
+    public function handleAction(array $params) : array;
 }

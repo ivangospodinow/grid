@@ -12,5 +12,5 @@ interface ActionHandlerInterface
     /**
      * @return []
      */
-    public function handle(Grid $grid) : Grid;
+    public function handleAction(Grid $grid) : Grid;
 }

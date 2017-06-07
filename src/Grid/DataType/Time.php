@@ -13,7 +13,7 @@ class Time extends AbstractDateTime
     public function filter($value, AbstractColumn $column, AbstractRow $contex)
     {
         return $this->date(
-            $column->getFormat() ? $column->getFormat() : 'H:i:s',
+            $column->getFormat() ?? 'H:i:s',
             $value
         );
     }

@@ -76,7 +76,7 @@ final class Grid implements ArrayAccess
 
     /**
      * Nothing is working without columns
-     * Use preColumns for init config
+     * Use filterColumns for init config
      * @return array
      */
     public function getColumns() : array

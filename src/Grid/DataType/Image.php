@@ -16,7 +16,7 @@ class Image implements DataTypeInterface
             return sprintf(
                 '<img src="%s" alt="%s"/>',
                 $value,
-                $value
+                htmlspecialchars($value)
             );
         }
 

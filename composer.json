@@ -33,9 +33,7 @@
         "phpunit/phpunit": "^5.7"
     },
     
-    "autoload": {
-        "psr-4": {
-            "Grid\\": "src/"
-        }
+   "autoload": {
+        "files": ["autoload.php"]
     }
 }

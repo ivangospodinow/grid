@@ -17,7 +17,7 @@ use \Exception;
 class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
 {
     use RowAwareTrait;
-    
+
     /**
      * Column name to which link will be created
      * Optional parameter
@@ -49,7 +49,7 @@ class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
     /**
      * array for extracts
      * ['id' => 'getId']
-     * @var type 
+     * @var type
      */
     protected $uriParameters = [];
 
@@ -68,7 +68,7 @@ class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
             unset($config['attributes']);
         }
         $this->exchangeArray($config);
-        
+
         if (!$this->column && !$this->rowIndex) {
             throw new Exception('Column or rowIndex required.');
         }
@@ -118,7 +118,7 @@ class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
 
         return $data;
     }
-    
+
     public function createLinkFromRow(AbstractRow $row) : string
     {
         return
@@ -126,7 +126,7 @@ class LinkPlugin extends AbstractLinkPlugin implements DataPluginInterface
             $row->getSource(),
             $this->uri,
             $this->uriParameters,
-            $this->label ? $this->getLabel() : isset($row[$this->column]) ? $row[$this->column] : '',
+            $this->label ? $this->getLabel() : (isset($row[$this->column]) ? $row[$this->column] : ''),
             $this->getAttributes()
         );
     }

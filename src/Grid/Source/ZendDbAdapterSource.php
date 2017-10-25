@@ -25,13 +25,13 @@ use \Exception;
 class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
 {
     use FilterGridQuery, NamespaceAwareTrait;
-    
+
     /**
      *
      * @var string
      */
     protected $table;
-    
+
     /**
      * Primary key
      * @var type
@@ -43,13 +43,13 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
      * @var Select
      */
     protected $query;
-    
+
     /**
      *
      * @var QuerySourceInterface
      */
     protected $driver;
-    
+
     /**
      *
      * @var Sql
@@ -68,7 +68,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
         }
 
         parent::__construct($config);
-        
+
         if (!$this->driver instanceof AdapterInterface) {
             throw new Exception('driver must be instance of AdapterInterface');
         }
@@ -101,7 +101,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     {
         $this->rows = $rows;
     }
-    
+
     /**
      * Added order to query
      */
@@ -112,7 +112,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
             $this->getQuery()->order($orderFields);
         }
     }
-    
+
     /**
      *
      * @param AbstractColumn $column
@@ -134,7 +134,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
         }
         $this->getQuery()->where($set);
     }
-    
+
     /**
      *
      * @param AbstractColumn $column
@@ -154,7 +154,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
         }
         $this->getQuery()->where($set);
     }
-    
+
     /**
      * dbFields [name]                = [name => name]         WHERE name LIKE selectable
      * dbFields [id, name]            = [id => name]           WHERE id = selectable
@@ -170,7 +170,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
         $first = key($dbFields);
         $idKey = $dbFields[$first];
         unset($dbFields[$first]);
-        
+
         $columns = [];
         $columns['id'] = $this->getDbFieldNamespace($idKey);
         if (empty($dbFields)) {
@@ -184,13 +184,13 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
             }
             $columns['value'] = new Expression("CONCAT_WS(' ', " . implode(',', $concat) . ")");
         }
-        
+
         $query->columns($columns);
         $query->reset('group');
         $query->reset('order');
         $query->reset('limit');
         $query->reset('offset');
-        
+
         $result = $this->getSql()
                        ->prepareStatementForSqlObject($query)
                        ->execute();
@@ -228,7 +228,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
             $query->reset('order');
             $query->limit(1);
             $query->offset(0);
-            
+
             $result = $this->getSql()
                            ->prepareStatementForSqlObject($query)
                            ->execute()
@@ -242,7 +242,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     {
         $this->count = $count;
     }
-    
+
     /**
      *
      * @return Select
@@ -250,7 +250,11 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
     public function getQuery()
     {
         if (null === $this->query) {
-            $select = $this->getSql()->select($this->table);
+            if ($this->namespace) {
+                $select = $this->getSql()->select([$this->namespace => $this->table]);
+            } else {
+                $select = $this->getSql()->select($this->table);
+            }
             if ($this->getOffset() || $this->getLimit()) {
                 $select->limit($this->getLimit());
                 $select->offset($this->getOffset());
@@ -262,7 +266,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
                 )
             );
         }
-        
+
         return $this->query;
     }
 

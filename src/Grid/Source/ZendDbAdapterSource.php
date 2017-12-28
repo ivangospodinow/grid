@@ -185,7 +185,7 @@ class ZendDbAdapterSource extends AbstractSource implements QuerySourceInterface
             $columns['value'] = new Expression("CONCAT_WS(' ', " . implode(',', $concat) . ")");
         }
 
-        $query->columns($columns);
+        $query->columns($columns, false);
         $query->reset('group');
         $query->reset('order');
         $query->reset('limit');

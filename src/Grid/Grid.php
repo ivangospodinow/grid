@@ -48,6 +48,7 @@ final class Grid implements ArrayAccess
     public function __construct(array $config = [])
     {
         $this->setAttribute('id', $config['id'] ?? 'grid-id');
+        unset($config['id']);
         $this->exchangeArray($config);
         $this[] = new AutoloaderPlugin;
     }

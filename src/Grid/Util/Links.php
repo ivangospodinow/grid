@@ -95,6 +95,22 @@ class Links implements GridInterface, LinksInterface
     }
 
     /**
+     *
+     * @param AbstractColumn $column
+     * @param string $type
+     * @return string
+     */
+    public function getFilterName(AbstractColumn $column, string $type) : string
+    {
+        return sprintf(
+            'grid[%s][%s][%s]',
+            $this->getGrid()->getId(),
+            $type,
+            $column->getName()
+        );
+    }
+
+    /**
      * ?grid[grid-id][page]=1
      * @param int $page
      * @return string

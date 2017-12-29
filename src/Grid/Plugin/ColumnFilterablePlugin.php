@@ -183,11 +183,7 @@ implements
         if ($column->isSearchable()) {
             $input = new Input(
                 [
-                    'name' => sprintf(
-                        'grid[%s][searchable][%s]',
-                        $this->getGrid()->getId(),
-                        $column->getName()
-                    ),
+                    'name' => $this->getLinkCreator()->getFilterName($column, 'searchable'),
                     'type' => Input::TYPE_TEXT,
                     'placeholder' => $this->placeholder ? $this->getGrid()->translate($this->placeholder) : null,
                     'value' => $this->getLinkCreator()->getFilterValue($column, 'searchable'),
@@ -199,11 +195,7 @@ implements
         if ($column->isSelectable()) {
             $input = new Input(
                 [
-                    'name' => sprintf(
-                        'grid[%s][selectable][%s]',
-                        $this->getGrid()->getId(),
-                        $column->getName()
-                    ),
+                    'name' => $this->getLinkCreator()->getFilterName($column, 'selectable'),
                     'type' => Input::TYPE_SELECT,
                     'placeholder' => $this->placeholder ? $this->getGrid()->translate($this->placeholder) : null,
                     'value' => $this->getLinkCreator()->getFilterValue($column, 'selectable'),

@@ -20,6 +20,12 @@ class ArraySource extends AbstractSource
     protected $driver = [];
 
     protected $orLike = [];
+
+    /**
+     * Disable to use pagination, but put data
+     * only for current page.
+     */
+    protected $applyLimitOffset = true;
     
     /**
      *
@@ -44,7 +50,7 @@ class ArraySource extends AbstractSource
     {
         $this->order();
         $this->applyOrLike();
-        if ($this->getOffset() || $this->getLimit()) {
+        if ($this->applyLimitOffset && ($this->getOffset() || $this->getLimit())) {
             return array_slice(
                 $this->driver,
                 $this->getOffset(),

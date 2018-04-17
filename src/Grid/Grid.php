@@ -141,6 +141,7 @@ final class Grid implements ArrayAccess
         if (!$this->hasCache(__METHOD__)) {
             $count = 0;
             foreach  ($this[SourceInterface::class] as $source) {
+                $this->filter(SourcePluginInterface::class, 'filterSource', $source);
                 $count += $source->getCount();
             }
             $this->setCache(__METHOD__, (int) $count);
@@ -192,8 +193,11 @@ final class Grid implements ArrayAccess
      */
     public function filter(string $interface, string $method, $data = null)
     {
-        foreach ($this[$interface] as $plugin) {
-            $data = $plugin->$method($data);
+        if (!$this->getCache(__METHOD__ . $interface . $method)) {
+            $this->setCache(__METHOD__ . $interface . $method, true);
+            foreach ($this[$interface] as $plugin) {
+                $data = $plugin->$method($data);
+            }
         }
         return $data;
     }

@@ -144,11 +144,11 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
         if (null === $this->count) {
             $query = clone $this->getQuery();
             if ($this->pk) {
-                $expr = 'COUNT(DISTINCT `' . $this->getDbFieldNamespace($this->pk) . '`)';
+                $expr = 'COUNT(DISTINCT ' . $this->getDbFieldNamespace($this->pk) . ')';
             } else {
-                $expr = 'COUNT(*)';
+                throw new Exception('pk option is required');
             }
-            $query->select("$expr AS `count`");
+            $query->select("$expr AS count");
             $query->setFirstResult(null);
             $query->setMaxResults(null);
             $query->resetDQLParts(['groupBy', 'orderBy']);
@@ -173,6 +173,7 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
         if (null === $this->query) {
             $query = $this->driver->createQueryBuilder();
             $query->from($this->table, $this->namespace);
+            $query->select($this->namespace);
             
             if ($this->getOffset() || $this->getLimit()) {
                 $query->setMaxResults($this->getLimit());

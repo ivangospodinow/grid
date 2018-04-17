@@ -22,8 +22,12 @@ class StaticFactory
     {
         $grid = null;
         $plugins = [];
-        foreach ($configs as $config) {
+        foreach ($configs as $key => $config) {
 
+            if ($key === 'id') {
+                continue;
+            }
+            
             if (is_array($config)
             && !isset($config['options'])) {
                 $config['options'] = [];
@@ -67,7 +71,7 @@ class StaticFactory
                 $plugins[] = $plugin;
             }
         }
-
+        
         if (!$grid instanceof Grid) {
             $grid = new Grid($configs);
         }

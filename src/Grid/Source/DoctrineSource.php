@@ -76,6 +76,7 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
     public function getRows()
     {
         if (null === $this->rows) {
+            $this->order();
             $this->rows = $this->getQuery()->getQuery()->getResult();
         }
         return $this->rows;

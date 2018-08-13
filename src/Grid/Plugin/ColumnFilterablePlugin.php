@@ -207,11 +207,13 @@ implements
                 foreach ($this->getGrid()[AbstractSource::class] as $source) {
                     $values += $source->getColumnValues($column);
                 }
-            } else {
+            } else if (is_callable($selectableSource)) {
                 $values = $this->call_user_func_array(
                     $selectableSource,
                     [$column]
                 );
+            } else {
+                $values = $selectableSource;
             }
             $input->setValueOptions($values);
             $inputs['selectable'] = $input;

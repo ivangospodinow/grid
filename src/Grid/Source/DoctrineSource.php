@@ -105,6 +105,7 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
             }
         }
     }
+    
     /**
      *
      * @param AbstractColumn $column
@@ -113,7 +114,18 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
      */
     public function andWhere(AbstractColumn $column, string $sign, string $value)
     {
-        //        @TODO
+        $set = new PredicateSet;
+        foreach ($column->getDbFields() as $field) {
+            $set->addPredicate(
+                new Operator(
+                    $this->getDbFieldNamespace($field),
+                    $sign,
+                    $value
+                ),
+                PredicateSet::OP_OR
+            );
+        }
+        $this->getQuery()->where($set);
     }
 
     /**

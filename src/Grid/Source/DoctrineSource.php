@@ -114,18 +114,17 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
      */
     public function andWhere(AbstractColumn $column, string $sign, string $value)
     {
-        $set = new PredicateSet;
+        $where = [];
         foreach ($column->getDbFields() as $field) {
-            $set->addPredicate(
-                new Operator(
-                    $this->getDbFieldNamespace($field),
-                    $sign,
-                    $value
-                ),
-                PredicateSet::OP_OR
+            $where[] = sprintf(
+                '%s %s %s',
+                $this->getDbFieldNamespace($field),
+                $sign,
+                $this->driver->getConnection()->quote($value)
             );
         }
-        $this->getQuery()->where($set);
+        
+        $this->getQuery()->andWhere('(' . implode(' OR ', $where) . ')');
     }
 
     /**

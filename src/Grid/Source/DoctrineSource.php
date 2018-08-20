@@ -105,7 +105,6 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
             }
         }
     }
-    
     /**
      *
      * @param AbstractColumn $column
@@ -138,13 +137,21 @@ class DoctrineSource extends AbstractSource implements GridInterface, QuerySourc
     }
     
     /**
+     * dbFields [name]                = [name => name]         WHERE name LIKE selectable
+     * dbFields [id, name]            = [id => name]           WHERE id = selectable
+     * dbFields [id, first, last ...] = [id => first last ...] WHERE id = selectable
      *
      * @param AbstractColumn $column
      * @return array
      */
     public function getColumnValues(AbstractColumn $column) : array
     {
-        return [];
+        return
+        $this->getGrid()->filter(
+            ColumnValuesInterface::class,
+            'filterColumnValues',
+            []
+        );
     }
 
     /**

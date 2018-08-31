@@ -54,7 +54,7 @@ class ObjectExtractor extends AbstractExtractor
          * $user->name;
          */
         if (null === $result) {
-            $variables = get_object_vars($source);
+            $variables = get_object_vars(func_get_arg(0));
             $property = $callbacks[key($callbacks)];
             if (array_key_exists($property, $variables)) {
                 $result = $variables[$property];

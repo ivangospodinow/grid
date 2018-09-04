@@ -53,8 +53,8 @@ class ObjectExtractor extends AbstractExtractor
          * In case of public property access
          * $user->name;
          */
-        if (null === $result) {
-            $variables = get_object_vars(func_get_arg(0));
+        if (null === $result && is_object($source)) {
+            $variables = get_object_vars($source);
             $property = $callbacks[key($callbacks)];
             if (array_key_exists($property, $variables)) {
                 $result = $variables[$property];

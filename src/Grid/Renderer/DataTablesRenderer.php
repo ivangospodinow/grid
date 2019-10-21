@@ -78,11 +78,25 @@ class DataTablesRenderer extends HtmlRenderer implements
         $script->captureStart();
         ?>
         //<script>
-            (function ($, id, params) {
-                $(document).ready(function() {
-                    $('#' + id).DataTable(params);
-                });
-            })(jQuery, '<?php echo $this->getGrid()->getId()?>', <?php echo json_encode($this->dataTableParams)?>);
+            (function(id, params) {
+                if (undefined !== window['jQuery']) {
+                    $(document).ready(function() {
+                        $('#' + id).DataTable(params);
+                    });
+                } else {
+                    document.addEventListener(
+                        'DOMContentLoaded',
+                        function() {
+                            if (undefined !== window['jQuery']) {
+                                $('#' + id).DataTable(params);
+                            } else {
+                                console.error('jquery not found')
+                            }
+                        },
+                        false
+                    );
+                }
+            })('<?php echo $this->getGrid()->getId() ?>', <?php echo json_encode($this->dataTableParams) ?>);
         //</script>
         <?php
         $script->captureEnd();        

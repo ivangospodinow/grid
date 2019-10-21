@@ -156,11 +156,15 @@ implements
                 if ($type === 'searchable') {
                     $source->andLike($column, $value);
                 } elseif ($type === 'selectable') {
-                    $dbFields = $column->getDbFields();
-                    $idDbField = $dbFields[key($dbFields)];
-                    $column->setDbFields([$idDbField]);
-                    $source->andWhere($column, '=', $value);
-                    $column->setDbFields($dbFields);
+                    if ($column->hasDbFields()) {
+                        $dbFields = $column->getDbFields();
+                        $idDbField = $dbFields[key($dbFields)];
+                        $column->setDbFields([$idDbField]);
+                        $source->andWhere($column, '=', $value);
+                        $column->setDbFields($dbFields);
+                    } else {
+                        $source->andWhere($column, '=', $value);
+                    }
                 }
             }
         }

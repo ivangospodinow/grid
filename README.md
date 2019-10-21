@@ -1,4 +1,4 @@
-# Grid (php 7)
+# Grid (php 7) - Microservices Pattern
 Easy to use event driven grid (table) and general purpose data manager
 
 ## Strong points

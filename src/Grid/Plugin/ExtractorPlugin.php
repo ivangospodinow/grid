@@ -27,9 +27,11 @@ class ExtractorPlugin extends AbstractPlugin implements RowPluginInterface, Grid
     {
         $columns = $this->getGrid()->getColumns();
         foreach ($columns as $column) {
-            $row[$column->getName()] =
-            $column->getExtractor($row->getSource())
-                   ->extract($row->getSource(), $column->getExtract());
+            $value = $column->getExtractor($row->getSource())
+                ->extract($row->getSource(), $column->getExtract());
+            if ($value !== null || !isset($row[$column->getName()])) {
+                $row[$column->getName()] = $value;
+            }
         }
         return $row;
     }
